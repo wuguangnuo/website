@@ -16,7 +16,7 @@ public class CodeGenerator {
     private static final String DRIVERNAME = "com.mysql.cj.jdbc.Driver";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
-    private static boolean FILEOVERRIDE = true;//是否覆盖原文件，要特别注意
+    private static boolean FILEOVERRIDE = false;//是否覆盖原文件，要特别注意
 
     public static void main(String[] args) {
         // 代码生成器
@@ -141,15 +141,12 @@ public class CodeGenerator {
         PreparedStatement pstmt;
         List<String> result = new ArrayList<>();
         try {
-            pstmt = (PreparedStatement) conn.prepareStatement(sql);
+            pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
-            int col = rs.getMetaData().getColumnCount();
-            System.out.println("============================");
             while (rs.next()) {
                 String tableName = rs.getString(1);
                 result.add(tableName);
             }
-            System.out.println("============================");
         } catch (SQLException e) {
             e.printStackTrace();
         }

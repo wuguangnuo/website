@@ -11,4 +11,5 @@ import org.springframework.stereotype.Component;
 @Component
 public class PageHelpper {
     public final Page MAX_SIZE = new Page(0, 200);
+    public final Page DEFAULT_SIZE = new Page(0, 10);
 }

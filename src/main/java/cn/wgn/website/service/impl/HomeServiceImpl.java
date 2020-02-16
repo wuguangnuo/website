@@ -1,5 +1,6 @@
 package cn.wgn.website.service.impl;
 
+import cn.wgn.website.dto.home.BlogListQuery;
 import cn.wgn.website.dto.home.DiaryDto;
 import cn.wgn.website.entity.*;
 import cn.wgn.website.mapper.*;
@@ -30,6 +31,8 @@ public class HomeServiceImpl implements IHomeService {
     private DocMapper docMapper;
     @Autowired
     private ToolMapper toolMapper;
+    @Autowired
+    private BlogMapper blogMapper;
 
     /**
      * 获取最新一篇日记
@@ -91,6 +94,39 @@ public class HomeServiceImpl implements IHomeService {
     public IPage<ToolEntity> getTool() {
         Page page = pageHelpper.MAX_SIZE;
         return toolMapper.getTool(page);
+    }
+
+    /**
+     * 获取博文列表
+     *
+     * @param query 查询条件
+     * @return
+     */
+    @Override
+    public IPage<BlogEntity> getBlogList(BlogListQuery query) {
+        Page page = new Page(query.getPageIndex(), query.getPageSize());
+        return blogMapper.getBlogList(page);
+    }
+
+    /**
+     * 获取相关博客
+     *
+     * @return
+     */
+    @Override
+    public IPage<BlogEntity> getBlogSide() {
+        Page page = pageHelpper.DEFAULT_SIZE;
+        return blogMapper.getBlogSide(page);
+    }
+
+    /**
+     * 获取博文详情
+     *
+     * @return
+     */
+    @Override
+    public BlogEntity getBlogDetail(Integer id) {
+        return blogMapper.selectById(id);
     }
 
 }

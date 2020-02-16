@@ -1,19 +1,14 @@
 package cn.wgn.website.controller;
 
 import cn.wgn.website.dto.ApiRes;
+import cn.wgn.website.dto.home.BlogListQuery;
 import cn.wgn.website.dto.home.DiaryDto;
-import cn.wgn.website.entity.DemoEntity;
-import cn.wgn.website.entity.DocEntity;
-import cn.wgn.website.entity.GameEntity;
-import cn.wgn.website.entity.ToolEntity;
+import cn.wgn.website.entity.*;
 import cn.wgn.website.service.IHomeService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author WuGuangNuo
@@ -87,6 +82,45 @@ public class HomeController extends BaseController {
     @ApiOperation(value = "工具箱")
     public ApiRes tool() {
         IPage<ToolEntity> res = homeService.getTool();
+
+        if (res == null) {
+            return ApiRes.fail();
+        } else {
+            return ApiRes.suc(res);
+        }
+    }
+
+    @PostMapping(value = "blogList")
+    @ApiOperation(value = "博文列表")
+    public ApiRes blogList(@RequestBody BlogListQuery query) {
+        IPage<BlogEntity> res = homeService.getBlogList(query);
+
+        if (res == null) {
+            return ApiRes.fail();
+        } else {
+            return ApiRes.suc(res);
+        }
+    }
+
+    @PostMapping(value = "blogSide")
+    @ApiOperation(value = "相关博客")
+    public ApiRes blogList() {
+        IPage<BlogEntity> res = homeService.getBlogSide();
+
+        if (res == null) {
+            return ApiRes.fail();
+        } else {
+            return ApiRes.suc(res);
+        }
+    }
+
+    @PostMapping(value = "blogDetail")
+    @ApiOperation(value = "博文详情")
+    public ApiRes blogList(Integer id) {
+        if (id == null || id <= 0) {
+            return ApiRes.fail();
+        }
+        BlogEntity res = homeService.getBlogDetail(id);
 
         if (res == null) {
             return ApiRes.fail();
