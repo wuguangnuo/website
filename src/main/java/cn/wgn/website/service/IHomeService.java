@@ -1,0 +1,49 @@
+package cn.wgn.website.service;
+
+import cn.wgn.website.dto.home.*;
+import cn.wgn.website.entity.DemoEntity;
+import cn.wgn.website.entity.DocEntity;
+import cn.wgn.website.entity.GameEntity;
+import cn.wgn.website.entity.ToolEntity;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+
+/**
+ * @author WuGuangNuo
+ * @date Created in 2020/2/16 10:50
+ */
+public interface IHomeService {
+    /**
+     * 获取最新一篇日记
+     *
+     * @return
+     */
+    DiaryDto getLastDiary();
+
+    /**
+     * 获取实例列表
+     *
+     * @return
+     */
+    IPage<DemoEntity> getDemo();
+
+    /**
+     * 游戏列表
+     *
+     * @return
+     */
+    IPage<GameEntity> getGame();
+
+    /**
+     * 开发文档列表
+     *
+     * @return
+     */
+    IPage<DocEntity> getDoc();
+
+    /**
+     * 工具箱列表
+     *
+     * @return
+     */
+    IPage<ToolEntity> getTool();
+}

@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/wuguangnuo?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false
+    username: root
+    password:
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  config: D:/wuguangnuo/wgn.cn/website/src/main/resources/logback-spring.xml
+  level:
+    cn.wgn.website: debug
+server:
+  port:
+    8888
