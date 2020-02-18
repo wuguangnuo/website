@@ -105,7 +105,11 @@ public class CodeGenerator {
 //        strategy.setSuperControllerClass("com.baomidou.ant.common.BaseController");
         strategy.setTablePrefix("wu_");
 
-        List<String> tableNames = getAllTableNames();
+        List<String> tableNames = new ArrayList<>();
+//        tableNames = getAllTableNames();
+        tableNames.add("wu_role");
+        tableNames.add("wu_role_permission");
+
         strategy.setSkipView(true);
 
         String[] arr = new String[tableNames.size()];

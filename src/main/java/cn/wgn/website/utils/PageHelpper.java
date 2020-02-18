@@ -1,7 +1,6 @@
 package cn.wgn.website.utils;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.Data;
 import org.springframework.stereotype.Component;
 
 /**

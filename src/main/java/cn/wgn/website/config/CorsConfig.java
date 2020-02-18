@@ -5,11 +5,14 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
+ * 路由拦截器
+ *
  * @author WuGuangNuo
  */
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
     /**
+     * 拦截器规则
      * CORS Config
      */
     @Override

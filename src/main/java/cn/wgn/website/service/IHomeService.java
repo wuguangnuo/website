@@ -51,7 +51,7 @@ public interface IHomeService {
      * @param query 查询条件
      * @return
      */
-    IPage<BlogEntity> getBlogList(BlogListQuery query);
+    IPage getBlogList(BlogListQuery query);
 
     /**
      * 获取相关博客

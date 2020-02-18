@@ -3,9 +3,9 @@
 <mapper namespace="cn.wgn.website.mapper.BlogMapper">
 
     <!--    获取博文列表-->
-    <select id="getBlogList" resultType="cn.wgn.website.entity.BlogEntity">
-        SELECT * FROM `wu_blog` ORDER BY RAND()
-    </select>
+<!--    <select id="getBlogList" resultType="cn.wgn.website.entity.BlogEntity">-->
+<!--        SELECT * FROM `wu_blog` ORDER BY RAND()-->
+<!--    </select>-->
 
     <!--    获取相关博客-->
     <select id="getBlogSide" resultType="cn.wgn.website.entity.BlogEntity">

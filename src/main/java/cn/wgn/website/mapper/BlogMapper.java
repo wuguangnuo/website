@@ -23,7 +23,7 @@ public interface BlogMapper extends BaseMapper<BlogEntity> {
      * @param page
      * @return
      */
-    IPage<BlogEntity> getBlogList(Page page);
+//    IPage<BlogEntity> getBlogList(Page page);
 
     /**
      * 获取相关博客

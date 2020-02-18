@@ -1,88 +1,67 @@
 package cn.wgn.website.dto;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import static java.net.HttpURLConnection.*;
 
 /**
+ * ApiRes 返回
+ *
+ * @param <T>
  * @author WuGuangNuo
  * @date Created in 2020/2/15 20:12
  */
 @Slf4j
-public class ApiRes {
-    private Integer code;
+@Data
+public class ApiRes<T> {
+    private Integer state;
     private String msg;
-    private Object data;
+    private T Data;
 
-    public ApiRes(Integer code, String msg, Object data) {
-        this.code = code;
-        this.msg = msg;
-        this.data = data;
-    }
-
-    public static ApiRes suc() {
+    public static <T> ApiRes<T> suc() {
         return suc("Success", null);
     }
 
-    public static ApiRes suc(String msg) {
+    public static <T> ApiRes<T> suc(String msg) {
         return suc(msg, null);
     }
 
-    public static ApiRes suc(Object obj) {
+    public static <T> ApiRes<T> suc(T obj) {
         return suc("Success", obj);
     }
 
-    public static ApiRes suc(String msg, Object obj) {
+    public static <T> ApiRes<T> suc(String msg, T obj) {
         return res(HTTP_OK, msg, obj);
     }
 
-    public static ApiRes fail() {
+    public static <T> ApiRes<T> fail() {
         return fail("Query Empty!");
     }
 
-    public static ApiRes fail(String msg) {
+    public static <T> ApiRes<T> fail(String msg) {
         log.warn("ApiRes Fail: " + msg);
         return res(HTTP_NOT_IMPLEMENTED, msg, null);
     }
 
-    public static ApiRes err(String msg) {
+    public static <T> ApiRes<T> err(String msg) {
         log.error("ApiRes Error: " + msg);
         return res(HTTP_INTERNAL_ERROR, msg, null);
     }
 
-    public static ApiRes unAuthorized() {
+    public static <T> ApiRes<T> unAuthorized() {
         return unAuthorized("unAuthorization");
     }
 
-    public static ApiRes unAuthorized(String msg) {
+    public static <T> ApiRes<T> unAuthorized(String msg) {
         return res(HTTP_UNAUTHORIZED, msg, null);
     }
 
-    private static ApiRes res(Integer code, String msg, Object data) {
-        return new ApiRes(code, msg, data);
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
+    public static <T> ApiRes<T> res(Integer state, String msg, T data) {
+        ApiRes<T> result = new ApiRes<>();
+        result.setState(state);
+        result.setMsg(msg);
+        result.setData(data);
+        return result;
     }
 }

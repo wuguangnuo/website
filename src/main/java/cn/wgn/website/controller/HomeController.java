@@ -32,7 +32,7 @@ public class HomeController extends BaseController {
 
     @PostMapping(value = "diary")
     @ApiOperation(value = "日记")
-    public ApiRes diary() {
+    public ApiRes<DiaryDto> diary() {
         DiaryDto res = homeService.getLastDiary();
 
         if (res == null) {
@@ -44,7 +44,7 @@ public class HomeController extends BaseController {
 
     @PostMapping(value = "demo")
     @ApiOperation(value = "示例")
-    public ApiRes demo() {
+    public ApiRes<IPage<DemoEntity>> demo() {
         IPage<DemoEntity> res = homeService.getDemo();
 
         if (res == null) {
@@ -56,7 +56,7 @@ public class HomeController extends BaseController {
 
     @PostMapping(value = "game")
     @ApiOperation(value = "游戏")
-    public ApiRes game() {
+    public ApiRes<IPage<GameEntity>> game() {
         IPage<GameEntity> res = homeService.getGame();
 
         if (res == null) {
@@ -68,7 +68,7 @@ public class HomeController extends BaseController {
 
     @PostMapping(value = "doc")
     @ApiOperation(value = "开发文档")
-    public ApiRes doc() {
+    public ApiRes<IPage<DocEntity>> doc() {
         IPage<DocEntity> res = homeService.getDoc();
 
         if (res == null) {
@@ -80,7 +80,7 @@ public class HomeController extends BaseController {
 
     @PostMapping(value = "tool")
     @ApiOperation(value = "工具箱")
-    public ApiRes tool() {
+    public ApiRes<IPage<ToolEntity>> tool() {
         IPage<ToolEntity> res = homeService.getTool();
 
         if (res == null) {
@@ -90,10 +90,10 @@ public class HomeController extends BaseController {
         }
     }
 
-    @PostMapping(value = "blogList")
+    @GetMapping(value = "blogList")
     @ApiOperation(value = "博文列表")
-    public ApiRes blogList(@RequestBody BlogListQuery query) {
-        IPage<BlogEntity> res = homeService.getBlogList(query);
+    public ApiRes<IPage> blogList(BlogListQuery query) {
+        IPage res = homeService.getBlogList(query);
 
         if (res == null) {
             return ApiRes.fail();
@@ -104,7 +104,7 @@ public class HomeController extends BaseController {
 
     @PostMapping(value = "blogSide")
     @ApiOperation(value = "相关博客")
-    public ApiRes blogList() {
+    public ApiRes<IPage<BlogEntity>> blogList() {
         IPage<BlogEntity> res = homeService.getBlogSide();
 
         if (res == null) {
@@ -116,7 +116,7 @@ public class HomeController extends BaseController {
 
     @PostMapping(value = "blogDetail")
     @ApiOperation(value = "博文详情")
-    public ApiRes blogList(Integer id) {
+    public ApiRes<BlogEntity> blogList(Integer id) {
         if (id == null || id <= 0) {
             return ApiRes.fail();
         }

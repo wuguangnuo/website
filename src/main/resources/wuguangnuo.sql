@@ -279,3 +279,32 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+-- Add by 2020年2月18日 wgn
+
+-- ----------------------------
+-- Table structure for wu_role
+-- ----------------------------
+DROP TABLE IF EXISTS `wu_role`;
+CREATE TABLE `wu_role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '角色表',
+  `role_id` varchar(20) NOT NULL COMMENT '角色id',
+  `role_name` varchar(50) NOT NULL COMMENT '角色名称',
+  `role_description` varchar(255) DEFAULT NULL COMMENT '角色描述',
+  `role_status` int(1) NOT NULL COMMENT '状态：1有效；2删除',
+  `role_ct` datetime DEFAULT NULL COMMENT '创建时间',
+  `role_ut` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='角色表';
+
+-- ----------------------------
+-- Table structure for wu_role_permission
+-- ----------------------------
+DROP TABLE IF EXISTS `wu_role_permission`;
+CREATE TABLE `wu_role_permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '角色权限表',
+  `role_id` varchar(20) NOT NULL COMMENT '角色id',
+  `permission_id` varchar(20) NOT NULL COMMENT '权限id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=870 DEFAULT CHARSET=utf8 COMMENT='角色权限表';

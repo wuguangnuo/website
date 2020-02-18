@@ -1,16 +1,23 @@
 package cn.wgn.website.service.impl;
 
+import cn.wgn.website.dto.home.BlogDto;
 import cn.wgn.website.dto.home.BlogListQuery;
 import cn.wgn.website.dto.home.DiaryDto;
 import cn.wgn.website.entity.*;
 import cn.wgn.website.mapper.*;
 import cn.wgn.website.service.IHomeService;
 import cn.wgn.website.utils.PageHelpper;
+import cn.wgn.website.utils.WebSiteUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author WuGuangNuo
@@ -20,6 +27,8 @@ import org.springframework.stereotype.Service;
 public class HomeServiceImpl implements IHomeService {
     @Autowired
     private PageHelpper pageHelpper;
+    @Autowired
+    private WebSiteUtil webSiteUtil;
 
     @Autowired
     private DiaryMapper diaryMapper;
@@ -103,9 +112,27 @@ public class HomeServiceImpl implements IHomeService {
      * @return
      */
     @Override
-    public IPage<BlogEntity> getBlogList(BlogListQuery query) {
+    public IPage getBlogList(BlogListQuery query) {
         Page page = new Page(query.getPageIndex(), query.getPageSize());
-        return blogMapper.getBlogList(page);
+        IPage blogEntityIPage = blogMapper.selectPage(page, new QueryWrapper<BlogEntity>().lambda()
+                .orderByDesc(BlogEntity::getId)
+        );
+
+        List list = blogEntityIPage.getRecords();
+        List<BlogDto> list2 = new ArrayList();
+        BlogDto dto;
+
+        Iterator it = list.iterator();
+        while (it.hasNext()) {
+            BlogEntity entity = (BlogEntity) it.next();
+            dto = new BlogDto();
+            BeanUtils.copyProperties(entity, dto);
+            dto.setPostDate(webSiteUtil.dateFormat(entity.getPostDate()));
+            dto.setPostContent(webSiteUtil.cutContent(entity.getPostContent()));
+            list2.add(dto);
+        }
+        blogEntityIPage.setRecords(list2);
+        return blogEntityIPage;
     }
 
     /**
