@@ -1,11 +1,13 @@
 package cn.wgn.website.dto;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
  * @author WuGuangNuo
  * @date Created in 2020/2/16 17:37
  */
+@Data
 public class RequestPage {
     @ApiModelProperty(value = "分页大小")
     private int pageSize;
@@ -15,7 +17,7 @@ public class RequestPage {
 
     // 默认分页大小
     public int getPageSize() {
-        return pageSize <= 0 ? 10 : pageSize;
+        return pageSize <= 0 ? 8 : pageSize;
     }
 
     // 默认分页第几页

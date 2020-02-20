@@ -5,6 +5,8 @@ import cn.wgn.website.dto.home.*;
 import cn.wgn.website.entity.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
+import java.util.List;
+
 /**
  * @author WuGuangNuo
  * @date Created in 2020/2/16 10:50
@@ -53,12 +55,14 @@ public interface IHomeService {
      */
     IPage getBlogList(BlogListQuery query);
 
+    BlogListDto getBlogList2(BlogListQuery query);
+
     /**
      * 获取相关博客
      *
      * @return
      */
-    IPage<BlogEntity> getBlogSide();
+    List<BlogSideDto> getBlogSide();
 
     /**
      * 获取博文详情

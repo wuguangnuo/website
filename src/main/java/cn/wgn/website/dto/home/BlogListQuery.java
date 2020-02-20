@@ -10,7 +10,6 @@ import lombok.experimental.Accessors;
  * @date Created in 2020/2/16 17:46
  */
 @Data
-@Accessors(chain = true)
 public class BlogListQuery extends RequestPage {
 
     @ApiModelProperty(value = "文章类型")

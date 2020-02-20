@@ -9,6 +9,6 @@
 
     <!--    获取相关博客-->
     <select id="getBlogSide" resultType="cn.wgn.website.entity.BlogEntity">
-        SELECT * FROM `wu_blog` ORDER BY RAND()
+        SELECT * FROM `wu_blog` ORDER BY RAND() LIMIT #{limit}
     </select>
 </mapper>

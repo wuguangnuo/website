@@ -1,7 +1,9 @@
 package cn.wgn.website.controller;
 
 import cn.wgn.website.dto.ApiRes;
+import cn.wgn.website.dto.home.BlogListDto;
 import cn.wgn.website.dto.home.BlogListQuery;
+import cn.wgn.website.dto.home.BlogSideDto;
 import cn.wgn.website.dto.home.DiaryDto;
 import cn.wgn.website.entity.*;
 import cn.wgn.website.service.IHomeService;
@@ -9,6 +11,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author WuGuangNuo
@@ -102,10 +106,22 @@ public class HomeController extends BaseController {
         }
     }
 
+    @GetMapping(value = "blogList2")
+    @ApiOperation(value = "博文列表2")
+    public ApiRes<BlogListDto> blogList2(BlogListQuery query) {
+        BlogListDto res = homeService.getBlogList2(query);
+
+        if (res == null) {
+            return ApiRes.fail();
+        } else {
+            return ApiRes.suc(res);
+        }
+    }
+
     @PostMapping(value = "blogSide")
     @ApiOperation(value = "相关博客")
-    public ApiRes<IPage<BlogEntity>> blogList() {
-        IPage<BlogEntity> res = homeService.getBlogSide();
+    public ApiRes<List<BlogSideDto>> blogList() {
+        List<BlogSideDto> res = homeService.getBlogSide();
 
         if (res == null) {
             return ApiRes.fail();

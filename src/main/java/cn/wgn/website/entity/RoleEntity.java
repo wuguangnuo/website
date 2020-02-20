@@ -32,9 +32,6 @@ public class RoleEntity implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @ApiModelProperty(value = "角色id")
-    private String roleId;
-
     @ApiModelProperty(value = "角色名称")
     private String roleName;
 

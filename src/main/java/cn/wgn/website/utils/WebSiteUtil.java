@@ -37,4 +37,15 @@ public class WebSiteUtil {
                 .replaceAll("\r", "")
                 .replaceAll("\n", "");
     }
+
+    /**
+     * 分割字符串
+     *
+     * @param s string
+     * @param l length
+     * @return
+     */
+    public String cutStr(String s, int l) {
+        return s.substring(0, Math.min(s.length(), l));
+    }
 }

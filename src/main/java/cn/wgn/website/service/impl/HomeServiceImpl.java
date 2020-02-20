@@ -1,8 +1,6 @@
 package cn.wgn.website.service.impl;
 
-import cn.wgn.website.dto.home.BlogDto;
-import cn.wgn.website.dto.home.BlogListQuery;
-import cn.wgn.website.dto.home.DiaryDto;
+import cn.wgn.website.dto.home.*;
 import cn.wgn.website.entity.*;
 import cn.wgn.website.mapper.*;
 import cn.wgn.website.service.IHomeService;
@@ -135,15 +133,62 @@ public class HomeServiceImpl implements IHomeService {
         return blogEntityIPage;
     }
 
+    @Override
+    public BlogListDto getBlogList2(BlogListQuery query) {
+        IPage data = this.getBlogList(query);
+
+        BlogListDto result = new BlogListDto();
+        result.setBlogList(data.getRecords());
+
+        // 本页，最后一页
+        long c = data.getCurrent();
+        long e = (data.getTotal() / data.getSize()) + (data.getTotal() % data.getSize() == 0 ? 0 : 1);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("<div>");
+        sb.append("<a class='first btn" + (c == 1 ? " disabled'" : "' to='?pageIndex=1'") + ">首页</a>");
+        sb.append("<a class='prev btn" + (c == 1 ? " disabled'" : "' to='?pageIndex=" + (c - 1) + "'") + ">上一页</a>");
+        sb.append(c > 4 ? "<span class='pageEllipsis'>...</span>" : "");
+
+        long t = (c < 4) ? (4 - c) : (c > e - 4 ? e - c - 3 : 0); // 对冲参数
+        for (int i = -3; i <= 3; i++) {
+            if (i + t == 0) {
+                sb.append("<a class='current'>" + c + "</a>");
+            } else {
+                sb.append("<a class='num' to='?pageIndex=" + (c + i + t) + "'>" + (c + i + t) + "</a>");
+            }
+        }
+
+        sb.append(c < (e - 3) ? "<span class='pageEllipsis'>...</span>" : "");
+        sb.append("<a class='prev btn" + (c == e ? " disabled'" : "' to='?pageIndex=" + (c + 1) + "'") + ">下一页</a>");//        <a class="next btn" href="/index.php/blog/loadtable/p/6">下一页</a>
+        sb.append("<a class='end btn" + (c == e ? " disabled'" : "' to='?pageIndex=" + e + "'") + ">尾页</a>");
+        sb.append("<label class='pageTurn'><input to='?pageIndex=%5BPAGE%5D' title='输入页码，按回车快速跳转' value='" + c + "'></input><span title='共 " + e + " 页'> / " + e + " 页</span></label>");
+//        </div>
+        sb.append("</div>");
+        result.setPageInfo(sb.toString());
+
+        return result;
+    }
+
     /**
      * 获取相关博客
      *
      * @return
      */
     @Override
-    public IPage<BlogEntity> getBlogSide() {
-        Page page = pageHelpper.DEFAULT_SIZE;
-        return blogMapper.getBlogSide(page);
+    public List<BlogSideDto> getBlogSide() {
+        List<BlogEntity> list = blogMapper.getBlogSide(8);
+
+        List<BlogSideDto> result = new ArrayList<>();
+        BlogSideDto dto;
+        for (BlogEntity entity : list) {
+            dto = new BlogSideDto();
+            dto.setId(entity.getId())
+                    .setPostTitle(entity.getPostTitle())
+                    .setPostTitleCut(webSiteUtil.cutStr(entity.getPostTitle(), 17));
+            result.add(dto);
+        }
+        return result;
     }
 
     /**

@@ -4,7 +4,10 @@ import cn.wgn.website.entity.BlogEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -28,8 +31,8 @@ public interface BlogMapper extends BaseMapper<BlogEntity> {
     /**
      * 获取相关博客
      *
-     * @param page
+     * @param limit
      * @return
      */
-    IPage<BlogEntity> getBlogSide(Page page);
+    List<BlogEntity> getBlogSide(@Param("limit") Integer limit);
 }
