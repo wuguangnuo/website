@@ -9,11 +9,11 @@ import javax.validation.constraints.NotBlank;
 @Data
 @ApiModel
 public class AccountLogin {
-    @ApiModelProperty("密码")
-    @NotBlank(message = "密码必填")
-    private String password;
-
     @ApiModelProperty("账号")
     @NotBlank(message = "账号必填")
     private String account;
+
+    @ApiModelProperty("密码")
+    @NotBlank(message = "密码必填")
+    private String password;
 }

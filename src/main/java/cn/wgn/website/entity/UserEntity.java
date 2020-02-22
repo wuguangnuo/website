@@ -34,11 +34,17 @@ public class UserEntity implements Serializable {
     @ApiModelProperty(value = "登陆名")
     private String username;
 
+    @ApiModelProperty(value = "姓名")
+    private String realname;
+
     @ApiModelProperty(value = "密码MD5")
     private String password;
 
     @ApiModelProperty(value = "权限默认0")
     private Integer roleid;
+
+    @ApiModelProperty(value = "头像")
+    private String headimg;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createdAt;

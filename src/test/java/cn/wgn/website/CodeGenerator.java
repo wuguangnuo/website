@@ -107,8 +107,7 @@ public class CodeGenerator {
 
         List<String> tableNames = new ArrayList<>();
 //        tableNames = getAllTableNames();
-        tableNames.add("wu_role");
-        tableNames.add("wu_role_permission");
+        tableNames.add("wu_novel");
 
         strategy.setSkipView(true);
 

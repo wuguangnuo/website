@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
+ * 主页接口(不需要权限)
+ *
  * @author WuGuangNuo
  * @date Created in 2020/2/16 10:50
  */

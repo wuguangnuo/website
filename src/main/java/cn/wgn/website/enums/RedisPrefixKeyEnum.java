@@ -47,5 +47,7 @@ public enum RedisPrefixKeyEnum {
     LowPrice,
 
     // BI 系统登陆
-    Sys
+    Sys,
+    // 验证码
+    Captcha
 }

@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -61,6 +62,9 @@ public class CommonServiceImpl implements ICommonService {
         LoginData loginData = new LoginData();
         BeanUtils.copyProperties(userEntity, loginData);
         loginData.setToken(token);
+
+        userEntity.setLoginAt(LocalDateTime.now());
+        userMapper.updateById(userEntity);
 
         return ApiRes.suc("登录成功", loginData);
     }
