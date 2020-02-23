@@ -123,7 +123,38 @@ public class ProfileServiceImpl implements IProfileService, IBaseService {
     private List<Menu> getMenuList() {
         // 获取用户的权限 匹配的code
 
-        String jsonStr = "[{\"code\":\"index\",\"icon\":\"el-icon-lx-home\",\"url\":\"index\",\"name\":\"系统首页\"},{\"code\":\"write\",\"icon\":\"el-icon-lx-home\",\"url\":\"write\",\"name\":\"写作\"},{\"code\":\"editor\",\"icon\":\"el-icon-lx-home\",\"url\":\"write/editor\",\"name\":\"富文本编辑器\"},{\"code\":\"markdown\",\"icon\":\"el-icon-lx-home\",\"url\":\"write/markdown\",\"name\":\"markdown编辑器\"}]";
+        String jsonStr = "[\n" +
+                "    {\n" +
+                "        \"code\":\"index\",\n" +
+                "        \"icon\":\"el-icon-lx-home\",\n" +
+                "        \"url\":\"index\",\n" +
+                "        \"name\":\"系统首页\"\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"code\":\"write\",\n" +
+                "        \"icon\":\"el-icon-edit\",\n" +
+                "        \"url\":\"write\",\n" +
+                "        \"name\":\"写作\"\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"code\":\"novellist\",\n" +
+                "        \"icon\":\"el-icon-lx-cascades\",\n" +
+                "        \"url\":\"write/novellist\",\n" +
+                "        \"name\":\"小说列表\"\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"code\":\"editor\",\n" +
+                "        \"icon\":\"el-icon-lx-home\",\n" +
+                "        \"url\":\"write/editor\",\n" +
+                "        \"name\":\"富文本编辑器\"\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"code\":\"markdown\",\n" +
+                "        \"icon\":\"el-icon-lx-home\",\n" +
+                "        \"url\":\"write/markdown\",\n" +
+                "        \"name\":\"markdown编辑器\"\n" +
+                "    }" +
+                "]";
 
         List<Menu> menus = JSONArray.parseArray(jsonStr, Menu.class);
         return menus;

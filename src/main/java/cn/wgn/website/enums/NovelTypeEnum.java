@@ -11,5 +11,5 @@ public enum NovelTypeEnum {
     Html,
 
     // Markdown
-    Markdowm
+    Markdown
 }

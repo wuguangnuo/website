@@ -1,6 +1,9 @@
 package cn.wgn.website.service;
 
+import cn.wgn.website.dto.RequestPage;
 import cn.wgn.website.dto.admin.AddNovel;
+import cn.wgn.website.entity.NovelEntity;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 /**
  * @author WuGuangNuo
@@ -20,7 +23,7 @@ public interface IAdminService {
      * @param addNovel
      * @return
      */
-    String addEdit(AddNovel addNovel);
+    Object addEdit(AddNovel addNovel);
 
 
     /**
@@ -29,5 +32,21 @@ public interface IAdminService {
      * @param addNovel
      * @return
      */
-    String addMarkdown(AddNovel addNovel);
+    Object addMarkdown(AddNovel addNovel);
+
+    /**
+     * 查看小说列表
+     *
+     * @param requestPage
+     * @return
+     */
+    IPage<NovelEntity> novelList(RequestPage requestPage);
+
+    /**
+     * 查看小说
+     *
+     * @param novelId
+     * @return
+     */
+    NovelEntity novelDetail(Integer novelId);
 }

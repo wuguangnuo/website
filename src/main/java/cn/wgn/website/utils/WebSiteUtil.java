@@ -28,6 +28,9 @@ public class WebSiteUtil {
      * @return
      */
     public String cutContent(String s) {
+        if (s.length() < 300) {
+            return s;
+        }
         return s.substring(0, 300)
 //                .replaceAll("&", "&amp;")
 //                .replaceAll("\"", "&quot;")
@@ -35,7 +38,7 @@ public class WebSiteUtil {
 //                .replaceAll("<", "&lt;")
 //                .replaceAll(">", "&gt;")
                 .replaceAll("\r", "")
-                .replaceAll("\n", "");
+                .replaceAll("\n", "") + "...";
     }
 
     /**
