@@ -1,7 +1,5 @@
 package cn.wgn.website.enums;
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
-
 /**
  * @author WuGuangNuo
  * @date Created in 2020/2/23 0:59

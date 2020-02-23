@@ -1,15 +1,16 @@
 package cn.wgn.website.service;
 
 import cn.wgn.website.dto.RequestPage;
-import cn.wgn.website.dto.admin.AddNovel;
+import cn.wgn.website.dto.manage.NovelDto;
 import cn.wgn.website.entity.NovelEntity;
+import cn.wgn.website.enums.NovelTypeEnum;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 /**
  * @author WuGuangNuo
  * @date Created in 2020/2/18 17:35
  */
-public interface IAdminService {
+public interface IManageService extends IBaseService {
     /**
      * 测试
      *
@@ -20,19 +21,11 @@ public interface IAdminService {
     /**
      * 新增小说
      *
-     * @param addNovel
+     * @param novelDto
+     * @param novelTypeEnum
      * @return
      */
-    Object addEdit(AddNovel addNovel);
-
-
-    /**
-     * 新增Markdown小说
-     *
-     * @param addNovel
-     * @return
-     */
-    Object addMarkdown(AddNovel addNovel);
+    Object addNovel(NovelDto novelDto, NovelTypeEnum novelTypeEnum);
 
     /**
      * 查看小说列表

@@ -4,7 +4,6 @@ import cn.wgn.website.dto.home.*;
 import cn.wgn.website.entity.*;
 import cn.wgn.website.mapper.*;
 import cn.wgn.website.service.IHomeService;
-import cn.wgn.website.utils.PageHelpper;
 import cn.wgn.website.utils.WebSiteUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -22,9 +21,7 @@ import java.util.List;
  * @date Created in 2020/2/16 10:52
  */
 @Service
-public class HomeServiceImpl implements IHomeService {
-    @Autowired
-    private PageHelpper pageHelpper;
+public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
     @Autowired
     private WebSiteUtil webSiteUtil;
 
@@ -66,7 +63,7 @@ public class HomeServiceImpl implements IHomeService {
      */
     @Override
     public IPage<DemoEntity> getDemo() {
-        Page page = pageHelpper.MAX_SIZE;
+        Page page = webSiteUtil.PAGE_MAX_SIZE;
         return demoMapper.getDemo(page);
     }
 
@@ -77,7 +74,7 @@ public class HomeServiceImpl implements IHomeService {
      */
     @Override
     public IPage<GameEntity> getGame() {
-        Page page = pageHelpper.MAX_SIZE;
+        Page page = webSiteUtil.PAGE_MAX_SIZE;
         return gameMapper.getGame(page);
     }
 
@@ -88,7 +85,7 @@ public class HomeServiceImpl implements IHomeService {
      */
     @Override
     public IPage<DocEntity> getDoc() {
-        Page page = pageHelpper.MAX_SIZE;
+        Page page = webSiteUtil.PAGE_MAX_SIZE;
         return docMapper.getDoc(page);
     }
 
@@ -99,7 +96,7 @@ public class HomeServiceImpl implements IHomeService {
      */
     @Override
     public IPage<ToolEntity> getTool() {
-        Page page = pageHelpper.MAX_SIZE;
+        Page page = webSiteUtil.PAGE_MAX_SIZE;
         return toolMapper.getTool(page);
     }
 
@@ -112,11 +109,11 @@ public class HomeServiceImpl implements IHomeService {
     @Override
     public IPage getBlogList(BlogListQuery query) {
         Page page = new Page(query.getPageIndex(), query.getPageSize());
-        IPage blogEntityIPage = blogMapper.selectPage(page, new QueryWrapper<BlogEntity>().lambda()
+        IPage bloePage = blogMapper.selectPage(page, new QueryWrapper<BlogEntity>().lambda()
                 .orderByDesc(BlogEntity::getId)
         );
 
-        List list = blogEntityIPage.getRecords();
+        List list = bloePage.getRecords();
         List<BlogDto> list2 = new ArrayList();
         BlogDto dto;
 
@@ -129,8 +126,8 @@ public class HomeServiceImpl implements IHomeService {
             dto.setPostContent(webSiteUtil.cutContent(entity.getPostContent()));
             list2.add(dto);
         }
-        blogEntityIPage.setRecords(list2);
-        return blogEntityIPage;
+        bloePage.setRecords(list2);
+        return bloePage;
     }
 
     @Override
@@ -160,7 +157,7 @@ public class HomeServiceImpl implements IHomeService {
         }
 
         sb.append(c < (e - 3) ? "<span class='pageEllipsis'>...</span>" : "");
-        sb.append("<a class='prev btn" + (c == e ? " disabled'" : "' to='?pageIndex=" + (c + 1) + "'") + ">下一页</a>");//        <a class="next btn" href="/index.php/blog/loadtable/p/6">下一页</a>
+        sb.append("<a class='prev btn" + (c == e ? " disabled'" : "' to='?pageIndex=" + (c + 1) + "'") + ">下一页</a>");
         sb.append("<a class='end btn" + (c == e ? " disabled'" : "' to='?pageIndex=" + e + "'") + ">尾页</a>");
         sb.append("<label class='pageTurn'><input to='?pageIndex=%5BPAGE%5D' title='输入页码，按回车快速跳转' value='" + c + "'></input><span title='共 " + e + " 页'> / " + e + " 页</span></label>");
 //        </div>
@@ -200,5 +197,4 @@ public class HomeServiceImpl implements IHomeService {
     public BlogEntity getBlogDetail(Integer id) {
         return blogMapper.selectById(id);
     }
-
 }

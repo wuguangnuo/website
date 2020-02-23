@@ -44,7 +44,7 @@ public class TokenAuthFilter implements Filter {
 
 //        final String url = request.getRequestURI();
 
-        if (Strings.isNullOrEmpty(token) || !redisUtil.exists(token, RedisPrefixKeyEnum.Sys.toString())) {
+        if (Strings.isNullOrEmpty(token) || !redisUtil.exists(token, RedisPrefixKeyEnum.Token.toString())) {
             log.warn("UnAuthorized url: " + request.getRequestURI());
             response.setStatus(HttpServletResponse.SC_OK);
             OutputStream outputStream = response.getOutputStream();
@@ -53,7 +53,7 @@ public class TokenAuthFilter implements Filter {
             outputStream.flush();
             outputStream.close();
         } else {
-            String idAndAccount = redisUtil.get(token, RedisPrefixKeyEnum.Sys.toString());
+            String idAndAccount = redisUtil.get(token, RedisPrefixKeyEnum.Token.toString());
             String[] arr = idAndAccount.split(":");
 
             if (arr.length == 3) {

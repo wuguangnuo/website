@@ -104,7 +104,9 @@ public class RedisUtil {
      * merge Key
      */
     private String mergeKey(String key, String prefix) {
-        if (Strings.isNullOrEmpty(prefix)) return key;
+        if (Strings.isNullOrEmpty(prefix)) {
+            return key;
+        }
         return prefix + ":" + key;
     }
 }

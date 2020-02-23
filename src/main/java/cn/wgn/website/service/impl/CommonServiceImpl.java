@@ -9,31 +9,28 @@ import cn.wgn.website.mapper.UserMapper;
 import cn.wgn.website.service.ICommonService;
 import cn.wgn.website.utils.EncryptUtil;
 import cn.wgn.website.utils.RedisUtil;
+import cn.wgn.website.utils.WebSiteUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * @author WuGuangNuo
  * @date Created in 2020/2/18 17:48
  */
-@Slf4j
 @Service
-public class CommonServiceImpl implements ICommonService {
+public class CommonServiceImpl extends BaseServiceImpl implements ICommonService {
     @Autowired
     private RedisUtil redisUtil;
     @Autowired
     private UserMapper userMapper;
     @Autowired
     private EncryptUtil encryptUtil;
-
-    // 账号过期时间,单位分
-    private static final int expireTime = 9000000;
+    @Autowired
+    private WebSiteUtil webSiteUtil;
 
     /**
      * 账号密码登录
@@ -42,11 +39,12 @@ public class CommonServiceImpl implements ICommonService {
      */
     @Override
     public ApiRes loginByPd(AccountLogin accountLogin) {
-        log.info("登录用户信息：" + accountLogin.toString());
+        LOG.info("登录用户信息：" + accountLogin.toString());
 
         // 验证登录密码
         UserEntity userEntity = userMapper.selectOne(
-                new QueryWrapper<UserEntity>().lambda().eq(UserEntity::getUsername, accountLogin.getAccount())
+                new QueryWrapper<UserEntity>().lambda()
+                        .eq(UserEntity::getUsername, accountLogin.getAccount())
         );
         if (userEntity == null) {
             return ApiRes.fail("账号不存在");
@@ -55,9 +53,12 @@ public class CommonServiceImpl implements ICommonService {
             return ApiRes.fail("密码错误");
         }
 
-        String token = UUID.randomUUID().toString().replaceAll("-", "");
+        String token = webSiteUtil.randomStr();
         // Redis : DB.Sys -> Id:No:RoleId
-        redisUtil.set(token, RedisPrefixKeyEnum.Sys.toString(), userEntity.getId() + ":" + userEntity.getUsername() + ":" + userEntity.getRoleid(), expireTime);
+        redisUtil.set(token,
+                RedisPrefixKeyEnum.Token.toString(),
+                userEntity.getId() + ":" + userEntity.getUsername() + ":" + userEntity.getRoleid(),
+                webSiteUtil.EXPIRE_TIME);
 
         LoginData loginData = new LoginData();
         BeanUtils.copyProperties(userEntity, loginData);

@@ -2,10 +2,11 @@ package cn.wgn.website.controller;
 
 import cn.wgn.website.dto.ApiRes;
 import cn.wgn.website.dto.RequestPage;
-import cn.wgn.website.dto.admin.AddNovel;
+import cn.wgn.website.dto.manage.NovelDto;
 import cn.wgn.website.entity.NovelEntity;
+import cn.wgn.website.enums.NovelTypeEnum;
 import cn.wgn.website.handler.Authorize;
-import cn.wgn.website.service.IAdminService;
+import cn.wgn.website.service.IManageService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,19 +24,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Api(tags = "管理")
-@RequestMapping("admin")
-public class AdminController extends BaseController {
-    private final IAdminService adminService;
+@RequestMapping("manage")
+public class ManageController extends BaseController {
+    private final IManageService manageService;
 
-    public AdminController(IAdminService adminServiceImpl) {
-        this.adminService = adminServiceImpl;
+    public ManageController(IManageService manageServiceImpl) {
+        this.manageService = manageServiceImpl;
     }
 
     @Authorize("admin") // 需要某个权限
     @PostMapping("test")
     @ApiOperation("测试Admin")
     public ApiRes<String> test() {
-        String result = adminService.test();
+        String result = manageService.test();
 
         if (result == null) {
             return ApiRes.fail();
@@ -47,8 +48,8 @@ public class AdminController extends BaseController {
     @Authorize("author")
     @PostMapping("addEdit")
     @ApiOperation("新增小说")
-    public ApiRes addEdit(@RequestBody AddNovel addNovel) {
-        Object result = adminService.addEdit(addNovel);
+    public ApiRes addEdit(@RequestBody NovelDto novelDto) {
+        Object result = manageService.addNovel(novelDto, NovelTypeEnum.Html);
 
         if (result instanceof Number) {
             return ApiRes.suc((Number) result);
@@ -60,8 +61,8 @@ public class AdminController extends BaseController {
     @Authorize("author")
     @PostMapping("addMarkdown")
     @ApiOperation("新增Markdown小说")
-    public ApiRes addMarkdown(@RequestBody AddNovel addNovel) {
-        Object result = adminService.addMarkdown(addNovel);
+    public ApiRes addMarkdown(@RequestBody NovelDto novelDto) {
+        Object result = manageService.addNovel(novelDto, NovelTypeEnum.Markdown);
 
         if (result instanceof Number) {
             return ApiRes.suc((Number) result);
@@ -74,7 +75,7 @@ public class AdminController extends BaseController {
     @PostMapping("novelList")
     @ApiOperation("查看小说列表")
     public ApiRes<IPage<NovelEntity>> novelList(@RequestBody RequestPage requestPage) {
-        IPage<NovelEntity> result = adminService.novelList(requestPage);
+        IPage<NovelEntity> result = manageService.novelList(requestPage);
 
         if (result == null) {
             return ApiRes.fail();
@@ -90,7 +91,7 @@ public class AdminController extends BaseController {
         if (novelId == null || novelId <= 0) {
             return ApiRes.fail("novel id 错误");
         }
-        NovelEntity result = adminService.novelDetail(novelId);
+        NovelEntity result = manageService.novelDetail(novelId);
 
         if (result == null) {
             return ApiRes.fail();

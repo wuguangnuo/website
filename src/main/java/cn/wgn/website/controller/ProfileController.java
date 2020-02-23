@@ -1,14 +1,14 @@
 package cn.wgn.website.controller;
 
 import cn.wgn.website.dto.ApiRes;
-import cn.wgn.website.dto.common.AccountLogin;
 import cn.wgn.website.dto.profile.MenuTree;
 import cn.wgn.website.service.IProfileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**

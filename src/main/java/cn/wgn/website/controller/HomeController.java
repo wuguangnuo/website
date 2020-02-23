@@ -96,7 +96,7 @@ public class HomeController extends BaseController {
         }
     }
 
-    @GetMapping(value = "blogList")
+    @PostMapping(value = "blogList")
     @ApiOperation(value = "博文列表")
     public ApiRes<IPage> blogList(BlogListQuery query) {
         IPage res = homeService.getBlogList(query);
@@ -108,7 +108,7 @@ public class HomeController extends BaseController {
         }
     }
 
-    @GetMapping(value = "blogList2")
+    @PostMapping(value = "blogList2")
     @ApiOperation(value = "博文列表2")
     public ApiRes<BlogListDto> blogList2(BlogListQuery query) {
         BlogListDto res = homeService.getBlogList2(query);

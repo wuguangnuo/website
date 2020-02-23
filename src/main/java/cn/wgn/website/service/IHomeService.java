@@ -11,7 +11,7 @@ import java.util.List;
  * @author WuGuangNuo
  * @date Created in 2020/2/16 10:50
  */
-public interface IHomeService {
+public interface IHomeService extends IBaseService {
     /**
      * 获取最新一篇日记
      *

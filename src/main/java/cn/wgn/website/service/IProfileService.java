@@ -10,7 +10,7 @@ import java.util.List;
  * @author WuGuangNuo
  * @date Created in 2020/2/21 21:12
  */
-public interface IProfileService {
+public interface IProfileService extends IBaseService {
     /**
      * 账号密码登录
      *

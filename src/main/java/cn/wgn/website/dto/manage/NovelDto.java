@@ -1,10 +1,8 @@
-package cn.wgn.website.dto.admin;
+package cn.wgn.website.dto.manage;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDateTime;
 
 /**
  * @author WuGuangNuo
@@ -12,7 +10,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Accessors(chain = true)
-public class AddNovel {
+public class NovelDto {
     @ApiModelProperty(value = "小说ID")
     private Integer id;
 

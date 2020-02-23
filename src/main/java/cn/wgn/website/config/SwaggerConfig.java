@@ -34,7 +34,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("cn.wgn.website.controller"))
                 .paths(PathSelectors.any())
                 .build()
-//                .host("api.wuguangnuo.cn") // 发布时取消此处的注释
+//                .host("api.wuguangnuo.cn:8800") // 发布时取消此处的注释
                 .securitySchemes(getSecuritySchemes())
                 .securityContexts(getSecuriryContext());
     }

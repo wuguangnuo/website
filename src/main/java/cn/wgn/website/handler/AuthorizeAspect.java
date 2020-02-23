@@ -59,7 +59,7 @@ public class AuthorizeAspect {
         String[] codes = authorize.value();
 
         // 未登录
-        if (Strings.isNullOrEmpty(token) || !redisUtil.exists(token, RedisPrefixKeyEnum.Sys.toString())) {
+        if (Strings.isNullOrEmpty(token) || !redisUtil.exists(token, RedisPrefixKeyEnum.Token.toString())) {
             return ApiRes.unAuthorized();
         }
 
@@ -67,7 +67,7 @@ public class AuthorizeAspect {
             // 注解为空,登陆即可
             return pjp.proceed();
         } else {
-            String[] arr = redisUtil.get(token, RedisPrefixKeyEnum.Sys.toString()).split(":");
+            String[] arr = redisUtil.get(token, RedisPrefixKeyEnum.Token.toString()).split(":");
             int roleId = Integer.valueOf(arr[2]);
             // roleId 的所有权限
             List<RolePermissionEntity> powers = rolePermissionMapper.selectList(

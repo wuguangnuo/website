@@ -23,7 +23,7 @@ public class FilterConfig {
     @Bean
     public FilterRegistrationBean tokenFilterRegistration() {
         List<String> url = new ArrayList<>();
-        url.add("/admin/*");
+        url.add("/manage/*");
         url.add("/profile/*");
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new TokenAuthFilter());
