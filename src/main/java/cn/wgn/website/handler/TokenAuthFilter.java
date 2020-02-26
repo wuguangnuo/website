@@ -32,6 +32,7 @@ public class TokenAuthFilter implements Filter {
         String methods = request.getMethod();
         if ("OPTIONS".equals(methods)) {
             response.setStatus(HttpServletResponse.SC_OK);
+            return;
         }
 
         String token = request.getHeader("token");

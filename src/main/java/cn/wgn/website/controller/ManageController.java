@@ -2,11 +2,16 @@ package cn.wgn.website.controller;
 
 import cn.wgn.website.dto.ApiRes;
 import cn.wgn.website.dto.RequestPage;
+import cn.wgn.website.dto.Table;
+import cn.wgn.website.dto.manage.Novel;
 import cn.wgn.website.dto.manage.NovelDto;
+import cn.wgn.website.dto.manage.NovelQueryDto;
 import cn.wgn.website.entity.NovelEntity;
 import cn.wgn.website.enums.NovelTypeEnum;
 import cn.wgn.website.handler.Authorize;
 import cn.wgn.website.service.IManageService;
+import cn.wgn.website.utils.ExcelUtil;
+import cn.wgn.website.utils.WebSiteUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +19,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 /**
  * 需要管理员权限的控制器
@@ -74,13 +83,38 @@ public class ManageController extends BaseController {
     @Authorize("author")
     @PostMapping("novelList")
     @ApiOperation("查看小说列表")
-    public ApiRes<IPage<NovelEntity>> novelList(@RequestBody RequestPage requestPage) {
-        IPage<NovelEntity> result = manageService.novelList(requestPage);
+    public ApiRes<IPage<Novel>> novelList(HttpServletResponse response, @RequestBody NovelQueryDto dto) {
+        // 校验
+        String checkOrderBy = WebSiteUtil.checkOrderBy(dto.getOrderBy(), NovelEntity.class);
+        if (!"1".equals(checkOrderBy)) {
+            return ApiRes.fail(checkOrderBy);
+        }
 
-        if (result == null) {
-            return ApiRes.fail();
+        // 调整
+        WebSiteUtil.sortDto(dto);
+
+        // 判断
+        if ("Excel".equalsIgnoreCase(dto.getExport())) {
+            List<Novel> data = manageService.novelListExcel(dto);
+
+            String fileName = "小说列表";
+            String excelName = "Sheet1";
+            String excelTitles = "ID,标题,作者,类型,内容,创建时间,更新时间";
+            try {
+                ExcelUtil.exportExcel(response, fileName, excelName, excelTitles, data);
+            } catch (Exception e) {
+                LOG.error(e.getMessage() + e);
+            }
+
+            return null;
         } else {
-            return ApiRes.suc(result);
+            IPage<Novel> tbody = manageService.novelList(dto);
+
+            if (tbody != null) {
+                return ApiRes.suc(tbody);
+            } else {
+                return ApiRes.fail();
+            }
         }
     }
 

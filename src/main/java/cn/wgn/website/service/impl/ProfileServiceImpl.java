@@ -36,8 +36,6 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
     private UserMapper userMapper;
     @Autowired
     private EncryptUtil encryptUtil;
-    @Autowired
-    private WebSiteUtil webSiteUtil;
 
     /**
      * 账号密码登录
@@ -65,7 +63,7 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
         redisUtil.set(token,
                 RedisPrefixKeyEnum.Token.toString(),
                 userEntity.getId() + ":" + userEntity.getUsername() + ":" + userEntity.getRoleid(),
-                webSiteUtil.EXPIRE_TIME);
+                WebSiteUtil.EXPIRE_TIME);
 
         LoginData loginData = new LoginData();
         BeanUtils.copyProperties(userEntity, loginData);

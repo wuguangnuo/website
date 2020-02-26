@@ -23,9 +23,6 @@ import java.util.List;
 @Service
 public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
     @Autowired
-    private WebSiteUtil webSiteUtil;
-
-    @Autowired
     private DiaryMapper diaryMapper;
     @Autowired
     private DemoMapper demoMapper;
@@ -63,7 +60,7 @@ public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
      */
     @Override
     public IPage<DemoEntity> getDemo() {
-        Page page = webSiteUtil.PAGE_MAX_SIZE;
+        Page page = WebSiteUtil.PAGE_MAX_SIZE;
         return demoMapper.getDemo(page);
     }
 
@@ -74,7 +71,7 @@ public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
      */
     @Override
     public IPage<GameEntity> getGame() {
-        Page page = webSiteUtil.PAGE_MAX_SIZE;
+        Page page = WebSiteUtil.PAGE_MAX_SIZE;
         return gameMapper.getGame(page);
     }
 
@@ -85,7 +82,7 @@ public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
      */
     @Override
     public IPage<DocEntity> getDoc() {
-        Page page = webSiteUtil.PAGE_MAX_SIZE;
+        Page page = WebSiteUtil.PAGE_MAX_SIZE;
         return docMapper.getDoc(page);
     }
 
@@ -96,7 +93,7 @@ public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
      */
     @Override
     public IPage<ToolEntity> getTool() {
-        Page page = webSiteUtil.PAGE_MAX_SIZE;
+        Page page = WebSiteUtil.PAGE_MAX_SIZE;
         return toolMapper.getTool(page);
     }
 
@@ -122,8 +119,8 @@ public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
             BlogEntity entity = (BlogEntity) it.next();
             dto = new BlogDto();
             BeanUtils.copyProperties(entity, dto);
-            dto.setPostDate(webSiteUtil.dateFormat(entity.getPostDate()));
-            dto.setPostContent(webSiteUtil.cutContent(entity.getPostContent()));
+            dto.setPostDate(WebSiteUtil.dateFormat(entity.getPostDate()));
+            dto.setPostContent(WebSiteUtil.cutContent(entity.getPostContent()));
             list2.add(dto);
         }
         bloePage.setRecords(list2);
@@ -182,7 +179,7 @@ public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
             dto = new BlogSideDto();
             dto.setId(entity.getId())
                     .setPostTitle(entity.getPostTitle())
-                    .setPostTitleCut(webSiteUtil.cutStr(entity.getPostTitle(), 17));
+                    .setPostTitleCut(WebSiteUtil.cutStr(entity.getPostTitle(), 17));
             result.add(dto);
         }
         return result;

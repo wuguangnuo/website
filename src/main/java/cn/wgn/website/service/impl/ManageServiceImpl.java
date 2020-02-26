@@ -1,7 +1,9 @@
 package cn.wgn.website.service.impl;
 
 import cn.wgn.website.dto.RequestPage;
+import cn.wgn.website.dto.manage.Novel;
 import cn.wgn.website.dto.manage.NovelDto;
+import cn.wgn.website.dto.manage.NovelQueryDto;
 import cn.wgn.website.entity.NovelEntity;
 import cn.wgn.website.enums.NovelTypeEnum;
 import cn.wgn.website.mapper.NovelMapper;
@@ -10,11 +12,13 @@ import cn.wgn.website.utils.WebSiteUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.base.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,8 +30,6 @@ import java.util.List;
 public class ManageServiceImpl extends BaseServiceImpl implements IManageService {
     @Autowired
     private NovelMapper novelMapper;
-    @Autowired
-    private WebSiteUtil webSiteUtil;
 
     /**
      * 测试
@@ -76,26 +78,83 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
     /**
      * 查看小说列表
      *
-     * @param requestPage
+     * @param dto
      * @return
      */
     @Override
-    public IPage<NovelEntity> novelList(RequestPage requestPage) {
-        Page page = new Page(requestPage.getPageIndex(), requestPage.getPageSize());
-        IPage<NovelEntity> novelEntityIPage = novelMapper.selectPage(page,
-                new QueryWrapper<NovelEntity>().lambda()
-                        .eq(NovelEntity::getNovelAuthor, getUserData().getAccount())
-                        .orderByDesc(NovelEntity::getId)
-        );
+//    @Cacheable(value = "novelList", key = "#dto.toString()+#dto.pageIndex+'_'+#dto.pageSize")
+    public Page novelList(NovelQueryDto dto) {
+        Page page = new Page(dto.getPageIndex(), dto.getPageSize());
+        Page novelPage = novelMapper.selectPage(page, novelListQw(dto));
 
-        List<NovelEntity> list = novelEntityIPage.getRecords();
-        Iterator it = list.iterator();
-        while (it.hasNext()) {
-            NovelEntity entity = (NovelEntity) it.next();
-            entity.setNovelContent(webSiteUtil.cutContent(entity.getNovelContent()));
+        List<NovelEntity> records = novelPage.getRecords();
+        List<Novel> result = new ArrayList<>();
+        Novel novel;
+        for (NovelEntity entity : records) {
+            novel = new Novel();
+            BeanUtils.copyProperties(entity, novel);
+            novel.setNovelContent(WebSiteUtil.cutContent(entity.getNovelContent(), 20));
+            result.add(novel);
         }
-        novelEntityIPage.setRecords(list);
-        return novelEntityIPage;
+        novelPage.setRecords(result);
+        return novelPage;
+    }
+
+    /**
+     * 查看小说列表（Excel）
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+//    @Cacheable(value = "novelListExcel", key = "#dto.toString()+#dto.pageIndex+'_'+#dto.pageSize")
+    public List<Novel> novelListExcel(NovelQueryDto dto) {
+        List<NovelEntity> list = novelMapper.selectList(novelListQw(dto));
+        List<Novel> result = new ArrayList<>();
+        Novel novel;
+        for (NovelEntity entity : list) {
+            novel = new Novel();
+            BeanUtils.copyProperties(entity, novel);
+            novel.setNovelContent(WebSiteUtil.cutContent(entity.getNovelContent(), 20));
+            result.add(novel);
+        }
+        return result;
+    }
+
+    /**
+     * 查看小说列表（QueryWrapper）
+     *
+     * @param dto
+     * @return
+     */
+    private QueryWrapper<NovelEntity> novelListQw(NovelQueryDto dto) {
+        QueryWrapper<NovelEntity> qw = new QueryWrapper<NovelEntity>();
+        if (getUserData().getAccount() != null) {
+            qw.lambda().like(NovelEntity::getNovelAuthor, getUserData().getAccount());
+        }
+        if (!Strings.isNullOrEmpty(dto.getNovelTitle())) {
+            qw.lambda().like(NovelEntity::getNovelTitle, dto.getNovelTitle());
+        }
+        if (!Strings.isNullOrEmpty(dto.getNovelType())) {
+            qw.lambda().eq(NovelEntity::getNovelType, dto.getNovelType());
+        }
+        if (dto.getCreateTm1() != null) {
+            qw.lambda().gt(NovelEntity::getCreateTm, dto.getCreateTm1());
+        }
+        if (dto.getCreateTm2() != null) {
+            qw.lambda().lt(NovelEntity::getCreateTm, dto.getCreateTm2());
+        }
+        if (dto.getUpdateTm1() != null) {
+            qw.lambda().gt(NovelEntity::getCreateTm, dto.getUpdateTm1());
+        }
+        if (dto.getUpdateTm2() != null) {
+            qw.lambda().lt(NovelEntity::getCreateTm, dto.getUpdateTm2());
+        }
+        if (!Strings.isNullOrEmpty(dto.getOrderBy())) {
+            String[] s = dto.getOrderBy().split(" ");
+            qw.orderBy(true, "ASC".equalsIgnoreCase(s[1]), s[0]);
+        }
+        return qw;
     }
 
     /**

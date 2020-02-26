@@ -29,8 +29,6 @@ public class CommonServiceImpl extends BaseServiceImpl implements ICommonService
     private UserMapper userMapper;
     @Autowired
     private EncryptUtil encryptUtil;
-    @Autowired
-    private WebSiteUtil webSiteUtil;
 
     /**
      * 账号密码登录
@@ -53,12 +51,12 @@ public class CommonServiceImpl extends BaseServiceImpl implements ICommonService
             return ApiRes.fail("密码错误");
         }
 
-        String token = webSiteUtil.randomStr();
+        String token = WebSiteUtil.randomStr();
         // Redis : DB.Sys -> Id:No:RoleId
         redisUtil.set(token,
                 RedisPrefixKeyEnum.Token.toString(),
                 userEntity.getId() + ":" + userEntity.getUsername() + ":" + userEntity.getRoleid(),
-                webSiteUtil.EXPIRE_TIME);
+                WebSiteUtil.EXPIRE_TIME);
 
         LoginData loginData = new LoginData();
         BeanUtils.copyProperties(userEntity, loginData);

@@ -61,7 +61,7 @@ public class CommonController extends BaseController {
 
     @GetMapping("captcha.jpg")
     @ApiOperation("验证码")
-    public void captcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void captcha(HttpServletResponse response) throws IOException {
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");
 
@@ -70,7 +70,7 @@ public class CommonController extends BaseController {
 
         String key = UUID.randomUUID().toString();
         redisUtil.set(key, RedisPrefixKeyEnum.Captcha.toString(), code, expireTime);
-        request.getSession().setAttribute(RedisPrefixKeyEnum.Captcha.toString(), key);
+//        request.getSession().setAttribute(RedisPrefixKeyEnum.Captcha.toString(), key);
 
         BufferedImage bi = producer.createImage(code);
         ServletOutputStream out = response.getOutputStream();

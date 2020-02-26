@@ -24,7 +24,7 @@ public class RequestPage {
 
     // 默认分页大小
     public int getPageSize() {
-        return pageSize <= 0 ? 8 : pageSize;
+        return pageSize <= 0 ? 10 : pageSize;
     }
 
     // 默认分页第几页

@@ -1,10 +1,13 @@
 package cn.wgn.website.service;
 
-import cn.wgn.website.dto.RequestPage;
+import cn.wgn.website.dto.manage.Novel;
 import cn.wgn.website.dto.manage.NovelDto;
+import cn.wgn.website.dto.manage.NovelQueryDto;
 import cn.wgn.website.entity.NovelEntity;
 import cn.wgn.website.enums.NovelTypeEnum;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+
+import java.util.List;
 
 /**
  * @author WuGuangNuo
@@ -30,10 +33,12 @@ public interface IManageService extends IBaseService {
     /**
      * 查看小说列表
      *
-     * @param requestPage
+     * @param dto
      * @return
      */
-    IPage<NovelEntity> novelList(RequestPage requestPage);
+    IPage<Novel> novelList(NovelQueryDto dto);
+
+    List<Novel> novelListExcel(NovelQueryDto dto);
 
     /**
      * 查看小说
