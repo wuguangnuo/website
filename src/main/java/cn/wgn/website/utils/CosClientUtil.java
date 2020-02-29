@@ -5,8 +5,8 @@ import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.model.PutObjectRequest;
-import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.region.Region;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,9 +20,13 @@ import java.util.UUID;
  */
 @Component
 public class CosClientUtil {
+    @Value("${privateConfig.cos.secretId}")
     private String secretId = "AKID1udFg5xYZaSAg3cKWXUPFvhMrNK9qiXR";
+    @Value("${privateConfig.cos.secretKey}")
     private String secretKey = "C6uumV5YtAW7at33TF0eGMLjATH5m5dM";
+    @Value("${privateConfig.cos.bucketName}")
     private String bucketName = "wuguangnuo-1257896087";
+    @Value("${privateConfig.cos.regionName}")
     private String regionName = "ap-guangzhou";
 
     private COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
@@ -37,9 +41,12 @@ public class CosClientUtil {
      * @param path Path in COS
      * @return URI on WEB
      */
-    public String uploadFile2COS(MultipartFile file, String path) {
+    public String uploadFile2Cos(MultipartFile file, String path) {
         String oldFileName = file.getOriginalFilename();
-        String suffix = oldFileName.substring(oldFileName.lastIndexOf("."));
+        String suffix = "";
+        if (oldFileName != null && oldFileName.contains(".")) {
+            suffix = oldFileName.substring(oldFileName.lastIndexOf("."));
+        }
         String newFileName = UUID.randomUUID() + suffix;
 
         File localFile;
@@ -49,10 +56,9 @@ public class CosClientUtil {
             // 指定要上传到 COS 上的路径
             String key = "/website/" + path + "/" + newFileName;
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, localFile);
-            PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
+            cosClient.putObject(putObjectRequest);
 
-            String url = "https://" + bucketName + ".cos." + regionName + ".myqcloud.com/website/" + path + "/" + newFileName;
-            return url;
+            return "https://" + bucketName + ".cos." + regionName + ".myqcloud.com/website/" + path + "/" + newFileName;
         } catch (IOException e) {
             return "上传失败";
         } finally {

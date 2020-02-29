@@ -1,0 +1,32 @@
+[
+	{
+		"code":"index",
+        "icon":"el-icon-lx-home",
+        "url":"index",
+        "name":"系统首页"
+    },
+    {
+        "code":"write",
+        "icon":"el-icon-edit",
+        "url":"write",
+        "name":"写作"
+    },
+    {
+        "code":"novellist",
+        "icon":"el-icon-lx-cascades",
+        "url":"write/novellist",
+        "name":"小说列表"
+    },
+    {
+        "code":"editor",
+        "icon":"el-icon-lx-home",
+        "url":"write/editor",
+        "name":"富文本编辑器"
+    },
+    {
+        "code":"markdown",
+        "icon":"el-icon-lx-home",
+        "url":"write/markdown",
+        "name":"markdown编辑器"
+    }
+]

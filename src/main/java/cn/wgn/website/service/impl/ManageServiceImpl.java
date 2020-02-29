@@ -1,6 +1,5 @@
 package cn.wgn.website.service.impl;
 
-import cn.wgn.website.dto.RequestPage;
 import cn.wgn.website.dto.manage.Novel;
 import cn.wgn.website.dto.manage.NovelDto;
 import cn.wgn.website.dto.manage.NovelQueryDto;
@@ -10,7 +9,6 @@ import cn.wgn.website.mapper.NovelMapper;
 import cn.wgn.website.service.IManageService;
 import cn.wgn.website.utils.WebSiteUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Strings;
 import org.springframework.beans.BeanUtils;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**

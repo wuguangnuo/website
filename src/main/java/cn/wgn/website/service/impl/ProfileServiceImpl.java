@@ -6,11 +6,14 @@ import cn.wgn.website.dto.SelectListItem;
 import cn.wgn.website.dto.common.AccountLogin;
 import cn.wgn.website.dto.common.LoginData;
 import cn.wgn.website.dto.profile.MenuTree;
+import cn.wgn.website.entity.RolePermissionEntity;
 import cn.wgn.website.entity.UserEntity;
 import cn.wgn.website.enums.RedisPrefixKeyEnum;
+import cn.wgn.website.mapper.RolePermissionMapper;
 import cn.wgn.website.mapper.UserMapper;
 import cn.wgn.website.service.IProfileService;
 import cn.wgn.website.utils.EncryptUtil;
+import cn.wgn.website.utils.FileUtil;
 import cn.wgn.website.utils.RedisUtil;
 import cn.wgn.website.utils.WebSiteUtil;
 import com.alibaba.fastjson.JSONArray;
@@ -20,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -33,9 +37,13 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
     @Autowired
     private RedisUtil redisUtil;
     @Autowired
+    private EncryptUtil encryptUtil;
+    @Autowired
+    private FileUtil fileUtil;
+    @Autowired
     private UserMapper userMapper;
     @Autowired
-    private EncryptUtil encryptUtil;
+    private RolePermissionMapper rolePermissionMapper;
 
     /**
      * 账号密码登录
@@ -44,8 +52,6 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
      */
     @Override
     public ApiRes loginByPd(AccountLogin accountLogin) {
-        LOG.info("登录用户信息：" + accountLogin.toString());
-
         // 验证登录密码
         UserEntity userEntity = userMapper.selectOne(
                 new QueryWrapper<UserEntity>().lambda()
@@ -118,43 +124,25 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
      *
      * @return
      */
-    private List<Menu> getMenuList() {
-        // 获取用户的权限 匹配的code
-
-        String jsonStr = "[\n" +
-                "    {\n" +
-                "        \"code\":\"index\",\n" +
-                "        \"icon\":\"el-icon-lx-home\",\n" +
-                "        \"url\":\"index\",\n" +
-                "        \"name\":\"系统首页\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "        \"code\":\"write\",\n" +
-                "        \"icon\":\"el-icon-edit\",\n" +
-                "        \"url\":\"write\",\n" +
-                "        \"name\":\"写作\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "        \"code\":\"novellist\",\n" +
-                "        \"icon\":\"el-icon-lx-cascades\",\n" +
-                "        \"url\":\"write/novellist\",\n" +
-                "        \"name\":\"小说列表\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "        \"code\":\"editor\",\n" +
-                "        \"icon\":\"el-icon-lx-home\",\n" +
-                "        \"url\":\"write/editor\",\n" +
-                "        \"name\":\"富文本编辑器\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "        \"code\":\"markdown\",\n" +
-                "        \"icon\":\"el-icon-lx-home\",\n" +
-                "        \"url\":\"write/markdown\",\n" +
-                "        \"name\":\"markdown编辑器\"\n" +
-                "    }" +
-                "]";
-
+    public List<Menu> getMenuList() {
+        String jsonStr = fileUtil.getMenuJson();
         List<Menu> menus = JSONArray.parseArray(jsonStr, Menu.class);
-        return menus;
+
+        // 获取用户的权限 匹配的code
+        List<RolePermissionEntity> powers = rolePermissionMapper.selectList(
+                new QueryWrapper<RolePermissionEntity>().lambda()
+                        .eq(RolePermissionEntity::getRoleId, getUserData().getRoleId())
+        );
+
+        List<Menu> result = new ArrayList<>();
+        for (Menu m : menus) {
+            for (RolePermissionEntity p : powers) {
+                if (m.getCode().equals(p.getPermissionId())) {
+                    result.add(m);
+                }
+            }
+        }
+
+        return result;
     }
 }

@@ -89,7 +89,7 @@ public class CommonController extends BaseController {
         if (file == null) {
             return ApiRes.fail("文件不能为空");
         }
-        String result = cosClientUtil.uploadFile2COS(file, "temp");
+        String result = cosClientUtil.uploadFile2Cos(file, "temp");
         return ApiRes.suc("上传成功", result);
     }
 }
