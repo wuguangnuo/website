@@ -8,6 +8,10 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/wuguangnuo?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false
     username: root
     password:
+  servlet:
+    multipart:
+      max-file-size: 16MB
+      max-request-size: 16MB
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml
   configuration:
@@ -18,5 +22,4 @@ logging:
     cn.wgn.website: debug
     io.swagger.models.parameters.AbstractSerializableParameter: error
 server:
-  port:
-    8800
+  port: 8800
