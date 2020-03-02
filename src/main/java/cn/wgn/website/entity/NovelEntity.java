@@ -43,11 +43,12 @@ public class NovelEntity implements Serializable {
     @ApiModelProperty(value = "小说内容")
     private String novelContent;
     
-    @ApiModelProperty(value = "小说创建时间")
+    @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTm;
     
-    @ApiModelProperty(value = "小说更新时间")
+    @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTm;
 
-
+    @ApiModelProperty(value = "状态")
+    private String state;
 }

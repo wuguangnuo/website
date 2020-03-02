@@ -5,6 +5,7 @@ import cn.wgn.website.dto.manage.NovelDto;
 import cn.wgn.website.dto.manage.NovelQueryDto;
 import cn.wgn.website.entity.NovelEntity;
 import cn.wgn.website.enums.NovelTypeEnum;
+import cn.wgn.website.enums.StateEnum;
 import cn.wgn.website.mapper.NovelMapper;
 import cn.wgn.website.service.IManageService;
 import cn.wgn.website.utils.WebSiteUtil;
@@ -58,7 +59,8 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
                     .setNovelTitle(novelDto.getNovelTitle())
                     .setNovelContent(novelDto.getNovelContent())
                     .setNovelType(novelTypeEnum.toString())
-                    .setUpdateTm(LocalDateTime.now());
+                    .setUpdateTm(LocalDateTime.now())
+                    .setState(StateEnum.NORMAL.getValue());
             novelMapper.updateById(entity);
             return entity.getId();
         } else {
@@ -90,7 +92,7 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
         for (NovelEntity entity : records) {
             novel = new Novel();
             BeanUtils.copyProperties(entity, novel);
-            novel.setNovelContent(WebSiteUtil.cutContent(entity.getNovelContent(), 20));
+            novel.setNovelContent(WebSiteUtil.cutContent(entity.getNovelContent(), 100));
             result.add(novel);
         }
         novelPage.setRecords(result);
@@ -112,7 +114,7 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
         for (NovelEntity entity : list) {
             novel = new Novel();
             BeanUtils.copyProperties(entity, novel);
-            novel.setNovelContent(WebSiteUtil.cutContent(entity.getNovelContent(), 20));
+            novel.setNovelContent(WebSiteUtil.cutContent(entity.getNovelContent(), 100));
             result.add(novel);
         }
         return result;
@@ -147,6 +149,7 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
         if (dto.getUpdateTm2() != null) {
             qw.lambda().lt(NovelEntity::getCreateTm, dto.getUpdateTm2());
         }
+        qw.lambda().eq(NovelEntity::getState, StateEnum.NORMAL.getValue());
         if (!Strings.isNullOrEmpty(dto.getOrderBy())) {
             String[] s = dto.getOrderBy().split(" ");
             qw.orderBy(true, "ASC".equalsIgnoreCase(s[1]), s[0]);
@@ -163,10 +166,40 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
     @Override
     public NovelEntity novelDetail(Integer novelId) {
         NovelEntity entity = novelMapper.selectById(novelId);
-        if (entity != null && getUserData().getAccount().equals(entity.getNovelAuthor())) {
+        if (entity != null
+                && StateEnum.NORMAL.getValue().equals(entity.getState())
+                && getUserData().getAccount().equals(entity.getNovelAuthor())) {
             return entity;
         } else {
             return null;
         }
+    }
+
+    /**
+     * 删除小说(逻辑删除)
+     *
+     * @param novelId
+     * @return
+     */
+    @Override
+    public String novelDelete(Integer novelId) {
+        NovelEntity entity = novelMapper.selectById(novelId);
+        String data;
+        if (entity == null) {
+            data = "Novel ID = [" + novelId + "]不存在!";
+        } else if (!StateEnum.NORMAL.getValue().equals(entity.getState())) {
+            data = "Novel ID = [" + novelId + "]已被删除!";
+        } else if (!getUserData().getAccount().equals(entity.getNovelAuthor())) {
+            data = "不是作者无权删除!";
+        } else {
+            entity.setState(StateEnum.DELETE.getValue());
+            int res = novelMapper.updateById(entity);
+            if (res == 1) {
+                data = "1";
+            } else {
+                data = "操作失败";
+            }
+        }
+        return data;
     }
 }

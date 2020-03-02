@@ -20,19 +20,14 @@ import java.util.UUID;
  */
 @Component
 public class CosClientUtil {
-    @Value("${privateConfig.cos.secretId}")
-    private String secretId = "AKID1udFg5xYZaSAg3cKWXUPFvhMrNK9qiXR";
-    @Value("${privateConfig.cos.secretKey}")
-    private String secretKey = "C6uumV5YtAW7at33TF0eGMLjATH5m5dM";
-    @Value("${privateConfig.cos.bucketName}")
-    private String bucketName = "wuguangnuo-1257896087";
-    @Value("${privateConfig.cos.regionName}")
-    private String regionName = "ap-guangzhou";
-
-    private COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
-    private Region region = new Region(regionName);
-    private ClientConfig clientConfig = new ClientConfig(region);
-    private COSClient cosClient = new COSClient(cred, clientConfig);
+    @Value("${private-config.cos.secret-id}")
+    private String secretId;
+    @Value("${private-config.cos.secret-key}")
+    private String secretKey;
+    @Value("${private-config.cos.bucket-name}")
+    private String bucketName;
+    @Value("${private-config.cos.region-name}")
+    private String regionName;
 
     /**
      * 上传文件到COS
@@ -42,6 +37,11 @@ public class CosClientUtil {
      * @return URI on WEB
      */
     public String uploadFile2Cos(MultipartFile file, String path) {
+        COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
+        Region region = new Region(regionName);
+        ClientConfig clientConfig = new ClientConfig(region);
+        COSClient cosClient = new COSClient(cred, clientConfig);
+
         String oldFileName = file.getOriginalFilename();
         String suffix = "";
         if (oldFileName != null && oldFileName.contains(".")) {

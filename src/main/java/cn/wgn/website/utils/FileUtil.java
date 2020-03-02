@@ -14,7 +14,7 @@ import java.io.*;
  */
 @Component
 public class FileUtil {
-    @Value("${privateConfig.menuJson}")
+    @Value("${private-config.menu-json}")
     private String menuJson;
 
     /**

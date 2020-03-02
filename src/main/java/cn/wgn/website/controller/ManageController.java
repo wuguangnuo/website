@@ -1,8 +1,6 @@
 package cn.wgn.website.controller;
 
 import cn.wgn.website.dto.ApiRes;
-import cn.wgn.website.dto.RequestPage;
-import cn.wgn.website.dto.Table;
 import cn.wgn.website.dto.manage.Novel;
 import cn.wgn.website.dto.manage.NovelDto;
 import cn.wgn.website.dto.manage.NovelQueryDto;
@@ -15,13 +13,9 @@ import cn.wgn.website.utils.WebSiteUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -131,6 +125,22 @@ public class ManageController extends BaseController {
             return ApiRes.fail();
         } else {
             return ApiRes.suc(result);
+        }
+    }
+
+    @Authorize("author")
+    @GetMapping("novelDelete")
+    @ApiOperation("删除小说")
+    public ApiRes<NovelEntity> novelDelete(Integer novelId) {
+        if (novelId == null || novelId <= 0) {
+            return ApiRes.fail("novel id 错误");
+        }
+        String result = manageService.novelDelete(novelId);
+
+        if (!"1".equals(result)) {
+            return ApiRes.fail(result);
+        } else {
+            return ApiRes.suc("删除成功");
         }
     }
 }

@@ -24,12 +24,12 @@ logging:
 server:
   port: 8800
 
-privateConfig:
+private-config:
   # 腾讯COS配置
   cos:
-    secretId: AKID1udFg5xYZaSAg3cKWXUPFvhMrNK9qiXR
-    secretKey: C6uumV5YtAW7at33TF0eGMLjATH5m5dM
-    bucketName: wuguangnuo-1257896087
-    regionName: ap-guangzhou
+    secret-id: A********************************9
+    secret-key: C******************************Q
+    bucket-name: w*******************7
+    region-name: a**********u
   # 菜单Json配置
-  menuJson: D:/wuguangnuo/wgn.cn/website/src/main/resources/menu.json
+  menu-json: D:/wuguangnuo/wgn.cn/website/src/main/resources/menu.json
