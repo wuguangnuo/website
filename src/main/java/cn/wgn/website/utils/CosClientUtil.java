@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.UUID;
 
 /**
@@ -37,10 +38,8 @@ public class CosClientUtil {
      * @return URI on WEB
      */
     public String uploadFile2Cos(MultipartFile file, String path) {
-        COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
-        Region region = new Region(regionName);
-        ClientConfig clientConfig = new ClientConfig(region);
-        COSClient cosClient = new COSClient(cred, clientConfig);
+        COSClient cosClient = getClient();
+        path = addTm(path);
 
         String oldFileName = file.getOriginalFilename();
         String suffix = "";
@@ -54,15 +53,69 @@ public class CosClientUtil {
             localFile = File.createTempFile("temp", null);
             file.transferTo(localFile);
             // 指定要上传到 COS 上的路径
-            String key = "/website/" + path + "/" + newFileName;
+            String key = path + newFileName;
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, localFile);
             cosClient.putObject(putObjectRequest);
 
-            return "https://" + bucketName + ".cos." + regionName + ".myqcloud.com/website/" + path + "/" + newFileName;
+            return "https://" + bucketName + ".cos." + regionName + ".myqcloud.com" + path + newFileName;
         } catch (IOException e) {
             return "上传失败";
         } finally {
             cosClient.shutdown();
         }
+    }
+
+    /**
+     * 上传文件到COS
+     *
+     * @param file File
+     * @param path Path in COS
+     * @return URI on WEB
+     */
+    public String uploadFile2Cos(File file, String path) {
+        COSClient cosClient = getClient();
+        path = addTm(path);
+
+        String oldFileName = file.getName();
+        String suffix = "";
+        if (oldFileName.contains(".")) {
+            suffix = oldFileName.substring(oldFileName.lastIndexOf("."));
+        }
+        String newFileName = UUID.randomUUID() + suffix;
+
+        // 指定要上传到 COS 上的路径
+        String key = path + newFileName;
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, file);
+        cosClient.putObject(putObjectRequest);
+
+        cosClient.shutdown();
+        return "https://" + bucketName + ".cos." + regionName + ".myqcloud.com" + path + newFileName;
+    }
+
+    /**
+     * 创建 Client
+     *
+     * @return
+     */
+    private COSClient getClient() {
+        COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
+        Region region = new Region(regionName);
+        ClientConfig clientConfig = new ClientConfig(region);
+        COSClient cosClient = new COSClient(cred, clientConfig);
+        return cosClient;
+    }
+
+    /**
+     * 路径添加时间
+     *
+     * @param path
+     * @return
+     */
+    private String addTm(String path) {
+        Calendar rightNow = Calendar.getInstance();
+        int year = rightNow.get(Calendar.YEAR);
+        int month = rightNow.get(Calendar.MONTH);
+        String tm = year + (month < 9 ? "0" : "") + (month + 1);
+        return "/website/" + path + "/" + tm + "/";
     }
 }

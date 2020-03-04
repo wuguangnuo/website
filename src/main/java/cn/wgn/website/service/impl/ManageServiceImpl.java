@@ -9,15 +9,19 @@ import cn.wgn.website.enums.NovelTypeEnum;
 import cn.wgn.website.enums.StateEnum;
 import cn.wgn.website.mapper.NovelMapper;
 import cn.wgn.website.service.IManageService;
+import cn.wgn.website.utils.CosClientUtil;
 import cn.wgn.website.utils.HttpUtil;
 import cn.wgn.website.utils.WebSiteUtil;
+import cn.wgn.website.utils.WordUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Strings;
+import org.markdownj.MarkdownProcessor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +36,10 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
     private NovelMapper novelMapper;
     @Autowired
     private HttpUtil httpUtil;
+    @Autowired
+    private WordUtil wordUtil;
+    @Autowired
+    private CosClientUtil cosClientUtil;
 
     /**
      * 测试
@@ -128,6 +136,8 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
             novel.setNovelContent(WebSiteUtil.cutContent(entity.getNovelContent(), 100));
             result.add(novel);
         }
+
+        LOG.info("用户[" + getUserData().getAccount() + "]下载 Novel List Excel，查询条件[" + dto.toString() + "]");
         return result;
     }
 
@@ -214,5 +224,30 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
             }
         }
         return data;
+    }
+
+    /**
+     * 下载文档
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public String downloadDoc(Integer id) {
+        NovelEntity novelEntity = novelMapper.selectById(id);
+        if (novelEntity == null) {
+            return null;
+        }
+        String htmlBody = novelEntity.getNovelContent();
+        if (NovelTypeEnum.Markdown.toString().equals(novelEntity.getNovelType())) {
+            MarkdownProcessor markdownProcessor = new MarkdownProcessor();
+            htmlBody = markdownProcessor.markdown(htmlBody);
+        }
+
+        String filePath = wordUtil.html2Word(htmlBody);
+        String url = cosClientUtil.uploadFile2Cos(new File(filePath), "noveldoc");
+
+        LOG.info("用户[" + getUserData().getAccount() + "]下载 Novel，ID=[" + id + "]，URL=[" + url + "]");
+        return url;
     }
 }

@@ -56,4 +56,12 @@ public interface IManageService extends IBaseService {
      * @return
      */
     String novelDelete(Integer novelId);
+
+    /**
+     * 下载文档
+     *
+     * @param id
+     * @return
+     */
+    String downloadDoc(Integer id);
 }

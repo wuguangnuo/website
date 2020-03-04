@@ -10,10 +10,7 @@ import cn.wgn.website.entity.NovelEntity;
 import cn.wgn.website.enums.NovelTypeEnum;
 import cn.wgn.website.handler.Authorize;
 import cn.wgn.website.service.IManageService;
-import cn.wgn.website.utils.CosClientUtil;
-import cn.wgn.website.utils.ExcelUtil;
-import cn.wgn.website.utils.IpUtil;
-import cn.wgn.website.utils.WebSiteUtil;
+import cn.wgn.website.utils.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -168,11 +165,23 @@ public class ManageController extends BaseController {
         if (file == null) {
             return ApiRes.fail("文件不能为空");
         }
-        Calendar rightNow = Calendar.getInstance();
-        int year = rightNow.get(Calendar.YEAR);
-        int month = rightNow.get(Calendar.MONTH);
-        String tm = year + (month < 9 ? "0" : "") + (month + 1);
-        String result = cosClientUtil.uploadFile2Cos(file, "novelimg/" + tm);
+
+        String result = cosClientUtil.uploadFile2Cos(file, "novelimg");
         return ApiRes.suc("上传成功", result);
+    }
+
+    @PostMapping(value = "downloadDoc")
+    @ApiOperation(value = "下载文档")
+    public ApiRes<String> downloadDoc(@RequestBody CommonData data) {
+        if (data.getId() == null) {
+            return ApiRes.fail();
+        }
+        String result = manageService.downloadDoc(data.getId());
+
+        if (result == null) {
+            return ApiRes.fail();
+        } else {
+            return ApiRes.suc("Success", result);
+        }
     }
 }

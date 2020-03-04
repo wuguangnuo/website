@@ -109,4 +109,18 @@ public class NovelQueryDto extends RequestPage {
     public void setExport(String export) {
         this.export = export;
     }
+
+    @Override
+    public String toString() {
+        return "NovelQueryDto{" +
+                "novelTitle='" + novelTitle + '\'' +
+                ", novelType='" + novelType + '\'' +
+                ", createTm1=" + createTm1 +
+                ", createTm2=" + createTm2 +
+                ", updateTm1=" + updateTm1 +
+                ", updateTm2=" + updateTm2 +
+                ", orderBy='" + orderBy + '\'' +
+                ", export='" + export + '\'' +
+                '}';
+    }
 }

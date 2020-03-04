@@ -28,6 +28,7 @@
         <lombok.version>1.18.12</lombok.version>
         <kaptcha.version>2.3.2</kaptcha.version>
         <poi-ooxml.version>4.1.2</poi-ooxml.version>
+        <markdownj-core.version>0.4</markdownj-core.version>
     </properties>
 
     <dependencies>
@@ -143,7 +144,11 @@
             <artifactId>poi-ooxml</artifactId>
             <version>${poi-ooxml.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.markdownj</groupId>
+            <artifactId>markdownj-core</artifactId>
+            <version>${markdownj-core.version}</version>
+        </dependency>
 
     </dependencies>
 
