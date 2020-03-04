@@ -1,6 +1,8 @@
 package cn.wgn.website.controller;
 
 import cn.wgn.website.dto.ApiRes;
+import cn.wgn.website.dto.CommonData;
+import cn.wgn.website.dto.manage.IpDto;
 import cn.wgn.website.dto.manage.Novel;
 import cn.wgn.website.dto.manage.NovelDto;
 import cn.wgn.website.dto.manage.NovelQueryDto;
@@ -8,14 +10,21 @@ import cn.wgn.website.entity.NovelEntity;
 import cn.wgn.website.enums.NovelTypeEnum;
 import cn.wgn.website.handler.Authorize;
 import cn.wgn.website.service.IManageService;
+import cn.wgn.website.utils.CosClientUtil;
 import cn.wgn.website.utils.ExcelUtil;
+import cn.wgn.website.utils.IpUtil;
 import cn.wgn.website.utils.WebSiteUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -29,17 +38,24 @@ import java.util.List;
 @Api(tags = "管理")
 @RequestMapping("manage")
 public class ManageController extends BaseController {
+    @Autowired
+    private IpUtil ipUtil;
+
     private final IManageService manageService;
 
     public ManageController(IManageService manageServiceImpl) {
         this.manageService = manageServiceImpl;
     }
 
-    @Authorize("admin") // 需要某个权限
-    @PostMapping("test")
-    @ApiOperation("测试Admin")
-    public ApiRes<String> test() {
-        String result = manageService.test();
+    @Autowired
+    private CosClientUtil cosClientUtil;
+
+    @Authorize() // 需要某个权限
+    @PostMapping("getIp")
+    @ApiOperation("getIp")
+    public ApiRes<IpDto> index(HttpServletRequest request) {
+        String ip = ipUtil.getIpAddr(request);
+        IpDto result = manageService.getIp(ip);
 
         if (result == null) {
             return ApiRes.fail();
@@ -115,7 +131,8 @@ public class ManageController extends BaseController {
     @Authorize("author")
     @PostMapping("novelDetail")
     @ApiOperation("查看小说")
-    public ApiRes<NovelEntity> novelDetail(Integer novelId) {
+    public ApiRes<NovelEntity> novelDetail(@RequestBody CommonData data) {
+        Integer novelId = data.getId();
         if (novelId == null || novelId <= 0) {
             return ApiRes.fail("novel id 错误");
         }
@@ -129,9 +146,10 @@ public class ManageController extends BaseController {
     }
 
     @Authorize("author")
-    @GetMapping("novelDelete")
+    @PostMapping("novelDelete")
     @ApiOperation("删除小说")
-    public ApiRes<NovelEntity> novelDelete(Integer novelId) {
+    public ApiRes<NovelEntity> novelDelete(@RequestBody CommonData data) {
+        Integer novelId = data.getId();
         if (novelId == null || novelId <= 0) {
             return ApiRes.fail("novel id 错误");
         }
@@ -142,5 +160,19 @@ public class ManageController extends BaseController {
         } else {
             return ApiRes.suc("删除成功");
         }
+    }
+
+    @PostMapping(value = "uploadImg")
+    @ApiOperation(value = "上传图片到COS")
+    public ApiRes<String> uploadFile(@ApiParam(value = "上传文件", required = true) MultipartFile file) {
+        if (file == null) {
+            return ApiRes.fail("文件不能为空");
+        }
+        Calendar rightNow = Calendar.getInstance();
+        int year = rightNow.get(Calendar.YEAR);
+        int month = rightNow.get(Calendar.MONTH);
+        String tm = year + (month < 9 ? "0" : "") + (month + 1);
+        String result = cosClientUtil.uploadFile2Cos(file, "novelimg/" + tm);
+        return ApiRes.suc("上传成功", result);
     }
 }

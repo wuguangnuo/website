@@ -1,5 +1,6 @@
 package cn.wgn.website.service;
 
+import cn.wgn.website.dto.manage.IpDto;
 import cn.wgn.website.dto.manage.Novel;
 import cn.wgn.website.dto.manage.NovelDto;
 import cn.wgn.website.dto.manage.NovelQueryDto;
@@ -15,11 +16,11 @@ import java.util.List;
  */
 public interface IManageService extends IBaseService {
     /**
-     * 测试
+     * 获取IP信息
      *
      * @return
      */
-    String test();
+    IpDto getIp(String ip);
 
     /**
      * 新增小说

@@ -1,4 +1,4 @@
-package cn.wgn.website.dto;
+package cn.wgn.website.dto.profile;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

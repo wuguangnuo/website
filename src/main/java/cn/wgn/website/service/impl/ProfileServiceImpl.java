@@ -1,7 +1,7 @@
 package cn.wgn.website.service.impl;
 
 import cn.wgn.website.dto.ApiRes;
-import cn.wgn.website.dto.Menu;
+import cn.wgn.website.dto.profile.Menu;
 import cn.wgn.website.dto.SelectListItem;
 import cn.wgn.website.dto.common.AccountLogin;
 import cn.wgn.website.dto.common.LoginData;

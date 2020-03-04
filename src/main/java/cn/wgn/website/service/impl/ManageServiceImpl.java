@@ -1,5 +1,6 @@
 package cn.wgn.website.service.impl;
 
+import cn.wgn.website.dto.manage.IpDto;
 import cn.wgn.website.dto.manage.Novel;
 import cn.wgn.website.dto.manage.NovelDto;
 import cn.wgn.website.dto.manage.NovelQueryDto;
@@ -8,6 +9,7 @@ import cn.wgn.website.enums.NovelTypeEnum;
 import cn.wgn.website.enums.StateEnum;
 import cn.wgn.website.mapper.NovelMapper;
 import cn.wgn.website.service.IManageService;
+import cn.wgn.website.utils.HttpUtil;
 import cn.wgn.website.utils.WebSiteUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,6 +30,8 @@ import java.util.List;
 public class ManageServiceImpl extends BaseServiceImpl implements IManageService {
     @Autowired
     private NovelMapper novelMapper;
+    @Autowired
+    private HttpUtil httpUtil;
 
     /**
      * 测试
@@ -35,8 +39,14 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
      * @return
      */
     @Override
-    public String test() {
-        return getUserData().toString();
+    public IpDto getIp(String ip) {
+//        Map<String, String> param = new HashMap<>();
+//        param.put("ip", ip);
+//        String result = httpUtil.httpPostMap(param, "http://ip.ws.126.net/ipquery");
+
+        IpDto data = new IpDto();
+        data.setIp(ip);
+        return data;
     }
 
     /**
@@ -68,7 +78,8 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
             BeanUtils.copyProperties(novelDto, entity);
             entity.setNovelAuthor(getUserData().getAccount())
                     .setCreateTm(LocalDateTime.now())
-                    .setNovelType(novelTypeEnum.toString());
+                    .setNovelType(novelTypeEnum.toString())
+                    .setState(StateEnum.NORMAL.getValue());
             novelMapper.insert(entity);
             return entity.getId();
         }
@@ -153,6 +164,8 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
         if (!Strings.isNullOrEmpty(dto.getOrderBy())) {
             String[] s = dto.getOrderBy().split(" ");
             qw.orderBy(true, "ASC".equalsIgnoreCase(s[1]), s[0]);
+        } else {
+            qw.lambda().orderByDesc(NovelEntity::getId);
         }
         return qw;
     }
