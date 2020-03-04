@@ -17,7 +17,7 @@ import static java.net.HttpURLConnection.*;
 public class ApiRes<T> {
     private Integer state;
     private String msg;
-    private T Data;
+    private T data;
 
     public static <T> ApiRes<T> suc() {
         return suc("Success", null);

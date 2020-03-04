@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
  * @author WuGuangNuo
  * @date Created in 2020/2/18 17:48
  */
-@Service
+@Service("commonService")
 public class CommonServiceImpl extends BaseServiceImpl implements ICommonService {
     @Autowired
     private RedisUtil redisUtil;

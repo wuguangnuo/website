@@ -10,6 +10,7 @@ import cn.wgn.website.service.IHomeService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,11 +25,8 @@ import java.util.List;
 @Api(tags = "主页")
 @RestController
 public class HomeController extends BaseController {
-    private final IHomeService homeService;
-
-    public HomeController(IHomeService homeServiceImpl) {
-        this.homeService = homeServiceImpl;
-    }
+    @Autowired
+    private IHomeService homeService;
 
     @GetMapping(value = "index")
     @ApiOperation(value = "首页")

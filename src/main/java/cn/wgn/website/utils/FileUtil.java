@@ -28,7 +28,7 @@ public class FileUtil {
      *
      * @return
      */
-    @Cacheable(value = "MenuJson",key = "")
+    @Cacheable(value = "MenuJson", key = "")
     public String getMenuJson() {
         return getFileString(menuJson);
     }

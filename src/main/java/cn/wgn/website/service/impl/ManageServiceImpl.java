@@ -30,7 +30,7 @@ import java.util.List;
  * @author WuGuangNuo
  * @date Created in 2020/2/18 17:37
  */
-@Service
+@Service("manageService")
 public class ManageServiceImpl extends BaseServiceImpl implements IManageService {
     @Autowired
     private NovelMapper novelMapper;

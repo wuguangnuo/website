@@ -40,12 +40,8 @@ public class CommonController extends BaseController {
     private RedisUtil redisUtil;
     @Autowired
     private CosClientUtil cosClientUtil;
-
-    private final ICommonService commonService;
-
-    public CommonController(ICommonService commonServiceImpl) {
-        this.commonService = commonServiceImpl;
-    }
+    @Autowired
+    private ICommonService commonService;
 
     // 验证码过期时间(分钟)
     private static final int expireTime = 15;

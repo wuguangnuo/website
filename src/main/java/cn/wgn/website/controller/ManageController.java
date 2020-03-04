@@ -37,13 +37,8 @@ import java.util.List;
 public class ManageController extends BaseController {
     @Autowired
     private IpUtil ipUtil;
-
-    private final IManageService manageService;
-
-    public ManageController(IManageService manageServiceImpl) {
-        this.manageService = manageServiceImpl;
-    }
-
+    @Autowired
+    private IManageService manageService;
     @Autowired
     private CosClientUtil cosClientUtil;
 

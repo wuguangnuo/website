@@ -20,7 +20,7 @@ import java.util.List;
  * @author WuGuangNuo
  * @date Created in 2020/2/16 10:52
  */
-@Service
+@Service("homeService")
 public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
     @Autowired
     private DiaryMapper diaryMapper;

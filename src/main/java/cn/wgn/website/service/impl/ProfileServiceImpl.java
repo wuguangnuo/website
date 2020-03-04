@@ -32,7 +32,7 @@ import java.util.UUID;
  * @author WuGuangNuo
  * @date Created in 2020/2/22 18:54
  */
-@Service
+@Service("profileService")
 public class ProfileServiceImpl extends BaseServiceImpl implements IProfileService {
     @Autowired
     private RedisUtil redisUtil;
