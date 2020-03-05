@@ -12,15 +12,13 @@ import cn.wgn.website.enums.RedisPrefixKeyEnum;
 import cn.wgn.website.mapper.RolePermissionMapper;
 import cn.wgn.website.mapper.UserMapper;
 import cn.wgn.website.service.IProfileService;
-import cn.wgn.website.utils.EncryptUtil;
-import cn.wgn.website.utils.FileUtil;
-import cn.wgn.website.utils.RedisUtil;
-import cn.wgn.website.utils.WebSiteUtil;
+import cn.wgn.website.utils.*;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -44,6 +42,8 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
     private UserMapper userMapper;
     @Autowired
     private RolePermissionMapper rolePermissionMapper;
+    @Autowired
+    private CosClientUtil cosClientUtil;
 
     /**
      * 账号密码登录
@@ -60,7 +60,7 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
         if (userEntity == null) {
             return ApiRes.fail("账号不存在");
         }
-        if (!userEntity.getPassword().equals(encryptUtil.getMD5Str(accountLogin.getPassword()))) {
+        if (!userEntity.getPassword().equals(encryptUtil.encryptString(accountLogin.getPassword()))) {
             return ApiRes.fail("密码错误");
         }
 
@@ -104,19 +104,67 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
                 }
                 menuTree = new MenuTree();
                 menuTree.setIcon(m.getIcon())
-                        .setIndex(m.getCode())
+                        .setIndex(m.getUrl())
                         .setTitle(m.getName())
                         .setSubs(new LinkedList<>());
             } else {
                 item = new SelectListItem();
                 item.setText(m.getName())
-                        .setValue(m.getCode());
+                        .setValue(m.getUrl().substring(m.getUrl().lastIndexOf("/")));
                 assert menuTree != null;
                 menuTree.getSubs().add(item);
             }
         }
         result.add(menuTree);
         return result;
+    }
+
+    /**
+     * 获取个人信息
+     *
+     * @return
+     */
+    @Override
+    public UserEntity getProfile() {
+        return userMapper.selectById(getUserData().getId());
+    }
+
+    /**
+     * 更新个人信息
+     *
+     * @param userEntity
+     * @return "1"
+     */
+    @Override
+    public String updateProfile(UserEntity userEntity) {
+        if (userEntity == null || getUserData().getId() != userEntity.getId()) {
+            return "错误，仅可修改自己的信息";
+        }
+        userEntity.setPassword(encryptUtil.encryptString(userEntity.getPassword()));
+        int res = userMapper.updateButNull(userEntity);
+        return res == 1 ? "1" : "更新错误";
+    }
+
+    /**
+     * 更新头像
+     *
+     * @param img 图片base64(包含URI)
+     * @return url
+     */
+    @Override
+    public String updateHeadImg(String img) {
+        if (img.split(",").length != 2) {
+            return "图片需要含URI";
+        }
+
+        MultipartFile file = fileUtil.base64ToMultipart(img);
+        String url = cosClientUtil.uploadFile2Cos(file, "headimg");
+
+        UserEntity userEntity = userMapper.selectById(getUserData().getId());
+        userEntity.setHeadimg(url);
+        userMapper.updateById(userEntity);
+
+        return url;
     }
 
     /**

@@ -8,7 +8,7 @@ package cn.wgn.website.dto;
  */
 public class CommonData {
     private Integer id;
-    private String name;
+    private String data;
 
     public Integer getId() {
         return id;
@@ -18,11 +18,11 @@ public class CommonData {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getData() {
+        return data;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setData(String data) {
+        this.data = data;
     }
 }

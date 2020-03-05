@@ -30,6 +30,7 @@ public class CodeGenerator {
         gc.setOpen(false);
         gc.setSwagger2(true);
         gc.setFileOverride(FILEOVERRIDE);//是否覆盖原文件，要特别注意
+        gc.setEntityName("%sEntity");
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
@@ -106,8 +107,8 @@ public class CodeGenerator {
         strategy.setTablePrefix("wu_");
 
         List<String> tableNames = new ArrayList<>();
-//        tableNames = getAllTableNames();
-        tableNames.add("wu_novel");
+        tableNames = getAllTableNames();
+//        tableNames.add("wu_novel");
 
         strategy.setSkipView(true);
 

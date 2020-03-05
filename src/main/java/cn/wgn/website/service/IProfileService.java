@@ -3,6 +3,7 @@ package cn.wgn.website.service;
 import cn.wgn.website.dto.ApiRes;
 import cn.wgn.website.dto.common.AccountLogin;
 import cn.wgn.website.dto.profile.MenuTree;
+import cn.wgn.website.entity.UserEntity;
 
 import java.util.List;
 
@@ -24,4 +25,27 @@ public interface IProfileService extends IBaseService {
      * @return
      */
     List<MenuTree> getMenuTree();
+
+    /**
+     * 获取个人信息
+     *
+     * @return
+     */
+    UserEntity getProfile();
+
+    /**
+     * 更新个人信息
+     *
+     * @param userEntity
+     * @return "1"
+     */
+    String updateProfile(UserEntity userEntity);
+
+    /**
+     * 更新头像
+     *
+     * @param img 图片base64(包含URI)
+     * @return url
+     */
+    String updateHeadImg(String img);
 }

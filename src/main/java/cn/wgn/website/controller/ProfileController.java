@@ -1,14 +1,14 @@
 package cn.wgn.website.controller;
 
 import cn.wgn.website.dto.ApiRes;
+import cn.wgn.website.dto.CommonData;
 import cn.wgn.website.dto.profile.MenuTree;
+import cn.wgn.website.entity.UserEntity;
 import cn.wgn.website.service.IProfileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,6 +34,45 @@ public class ProfileController extends BaseController {
             return ApiRes.suc(data);
         } else {
             return ApiRes.fail();
+        }
+    }
+
+    @PostMapping("getProfile")
+    @ApiOperation("获取个人信息")
+    public ApiRes<UserEntity> getProfile() {
+        UserEntity result = profileService.getProfile();
+
+        if (result == null) {
+            return ApiRes.fail();
+        } else {
+            return ApiRes.suc(result);
+        }
+    }
+
+    @PostMapping("updateProfile")
+    @ApiOperation("更新个人信息")
+    public ApiRes<String> updateProfile(@RequestBody UserEntity data) {
+        String result = profileService.updateProfile(data);
+
+        if ("1".equals(result)) {
+            return ApiRes.suc();
+        } else {
+            return ApiRes.err(result);
+        }
+    }
+
+    @PostMapping("updateHeadImg")
+    @ApiOperation("更新头像")
+    public ApiRes<UserEntity> updateHeadImg(@RequestBody CommonData data) {
+        if (data == null || data.getData() == null) {
+            return ApiRes.fail();
+        }
+        String result = profileService.updateHeadImg(data.getData());
+
+        if (result == null) {
+            return ApiRes.fail();
+        } else {
+            return ApiRes.suc(result);
         }
     }
 }

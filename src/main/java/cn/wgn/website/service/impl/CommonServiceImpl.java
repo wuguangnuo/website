@@ -47,7 +47,7 @@ public class CommonServiceImpl extends BaseServiceImpl implements ICommonService
         if (userEntity == null) {
             return ApiRes.fail("账号不存在");
         }
-        if (!userEntity.getPassword().equals(encryptUtil.getMD5Str(accountLogin.getPassword()))) {
+        if (!userEntity.getPassword().equals(encryptUtil.encryptString(accountLogin.getPassword()))) {
             return ApiRes.fail("密码错误");
         }
 

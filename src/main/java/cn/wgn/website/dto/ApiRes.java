@@ -15,7 +15,7 @@ import static java.net.HttpURLConnection.*;
 @Slf4j
 @Data
 public class ApiRes<T> {
-    private Integer state;
+    private Integer code;
     private String msg;
     private T data;
 
@@ -57,9 +57,9 @@ public class ApiRes<T> {
         return res(HTTP_UNAUTHORIZED, msg, null);
     }
 
-    public static <T> ApiRes<T> res(Integer state, String msg, T data) {
+    public static <T> ApiRes<T> res(Integer code, String msg, T data) {
         ApiRes<T> result = new ApiRes<>();
-        result.setState(state);
+        result.setCode(code);
         result.setMsg(msg);
         result.setData(data);
         return result;

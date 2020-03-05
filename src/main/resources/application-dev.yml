@@ -13,7 +13,7 @@ spring:
       max-file-size: 16MB
       max-request-size: 16MB
 mybatis-plus:
-  mapper-locations: classpath:/mapper/*Mapper.xml
+  mapper-locations: classpath:cn/wgn/website/mapper/xml/*.xml
   configuration:
     map-underscore-to-camel-case: true
 logging:

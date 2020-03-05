@@ -24,7 +24,7 @@ public class EncryptUtil {
      * @return
      */
     public String encryptString(String str) {
-        String str2 = getMD5Str("XyjsKey");
+        String str2 = getMD5Str("WgnKey");
         int num2 = 0;
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < str.length(); i++) {
@@ -72,7 +72,7 @@ public class EncryptUtil {
      * 加密Key
      */
     private String encryptKey(String str) {
-        String str2 = getMD5Str("XyjsKey");
+        String str2 = getMD5Str("WgnKey");
         int num2 = 0;
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < str.length(); i++) {
