@@ -3,7 +3,7 @@ package cn.wgn.website.service;
 import cn.wgn.website.dto.ApiRes;
 import cn.wgn.website.dto.common.AccountLogin;
 import cn.wgn.website.dto.profile.MenuTree;
-import cn.wgn.website.entity.UserEntity;
+import cn.wgn.website.dto.profile.ProfileDto;
 
 import java.util.List;
 
@@ -31,15 +31,15 @@ public interface IProfileService extends IBaseService {
      *
      * @return
      */
-    UserEntity getProfile();
+    ProfileDto getProfile();
 
     /**
      * 更新个人信息
      *
-     * @param userEntity
+     * @param dto
      * @return "1"
      */
-    String updateProfile(UserEntity userEntity);
+    String updateProfile(ProfileDto dto);
 
     /**
      * 更新头像

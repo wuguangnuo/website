@@ -3,19 +3,22 @@
 <mapper namespace="cn.wgn.website.mapper.UserMapper">
 
 <!--    更新不为空的信息-->
-    <update id="updateButNull" parameterType="cn.wgn.website.entity.UserEntity">
+    <update id="updateButNull" parameterType="cn.wgn.website.dto.profile.ProfileDto">
         UPDATE WU_USER
-        SET ID = #{entity.id}
-        <if test="entity.username != null">
-            ,USERNAME = #{entity.username}
+        SET ID = #{id}
+        <if test="dto.username != null">
+            ,USERNAME = #{dto.username}
         </if>
-        <if test="entity.realname != null">
-            ,REALNAME = #{entity.realname}
+        <if test="dto.realname != null">
+            ,REALNAME = #{dto.realname}
         </if>
-        <if test="entity.password != null">
-            ,PASSWORD = #{entity.password}
+        <if test="dto.password != null">
+            ,PASSWORD = #{dto.password}
+        </if>
+        <if test="dto.headimg != null">
+            ,HEADIMG = #{dto.headimg}
         </if>
         WHERE
-            ID = #{entity.id}
+            ID = #{id}
     </update>
 </mapper>

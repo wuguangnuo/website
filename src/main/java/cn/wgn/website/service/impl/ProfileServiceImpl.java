@@ -6,6 +6,7 @@ import cn.wgn.website.dto.SelectListItem;
 import cn.wgn.website.dto.common.AccountLogin;
 import cn.wgn.website.dto.common.LoginData;
 import cn.wgn.website.dto.profile.MenuTree;
+import cn.wgn.website.dto.profile.ProfileDto;
 import cn.wgn.website.entity.RolePermissionEntity;
 import cn.wgn.website.entity.UserEntity;
 import cn.wgn.website.enums.RedisPrefixKeyEnum;
@@ -44,6 +45,8 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
     private RolePermissionMapper rolePermissionMapper;
     @Autowired
     private CosClientUtil cosClientUtil;
+    @Autowired
+    private ThumbnailsUtil thumbnailsUtil;
 
     /**
      * 账号密码登录
@@ -125,23 +128,36 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
      * @return
      */
     @Override
-    public UserEntity getProfile() {
-        return userMapper.selectById(getUserData().getId());
+    public ProfileDto getProfile() {
+        UserEntity entity = userMapper.selectById(getUserData().getId());
+        ProfileDto result = new ProfileDto();
+        BeanUtils.copyProperties(entity, result);
+        result.setPassword("");
+        return result;
     }
 
     /**
      * 更新个人信息
      *
-     * @param userEntity
+     * @param dto
      * @return "1"
      */
     @Override
-    public String updateProfile(UserEntity userEntity) {
-        if (userEntity == null || getUserData().getId() != userEntity.getId()) {
-            return "错误，仅可修改自己的信息";
+    public String updateProfile(ProfileDto dto) {
+        String url;
+        if (dto.getHeadimg().startsWith("http")) {
+            url = dto.getHeadimg();
+        } else {
+            if (dto.getHeadimg().split(",").length != 2) {
+                return "图片需要含URI";
+            }
+            url = this.uploadHeadimg(dto.getHeadimg());
         }
-        userEntity.setPassword(encryptUtil.encryptString(userEntity.getPassword()));
-        int res = userMapper.updateButNull(userEntity);
+
+        dto.setPassword(encryptUtil.encryptString(dto.getPassword()));
+        dto.setHeadimg(url);
+
+        int res = userMapper.updateButNull(dto, getUserData().getId());
         return res == 1 ? "1" : "更新错误";
     }
 
@@ -157,8 +173,7 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
             return "图片需要含URI";
         }
 
-        MultipartFile file = fileUtil.base64ToMultipart(img);
-        String url = cosClientUtil.uploadFile2Cos(file, "headimg");
+        String url = this.uploadHeadimg(img);
 
         UserEntity userEntity = userMapper.selectById(getUserData().getId());
         userEntity.setHeadimg(url);
@@ -192,5 +207,28 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
         }
 
         return result;
+    }
+
+    /**
+     * 上传压缩头像
+     *
+     * @param base64 图片base64
+     * @return url
+     */
+    private String uploadHeadimg(String base64) {
+//        String[] imgUrls = base64.split(",");
+//        base64 = "data:image/jpeg;base64,";
+//        if (base64.length() < 100 * 1000) {
+//            base64 += thumbnailsUtil.imageCompress(imgUrls[1], 1);
+//        } else if (base64.length() < 500 * 1000) {
+//            base64 += thumbnailsUtil.imageCompress(imgUrls[1], 0.5);
+//        } else if (base64.length() < 1000 * 1000) {
+//            base64 += thumbnailsUtil.imageCompress(imgUrls[1], 0.3);
+//        } else {
+//            base64 += thumbnailsUtil.imageCompress(imgUrls[1], 0.2);
+//        }
+        MultipartFile file = fileUtil.base64ToMultipart(base64);
+        String url = cosClientUtil.uploadFile2Cos(file, "headimg");
+        return url;
     }
 }

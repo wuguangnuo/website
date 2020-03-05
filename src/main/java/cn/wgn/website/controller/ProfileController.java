@@ -3,6 +3,7 @@ package cn.wgn.website.controller;
 import cn.wgn.website.dto.ApiRes;
 import cn.wgn.website.dto.CommonData;
 import cn.wgn.website.dto.profile.MenuTree;
+import cn.wgn.website.dto.profile.ProfileDto;
 import cn.wgn.website.entity.UserEntity;
 import cn.wgn.website.service.IProfileService;
 import io.swagger.annotations.Api;
@@ -39,8 +40,8 @@ public class ProfileController extends BaseController {
 
     @PostMapping("getProfile")
     @ApiOperation("获取个人信息")
-    public ApiRes<UserEntity> getProfile() {
-        UserEntity result = profileService.getProfile();
+    public ApiRes<ProfileDto> getProfile() {
+        ProfileDto result = profileService.getProfile();
 
         if (result == null) {
             return ApiRes.fail();
@@ -51,7 +52,7 @@ public class ProfileController extends BaseController {
 
     @PostMapping("updateProfile")
     @ApiOperation("更新个人信息")
-    public ApiRes<String> updateProfile(@RequestBody UserEntity data) {
+    public ApiRes<String> updateProfile(@RequestBody ProfileDto data) {
         String result = profileService.updateProfile(data);
 
         if ("1".equals(result)) {

@@ -1,5 +1,6 @@
 package cn.wgn.website.mapper;
 
+import cn.wgn.website.dto.profile.ProfileDto;
 import cn.wgn.website.entity.UserEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,8 +20,8 @@ public interface UserMapper extends BaseMapper<UserEntity> {
     /**
      * 更新不为空的信息
      *
-     * @param entity
+     * @param dto
      * @return
      */
-    int updateButNull(@Param("entity") UserEntity entity);
+    int updateButNull(@Param("dto") ProfileDto dto, @Param("id") int id);
 }
