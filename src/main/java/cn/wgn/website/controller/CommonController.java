@@ -2,11 +2,14 @@ package cn.wgn.website.controller;
 
 import cn.wgn.website.dto.ApiRes;
 import cn.wgn.website.dto.common.AccountLogin;
+import cn.wgn.website.dto.utils.EmailInfo;
 import cn.wgn.website.enums.RedisPrefixKeyEnum;
 import cn.wgn.website.service.ICommonService;
 import cn.wgn.website.utils.CosClientUtil;
+import cn.wgn.website.utils.EmailUtil;
 import cn.wgn.website.utils.RedisUtil;
 import com.google.code.kaptcha.Producer;
+import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -19,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.awt.image.BufferedImage;
@@ -42,9 +46,13 @@ public class CommonController extends BaseController {
     private CosClientUtil cosClientUtil;
     @Autowired
     private ICommonService commonService;
+    @Autowired
+    private EmailUtil emailUtil;
 
     // 验证码过期时间(分钟)
     private static final int expireTime = 15;
+    // 发邮件时间戳
+    private static long timestamp = System.currentTimeMillis();
 
     @GetMapping(value = "")
     @ApiOperation(value = "welcome")
@@ -55,8 +63,8 @@ public class CommonController extends BaseController {
 
     @PostMapping("login")
     @ApiOperation(value = "登录")
-    public ApiRes login(@RequestBody @Valid AccountLogin accountLogin) {
-        return commonService.loginByPd(accountLogin);
+    public ApiRes login(@RequestBody @Valid AccountLogin accountLogin, HttpServletRequest request) {
+        return commonService.loginByPd(accountLogin, request);
     }
 
     @GetMapping("captcha.jpg")
@@ -86,5 +94,29 @@ public class CommonController extends BaseController {
         }
         String result = cosClientUtil.uploadFile2Cos(file, "temp");
         return ApiRes.suc("上传成功", result);
+    }
+
+    @GetMapping(value = "/sendMail")
+    @ApiOperation(value = "发送邮件")
+    public ApiRes<String> sendMail(String eMail) {
+        if (Strings.isNullOrEmpty(eMail)) {
+            ApiRes.fail("eMail 不能为空!");
+        }
+        if (!eMail.matches("[\\w.\\-]+@([\\w\\-]+\\.)+[\\w\\-]+")) {
+            ApiRes.err("邮箱地址格式错误!");
+        }
+
+        long timestamp2 = System.currentTimeMillis() / 1000;
+        if (timestamp2 - timestamp < 120) {
+            ApiRes.fail("请求过于频繁，请稍后重试！");
+        } else {
+            timestamp = timestamp2;
+        }
+
+        String subject = "测试邮件 from wgn API";
+        String content = "<div style='font-size:16px;user-select:none'><p>这是一封<strong style='color:red;font-size:20px;'>测试邮件</strong>。</p><p>点击进入\uD83D\uDC49<a style='color:blue;text-decoration:none'href='http://api.wuguangnuo.cn:8800'>吴广诺API</a></p><p style='font-size:14px;font-family:Courier New'>@author&nbsp;<a style='color:black;text-decoration:none'href='https://github.com/wuguangnuo'>WuGuangNuo</a></p></div>";
+        EmailInfo emailInfo = new EmailInfo(eMail, subject, content);
+        boolean b = emailUtil.sendHtmlMail(emailInfo);
+        return b ? ApiRes.suc("发送成功!") : ApiRes.err("发送失败");
     }
 }

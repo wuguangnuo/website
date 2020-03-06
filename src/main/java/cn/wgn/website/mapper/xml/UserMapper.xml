@@ -18,6 +18,9 @@
         <if test="dto.headimg != null and dto.headimg != ''">
             ,HEADIMG = #{dto.headimg}
         </if>
+        <if test="dto.email != null and dto.email != ''">
+            ,EMAIL = #{dto.email}
+        </if>
         WHERE
             ID = #{id}
     </update>

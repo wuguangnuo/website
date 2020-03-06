@@ -46,6 +46,9 @@ public class UserEntity implements Serializable {
     @ApiModelProperty(value = "头像")
     private String headimg;
 
+    @ApiModelProperty(value = "邮箱")
+    private String email;
+
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createdAt;
 

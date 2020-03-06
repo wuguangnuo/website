@@ -33,3 +33,10 @@ private-config:
     region-name: a**********u
   # 菜单Json配置
   menu-json: D:/wuguangnuo/wgn.cn/website/src/main/resources/menu.json
+  # 邮箱配置
+  mail:
+    ssl-factory: javax.net.ssl.SSLSocketFactory
+    smtp-server: smtp.***.com
+    port: 465
+    from-user-name: 123@email.com
+    from-user-password: 123456

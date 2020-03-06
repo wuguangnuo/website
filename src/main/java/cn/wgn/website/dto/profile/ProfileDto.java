@@ -22,6 +22,9 @@ public class ProfileDto extends BaseDto {
     @ApiModelProperty(value = "头像")
     private String headimg;
 
+    @ApiModelProperty(value = "邮箱")
+    private String email;
+
     public String getUsername() {
         return username;
     }
@@ -52,5 +55,13 @@ public class ProfileDto extends BaseDto {
 
     public void setHeadimg(String headimg) {
         this.headimg = headimg;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

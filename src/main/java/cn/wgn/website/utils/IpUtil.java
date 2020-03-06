@@ -60,7 +60,7 @@ public class IpUtil {
         return this.ip2int(this.getIpAddr(request));
     }
 
-    private Integer ip2int(String ip) {
+    public Integer ip2int(String ip) {
         int ips = 0;
         String[] numbers = ip.split("[.]");
         for (int i = 0; i < 4; i++) {
@@ -69,7 +69,7 @@ public class IpUtil {
         return ips;
     }
 
-    private String int2ip(Integer number) {
+    public String int2ip(Integer number) {
         String ip = "";
         for (int i = 3; i >= 0; i--) {
             ip += String.valueOf((number >> 8 * i & 0xff));

@@ -216,6 +216,7 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
      * @return url
      */
     private String uploadHeadimg(String base64) {
+        // todo 用户头像图片压缩
 //        String[] imgUrls = base64.split(",");
 //        base64 = "data:image/jpeg;base64,";
 //        if (base64.length() < 100 * 1000) {
