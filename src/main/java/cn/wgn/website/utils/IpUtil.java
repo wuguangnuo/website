@@ -49,10 +49,34 @@ public class IpUtil {
                 }
             }
         } catch (Exception e) {
-            ipAddress = "";
+            ipAddress = "0.0.0.0";
         }
         // ipAddress = this.getRequest().getRemoteAddr();
 
         return ipAddress;
+    }
+
+    public Integer getIp(HttpServletRequest request) {
+        return this.ip2int(this.getIpAddr(request));
+    }
+
+    private Integer ip2int(String ip) {
+        int ips = 0;
+        String[] numbers = ip.split("[.]");
+        for (int i = 0; i < 4; i++) {
+            ips = ips << 8 | Integer.parseInt(numbers[i]);
+        }
+        return ips;
+    }
+
+    private String int2ip(Integer number) {
+        String ip = "";
+        for (int i = 3; i >= 0; i--) {
+            ip += String.valueOf((number >> 8 * i & 0xff));
+            if (i != 0) {
+                ip += ".";
+            }
+        }
+        return ip;
     }
 }

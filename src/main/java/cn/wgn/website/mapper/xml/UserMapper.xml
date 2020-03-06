@@ -4,18 +4,18 @@
 
 <!--    更新不为空的信息-->
     <update id="updateButNull" parameterType="cn.wgn.website.dto.profile.ProfileDto">
-        UPDATE WU_USER
+        UPDATE wu_user
         SET ID = #{id}
-        <if test="dto.username != null">
+        <if test="dto.username != null and dto.username != ''">
             ,USERNAME = #{dto.username}
         </if>
-        <if test="dto.realname != null">
+        <if test="dto.realname != null and dto.realname != ''">
             ,REALNAME = #{dto.realname}
         </if>
-        <if test="dto.password != null">
+        <if test="dto.password != null and dto.password != ''">
             ,PASSWORD = #{dto.password}
         </if>
-        <if test="dto.headimg != null">
+        <if test="dto.headimg != null and dto.headimg != ''">
             ,HEADIMG = #{dto.headimg}
         </if>
         WHERE

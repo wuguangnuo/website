@@ -43,5 +43,6 @@ public class VistorEntity implements Serializable {
     @ApiModelProperty(value = "datetime")
     private LocalDateTime tm;
 
-
+    @ApiModelProperty(value = "user")
+    private String us;
 }

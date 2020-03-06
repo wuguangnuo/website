@@ -10,8 +10,8 @@ import com.google.common.base.Strings;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -26,6 +26,7 @@ import java.util.List;
  *
  * @author WuGuangNuo
  */
+@Order(10)
 @Aspect
 @Component
 public class AuthorizeAspect {
@@ -45,11 +46,7 @@ public class AuthorizeAspect {
      * @Aspect 用来定义切面，针对类
      * 后面的增强均是围绕此切入点来完成的
      */
-    @Pointcut("@annotation(authorize)")
-    public void doAuthorize(Authorize authorize) {
-    }
-
-    @Around(value = "doAuthorize(authorize)", argNames = "pjp,authorize")
+    @Around(value = "@annotation(authorize)")
     public Object deBefore(ProceedingJoinPoint pjp, Authorize authorize) throws Throwable {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
@@ -68,7 +65,7 @@ public class AuthorizeAspect {
             return pjp.proceed();
         } else {
             String[] arr = redisUtil.get(token, RedisPrefixKeyEnum.Token.toString()).split(":");
-            int roleId = Integer.valueOf(arr[2]);
+            int roleId = Integer.parseInt(arr[2]);
             // roleId 的所有权限
             List<RolePermissionEntity> powers = rolePermissionMapper.selectList(
                     new QueryWrapper<RolePermissionEntity>().lambda()
