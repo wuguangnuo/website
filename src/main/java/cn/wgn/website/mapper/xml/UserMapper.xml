@@ -65,7 +65,8 @@
                 FROM
                     wu_vistor
             ) AS allNum,
-            NULL AS weekChart
+            NULL AS weekChart,
+            NULL AS lastAdd
         FROM
             wu_user AS t
         WHERE

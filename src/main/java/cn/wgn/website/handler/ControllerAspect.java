@@ -46,7 +46,7 @@ public class ControllerAspect {
 //        String serviePath = request.getServletPath();
 
         VistorEntity vEntity = new VistorEntity();
-        vEntity.setLk(request.getHeader("referer"))
+        vEntity.setLk(request.getServletPath())
                 .setIp(ipUtil.getIp(request))
                 .setAg(request.getHeader("User-Agent"))
                 .setTm(LocalDateTime.now())

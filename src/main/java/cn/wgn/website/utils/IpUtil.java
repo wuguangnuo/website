@@ -1,7 +1,6 @@
 package cn.wgn.website.utils;
 
 import cn.wgn.website.dto.utils.IpRegion;
-import org.lionsoul.ip2region.DataBlock;
 import org.lionsoul.ip2region.DbConfig;
 import org.lionsoul.ip2region.DbMakerConfigException;
 import org.lionsoul.ip2region.DbSearcher;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -20,7 +18,7 @@ import java.net.UnknownHostException;
  */
 @Component
 public class IpUtil {
-    @Value("private-config.ip2region")
+    @Value("${private-config.ip2region}")
     private String ipRegionPath;
 
     /**

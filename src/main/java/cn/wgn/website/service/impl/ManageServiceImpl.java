@@ -1,15 +1,29 @@
 package cn.wgn.website.service.impl;
 
 import cn.wgn.website.dto.manage.*;
+import cn.wgn.website.dto.utils.IpRegion;
 import cn.wgn.website.entity.NovelEntity;
+import cn.wgn.website.entity.VistorEntity;
 import cn.wgn.website.enums.NovelTypeEnum;
 import cn.wgn.website.enums.StateEnum;
 import cn.wgn.website.mapper.NovelMapper;
 import cn.wgn.website.mapper.UserMapper;
+import cn.wgn.website.mapper.VistorMapper;
 import cn.wgn.website.service.IManageService;
 import cn.wgn.website.utils.*;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.abel533.echarts.AxisPointer;
+import com.github.abel533.echarts.Grid;
+import com.github.abel533.echarts.Option;
+import com.github.abel533.echarts.axis.CategoryAxis;
+import com.github.abel533.echarts.axis.ValueAxis;
+import com.github.abel533.echarts.code.*;
+import com.github.abel533.echarts.feature.MagicType;
+import com.github.abel533.echarts.series.Bar;
+import com.github.abel533.echarts.style.ItemStyle;
+import com.github.abel533.echarts.style.itemstyle.Normal;
 import com.google.common.base.Strings;
 import org.markdownj.MarkdownProcessor;
 import org.springframework.beans.BeanUtils;
@@ -17,9 +31,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalTime;
+import java.util.*;
 
 /**
  * @author WuGuangNuo
@@ -39,6 +54,8 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
     private UserMapper userMapper;
     @Autowired
     private IpUtil ipUtil;
+    @Autowired
+    private VistorMapper vistorMapper;
 
     /**
      * 获取首页信息
@@ -49,9 +66,11 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
     public HomeInfo getHomeInfo() {
         HomeInfo homeInfo = userMapper.getHomeInfo(getUserData().getId());
         homeInfo.setLastIp(ipUtil.int2ip(Integer.parseInt(homeInfo.getLastIp())));
-        // todo chart here
-        homeInfo.setWeekChart("chart here");
-        ipUtil.getIpRegion("xxx");
+        IpRegion ipRegion = ipUtil.getIpRegion(homeInfo.getLastIp());
+        String lastAdd = ipRegion.getCountry() + ipRegion.getArea() + ipRegion.getProvince() + ipRegion.getCity()
+                + (Strings.isNullOrEmpty(ipRegion.getIsp()) ? "" : ("," + ipRegion.getIsp()));
+        homeInfo.setLastAdd(lastAdd);
+        homeInfo.setWeekChart(getHomeChart());
         return homeInfo;
     }
 
@@ -247,5 +266,54 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
 
         LOG.info("用户[" + getUserData().getAccount() + "]下载 Novel，ID=[" + id + "]，URL=[" + url + "]");
         return url;
+    }
+
+    private String getHomeChart() {
+        List<VistorEntity> vistorEntityList = vistorMapper.selectList(
+                new QueryWrapper<VistorEntity>().lambda()
+                        .between(VistorEntity::getTm, LocalDateTime.of(LocalDate.now(), LocalTime.MIN).minusDays(6), LocalDateTime.now())
+        );
+
+        // 日期坐标轴
+        String[] yAxis = new String[7];
+        for (int i = 0; i < 7; i++) {
+            yAxis[i] = LocalDate.now().minusDays(6 - i).toString();
+        }
+
+        // LinkedHashMap<接口名称，LinkedHashMap<日期，数量>>
+        LinkedHashMap<String, LinkedHashMap<String, Integer>> data = new LinkedHashMap<>();
+        for (VistorEntity e : vistorEntityList) {
+            String date = e.getTm().toLocalDate().toString();
+            if (data.containsKey(e.getLk())) {
+                int num = data.get(e.getLk()).getOrDefault(date, 0) + 1;
+                data.get(e.getLk()).put(date, num);
+            } else {
+                LinkedHashMap<String, Integer> temp = new LinkedHashMap<>();
+                for (String yAxi : yAxis) {
+                    temp.put(yAxi, 0);
+                }
+                temp.put(date, 1);
+                data.put(e.getLk(), temp);
+            }
+        }
+
+        Option option = new Option();
+        option.title().text("最近七天接口调用统计").subtext("wuguangnuo.cn").left("3%");
+        option.tooltip().trigger(Trigger.axis).axisPointer(new AxisPointer().type(PointerType.shadow));
+        option.legend(data.keySet().toArray());
+        option.toolbox().show(true).right("3%").feature(Tool.mark, Tool.dataView,
+                new MagicType(Magic.line, Magic.bar).show(true), Tool.restore, Tool.saveAsImage);
+        option.calculable(true);
+        option.xAxis(new CategoryAxis().data(yAxis));
+        option.yAxis(new ValueAxis());
+        option.grid(new Grid().left("3%").right("3%").bottom("3%").containLabel(true));
+
+        for (String key : data.keySet()) {
+            option.series(new Bar(key)
+                    .data(data.get(key).values().toArray())
+                    .stack("总量")
+                    .label(new ItemStyle().normal(new Normal().show(true).position(Position.inside))));
+        }
+        return JSON.toJSONString(option);
     }
 }

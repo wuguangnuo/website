@@ -1,8 +1,10 @@
 package cn.wgn.website;
 
-import org.springframework.web.client.RestTemplate;
-
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author WuGuangNuo
@@ -14,39 +16,11 @@ public class YinWang {
     }
 
     public static void f() {
+        Map<String, Map<String, Integer>> data = new HashMap<String, Map<String, Integer>>();
 
-        RestTemplate restTemplate = new RestTemplate();
-        Notice notice = restTemplate.getForObject("http://ip.ws.126.net/ipquery?ip=8.8.8.8"
-                , Notice.class);
-        System.out.println(notice.toString());
-    }
-}
-
-class Notice {
-    private String city;
-    private String province;
-
-    @Override
-    public String toString() {
-        return "Notice{" +
-                "city='" + city + '\'' +
-                ", province='" + province + '\'' +
-                '}';
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
+        data.forEach((k, v) -> {
+            System.out.println(k);
+            System.out.println(v.toString());
+        });
     }
 }

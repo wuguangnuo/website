@@ -21,6 +21,8 @@ public class HomeInfo {
     private String loginAt;
     @ApiModelProperty("登录IP")
     private String lastIp;
+    @ApiModelProperty("登录地点")
+    private String lastAdd;
 
     @ApiModelProperty("今日接口访问量")
     private Integer todayNum;
@@ -76,6 +78,14 @@ public class HomeInfo {
 
     public void setLastIp(String lastIp) {
         this.lastIp = lastIp;
+    }
+
+    public String getLastAdd() {
+        return lastAdd;
+    }
+
+    public void setLastAdd(String lastAdd) {
+        this.lastAdd = lastAdd;
     }
 
     public Integer getTodayNum() {
