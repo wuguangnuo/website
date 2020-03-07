@@ -2,10 +2,7 @@ package cn.wgn.website.controller;
 
 import cn.wgn.website.dto.ApiRes;
 import cn.wgn.website.dto.CommonData;
-import cn.wgn.website.dto.manage.IpDto;
-import cn.wgn.website.dto.manage.Novel;
-import cn.wgn.website.dto.manage.NovelDto;
-import cn.wgn.website.dto.manage.NovelQueryDto;
+import cn.wgn.website.dto.manage.*;
 import cn.wgn.website.entity.NovelEntity;
 import cn.wgn.website.enums.NovelTypeEnum;
 import cn.wgn.website.handler.Authorize;
@@ -42,12 +39,11 @@ public class ManageController extends BaseController {
     @Autowired
     private CosClientUtil cosClientUtil;
 
-    @Authorize() // 需要某个权限
-    @PostMapping("getIp")
-    @ApiOperation("getIp")
-    public ApiRes<IpDto> index(HttpServletRequest request) {
-        String ip = ipUtil.getIpAddr(request);
-        IpDto result = manageService.getIp(ip);
+    @Authorize("index")
+    @PostMapping("getHomeInfo")
+    @ApiOperation("获取首页信息")
+    public ApiRes<HomeInfo> getHomeInfo() {
+        HomeInfo result = manageService.getHomeInfo();
 
         if (result == null) {
             return ApiRes.fail();

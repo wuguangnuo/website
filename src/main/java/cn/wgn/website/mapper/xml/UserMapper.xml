@@ -5,23 +5,70 @@
 <!--    更新不为空的信息-->
     <update id="updateButNull" parameterType="cn.wgn.website.dto.profile.ProfileDto">
         UPDATE wu_user
-        SET ID = #{id}
+        SET id = #{id}
         <if test="dto.username != null and dto.username != ''">
-            ,USERNAME = #{dto.username}
+            ,username = #{dto.username}
         </if>
         <if test="dto.realname != null and dto.realname != ''">
-            ,REALNAME = #{dto.realname}
+            ,realname = #{dto.realname}
         </if>
         <if test="dto.password != null and dto.password != ''">
-            ,PASSWORD = #{dto.password}
+            ,password = #{dto.password}
         </if>
         <if test="dto.headimg != null and dto.headimg != ''">
-            ,HEADIMG = #{dto.headimg}
+            ,headimg = #{dto.headimg}
         </if>
         <if test="dto.email != null and dto.email != ''">
-            ,EMAIL = #{dto.email}
+            ,email = #{dto.email}
         </if>
         WHERE
-            ID = #{id}
+            id = #{id}
     </update>
+
+<!--    获取首页信息-->
+    <select id="getHomeInfo" resultType="cn.wgn.website.dto.manage.HomeInfo">
+        SELECT
+            t.headimg,
+            t.username,
+            t.realname,
+            (
+                SELECT
+                    t2.role_name
+                FROM
+                    wu_role t2
+                WHERE
+                    t2.id = t.roleid
+            ) AS role,
+            t.login_at AS loginAt,
+            (
+                SELECT
+                    t3.ip
+                FROM
+                    wu_vistor t3
+                WHERE
+                    LEFT (t3.us, LENGTH(t.id) + 1) = t.id + ':'
+                ORDER BY
+                    t3.id DESC
+                LIMIT 1
+            ) AS lastIp,
+            (
+                SELECT
+                    count(1)
+                FROM
+                    wu_vistor t4
+                WHERE
+                    TO_DAYS(NOW()) - TO_DAYS(t4.tm) &lt; 7
+            ) AS todayNum,
+            (
+                SELECT
+                    count(1)
+                FROM
+                    wu_vistor
+            ) AS allNum,
+            NULL AS weekChart
+        FROM
+            wu_user AS t
+        WHERE
+            t.id = #{uid}
+    </select>
 </mapper>

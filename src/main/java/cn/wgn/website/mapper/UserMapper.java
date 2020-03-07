@@ -1,5 +1,6 @@
 package cn.wgn.website.mapper;
 
+import cn.wgn.website.dto.manage.HomeInfo;
 import cn.wgn.website.dto.profile.ProfileDto;
 import cn.wgn.website.entity.UserEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -24,4 +25,12 @@ public interface UserMapper extends BaseMapper<UserEntity> {
      * @return
      */
     int updateButNull(@Param("dto") ProfileDto dto, @Param("id") int id);
+
+    /**
+     * 获取首页信息
+     *
+     * @param id
+     * @return
+     */
+    HomeInfo getHomeInfo(@Param("uid") int id);
 }

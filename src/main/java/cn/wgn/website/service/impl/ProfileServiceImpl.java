@@ -229,6 +229,7 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
 //            base64 += thumbnailsUtil.imageCompress(imgUrls[1], 0.2);
 //        }
         MultipartFile file = fileUtil.base64ToMultipart(base64);
+
         String url = cosClientUtil.uploadFile2Cos(file, "headimg");
         return url;
     }

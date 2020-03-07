@@ -1,8 +1,16 @@
 package cn.wgn.website.utils;
 
+import cn.wgn.website.dto.utils.IpRegion;
+import org.lionsoul.ip2region.DataBlock;
+import org.lionsoul.ip2region.DbConfig;
+import org.lionsoul.ip2region.DbMakerConfigException;
+import org.lionsoul.ip2region.DbSearcher;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -12,6 +20,9 @@ import java.net.UnknownHostException;
  */
 @Component
 public class IpUtil {
+    @Value("private-config.ip2region")
+    private String ipRegionPath;
+
     /**
      * 获取IP地址
      *
@@ -56,10 +67,22 @@ public class IpUtil {
         return ipAddress;
     }
 
+    /**
+     * 获取IP地址
+     *
+     * @param request
+     * @return
+     */
     public Integer getIp(HttpServletRequest request) {
         return this.ip2int(this.getIpAddr(request));
     }
 
+    /**
+     * ip to int (有负数,同PHP版)
+     *
+     * @param ip
+     * @return
+     */
     public Integer ip2int(String ip) {
         int ips = 0;
         String[] numbers = ip.split("[.]");
@@ -69,6 +92,12 @@ public class IpUtil {
         return ips;
     }
 
+    /**
+     * int to ip (有负数,同PHP版)
+     *
+     * @param number
+     * @return
+     */
     public String int2ip(Integer number) {
         String ip = "";
         for (int i = 3; i >= 0; i--) {
@@ -78,5 +107,36 @@ public class IpUtil {
             }
         }
         return ip;
+    }
+
+    /**
+     * 获取IP地理位置
+     *
+     * @param ip
+     * @return
+     */
+    public IpRegion getIpRegion(String ip) {
+        String block = null;
+        try {
+            DbConfig dbConfig = new DbConfig();
+            DbSearcher searcher = new DbSearcher(dbConfig, ipRegionPath);
+            // B树搜索
+            block = searcher.btreeSearch(ip).getRegion();
+        } catch (DbMakerConfigException | IOException e) {
+            e.printStackTrace();
+        }
+
+        assert block != null;
+        String[] blocks = block.split("[|]");
+        for (int i = 0; i < blocks.length; i++) {
+            blocks[i] = "0".equals(blocks[i]) ? "" : blocks[i];
+        }
+        IpRegion ipRegion = new IpRegion();
+        ipRegion.setCountry(blocks[0]);
+        ipRegion.setArea(blocks[1]);
+        ipRegion.setProvince(blocks[2]);
+        ipRegion.setCity(blocks[3]);
+        ipRegion.setIsp(blocks[4]);
+        return ipRegion;
     }
 }

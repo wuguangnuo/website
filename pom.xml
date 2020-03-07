@@ -31,6 +31,7 @@
         <markdownj-core.version>0.4</markdownj-core.version>
         <thumbnailator.version>0.4.11</thumbnailator.version>
         <mail.version>1.4.7</mail.version>
+        <ip2region.version>1.7.2</ip2region.version>
     </properties>
 
     <dependencies>
@@ -160,6 +161,11 @@
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
             <version>${mail.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>${ip2region.version}</version>
         </dependency>
 
     </dependencies>

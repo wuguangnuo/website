@@ -41,7 +41,4 @@ public class LoginData {
 
     @ApiModelProperty(value = "最后一次修改时间")
     private LocalDateTime updatedAt;
-
-    @ApiModelProperty(value = "最后一次登陆时间")
-    private LocalDateTime loginAt;
 }

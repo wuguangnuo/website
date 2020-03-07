@@ -1,9 +1,6 @@
 package cn.wgn.website.service;
 
-import cn.wgn.website.dto.manage.IpDto;
-import cn.wgn.website.dto.manage.Novel;
-import cn.wgn.website.dto.manage.NovelDto;
-import cn.wgn.website.dto.manage.NovelQueryDto;
+import cn.wgn.website.dto.manage.*;
 import cn.wgn.website.entity.NovelEntity;
 import cn.wgn.website.enums.NovelTypeEnum;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -16,11 +13,11 @@ import java.util.List;
  */
 public interface IManageService extends IBaseService {
     /**
-     * 获取IP信息
+     * 获取首页信息
      *
      * @return
      */
-    IpDto getIp(String ip);
+    HomeInfo getHomeInfo();
 
     /**
      * 新增小说

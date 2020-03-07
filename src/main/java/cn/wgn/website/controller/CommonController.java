@@ -96,7 +96,7 @@ public class CommonController extends BaseController {
         return ApiRes.suc("上传成功", result);
     }
 
-    @GetMapping(value = "/sendMail")
+    @GetMapping(value = "sendMail")
     @ApiOperation(value = "发送邮件")
     public ApiRes<String> sendMail(String eMail) {
         if (Strings.isNullOrEmpty(eMail)) {

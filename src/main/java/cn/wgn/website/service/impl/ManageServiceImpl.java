@@ -1,18 +1,13 @@
 package cn.wgn.website.service.impl;
 
-import cn.wgn.website.dto.manage.IpDto;
-import cn.wgn.website.dto.manage.Novel;
-import cn.wgn.website.dto.manage.NovelDto;
-import cn.wgn.website.dto.manage.NovelQueryDto;
+import cn.wgn.website.dto.manage.*;
 import cn.wgn.website.entity.NovelEntity;
 import cn.wgn.website.enums.NovelTypeEnum;
 import cn.wgn.website.enums.StateEnum;
 import cn.wgn.website.mapper.NovelMapper;
+import cn.wgn.website.mapper.UserMapper;
 import cn.wgn.website.service.IManageService;
-import cn.wgn.website.utils.CosClientUtil;
-import cn.wgn.website.utils.HttpUtil;
-import cn.wgn.website.utils.WebSiteUtil;
-import cn.wgn.website.utils.WordUtil;
+import cn.wgn.website.utils.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Strings;
@@ -40,21 +35,24 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
     private WordUtil wordUtil;
     @Autowired
     private CosClientUtil cosClientUtil;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private IpUtil ipUtil;
 
     /**
-     * 测试
+     * 获取首页信息
      *
      * @return
      */
     @Override
-    public IpDto getIp(String ip) {
-//        Map<String, String> param = new HashMap<>();
-//        param.put("ip", ip);
-//        String result = httpUtil.httpPostMap(param, "http://ip.ws.126.net/ipquery");
-
-        IpDto data = new IpDto();
-        data.setIp(ip);
-        return data;
+    public HomeInfo getHomeInfo() {
+        HomeInfo homeInfo = userMapper.getHomeInfo(getUserData().getId());
+        homeInfo.setLastIp(ipUtil.int2ip(Integer.parseInt(homeInfo.getLastIp())));
+        // todo chart here
+        homeInfo.setWeekChart("chart here");
+        ipUtil.getIpRegion("xxx");
+        return homeInfo;
     }
 
     /**

@@ -40,3 +40,4 @@ private-config:
     port: 465
     from-user-name: 123@email.com
     from-user-password: 123456
+  ip2region: D:/wuguangnuo/wgn.cn/website/src/main/resources/ip2region.db
