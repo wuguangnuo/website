@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.abel533.echarts.AxisPointer;
 import com.github.abel533.echarts.Grid;
+import com.github.abel533.echarts.Legend;
 import com.github.abel533.echarts.Option;
 import com.github.abel533.echarts.axis.CategoryAxis;
 import com.github.abel533.echarts.axis.ValueAxis;
@@ -300,13 +301,13 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
         Option option = new Option();
         option.title().text("最近七天接口调用统计").subtext("wuguangnuo.cn").left("3%");
         option.tooltip().trigger(Trigger.axis).axisPointer(new AxisPointer().type(PointerType.shadow));
-        option.legend(data.keySet().toArray());
+        option.legend(new Legend().top("8%").data(data.keySet().toArray()));
         option.toolbox().show(true).right("3%").feature(Tool.mark, Tool.dataView,
                 new MagicType(Magic.line, Magic.bar).show(true), Tool.restore, Tool.saveAsImage);
         option.calculable(true);
         option.xAxis(new CategoryAxis().data(yAxis));
         option.yAxis(new ValueAxis());
-        option.grid(new Grid().left("3%").right("3%").bottom("3%").containLabel(true));
+        option.grid(new Grid().top("20%").left("3%").right("3%").bottom("3%").containLabel(true));
 
         for (String key : data.keySet()) {
             option.series(new Bar(key)
