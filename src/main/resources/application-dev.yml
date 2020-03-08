@@ -5,7 +5,7 @@ spring:
     password:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/wuguangnuo?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/wgnapi?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false
     username: root
     password:
   servlet:
@@ -40,4 +40,5 @@ private-config:
     port: 465
     from-user-name: 123@email.com
     from-user-password: 123456
+    copy-to: wuguangnuo@qq.com
   ip2region: D:/wuguangnuo/wgn.cn/website/src/main/resources/ip2region.db

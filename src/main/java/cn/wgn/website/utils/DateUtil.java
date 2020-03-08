@@ -93,9 +93,8 @@ public class DateUtil {
      * @param date    Date
      * @param pattern StrUtils.DATE_TIME_PATTERN || StrUtils.DATE_PATTERN， 如果为空，则为yyyy-MM-dd
      * @return
-     * @throws ParseException
      */
-    public static String dateFormat(Date date, String pattern) throws ParseException {
+    public static String dateFormat(Date date, String pattern) {
         if (Strings.isNullOrEmpty(pattern)) {
             pattern = DateUtil.DATE_PATTERN;
         }

@@ -12,6 +12,7 @@ import cn.wgn.website.entity.UserEntity;
 import cn.wgn.website.enums.RedisPrefixKeyEnum;
 import cn.wgn.website.mapper.RolePermissionMapper;
 import cn.wgn.website.mapper.UserMapper;
+import cn.wgn.website.service.ICacheService;
 import cn.wgn.website.service.IProfileService;
 import cn.wgn.website.utils.*;
 import com.alibaba.fastjson.JSONArray;
@@ -47,6 +48,8 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
     private CosClientUtil cosClientUtil;
     @Autowired
     private ThumbnailsUtil thumbnailsUtil;
+    @Autowired
+    private ICacheService cacheService;
 
     /**
      * 账号密码登录
@@ -188,7 +191,7 @@ public class ProfileServiceImpl extends BaseServiceImpl implements IProfileServi
      * @return
      */
     public List<Menu> getMenuList() {
-        String jsonStr = fileUtil.getMenuJson();
+        String jsonStr = cacheService.getMenuJson();
         List<Menu> menus = JSONArray.parseArray(jsonStr, Menu.class);
 
         // 获取用户的权限 匹配的code

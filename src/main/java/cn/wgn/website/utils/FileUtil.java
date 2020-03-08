@@ -21,16 +21,9 @@ public class FileUtil {
 
     /**
      * 获取菜单列表
-     * {
-     * "code":"所需权限",
-     * "icon":"图标",
-     * "url":"相对链接",
-     * "name":"菜单名称"
-     * }
      *
      * @return
      */
-    @Cacheable(value = "MenuJson", key = "")
     public String getMenuJson() {
         return getFileString(menuJson);
     }

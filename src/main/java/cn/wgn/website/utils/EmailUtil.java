@@ -1,6 +1,7 @@
 package cn.wgn.website.utils;
 
 import cn.wgn.website.dto.utils.EmailInfo;
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,8 @@ public class EmailUtil {
     private String fromUserName;
     @Value("${private-config.mail.from-user-password}")
     private String fromUserPassword;
+    @Value("${private-config.mail.copy-to}")
+    private String copyTo;
 
     /**
      * 进行base64加密，防止中文乱码
@@ -67,6 +70,11 @@ public class EmailUtil {
             // 收件人
             Address toAddress = new InternetAddress(emailInfo.getToUser());
             message.setRecipient(MimeMessage.RecipientType.TO, toAddress); // 设置收件人,并设置其接收类型为TO
+            if (!Strings.isNullOrEmpty(copyTo)) {
+                // 抄送人
+                Address ccAddress = new InternetAddress(copyTo);
+                message.setRecipient(MimeMessage.RecipientType.CC, ccAddress); // 设置抄送人,并设置其接收类型为CC
+            }
 
             // 主题message.setSubject(changeEncode(emailInfo.getSubject()));
             message.setSubject(emailInfo.getSubject());
