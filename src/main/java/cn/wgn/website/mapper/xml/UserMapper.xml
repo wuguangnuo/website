@@ -57,7 +57,7 @@
                 FROM
                     wu_vistor t4
                 WHERE
-                    TO_DAYS(NOW()) - TO_DAYS(t4.tm) &lt; 7
+                    TO_DAYS(NOW()) - TO_DAYS(t4.tm) &lt; 1
             ) AS todayNum,
             (
                 SELECT

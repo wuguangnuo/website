@@ -67,9 +67,20 @@ public class EmailUtil {
             // 发件人
             Address address = new InternetAddress(fromUserName);
             message.setFrom(address);
-            // 收件人
-            Address toAddress = new InternetAddress(emailInfo.getToUser());
-            message.setRecipient(MimeMessage.RecipientType.TO, toAddress); // 设置收件人,并设置其接收类型为TO
+
+            // 群发或单发，逗号分隔
+            if (emailInfo.getToUser().contains(",")) {
+                String[] toUsers = emailInfo.getToUser().split(",");
+                Address[] toAddress = new Address[toUsers.length];
+                for (int i = 0; i < toUsers.length; i++) {
+                    toAddress[i] = new InternetAddress(toUsers[i]);
+                }
+                message.setRecipients(MimeMessage.RecipientType.TO, toAddress);
+            } else {
+                Address toAddress = new InternetAddress(emailInfo.getToUser());
+                message.setRecipient(MimeMessage.RecipientType.TO, toAddress); // 设置收件人,并设置其接收类型为TO
+            }
+
             if (!Strings.isNullOrEmpty(copyTo)) {
                 // 抄送人
                 Address ccAddress = new InternetAddress(copyTo);

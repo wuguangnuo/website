@@ -1,6 +1,7 @@
 package cn.wgn.website.controller;
 
 import cn.wgn.website.dto.ApiRes;
+import cn.wgn.website.dto.CommonData;
 import cn.wgn.website.dto.common.AccountLogin;
 import cn.wgn.website.dto.utils.EmailInfo;
 import cn.wgn.website.enums.RedisPrefixKeyEnum;
@@ -8,6 +9,7 @@ import cn.wgn.website.service.ICommonService;
 import cn.wgn.website.utils.CosClientUtil;
 import cn.wgn.website.utils.EmailUtil;
 import cn.wgn.website.utils.RedisUtil;
+import cn.wgn.website.utils.TencentAIUtil;
 import com.google.code.kaptcha.Producer;
 import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
@@ -27,6 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 /**
@@ -48,6 +52,8 @@ public class CommonController extends BaseController {
     private ICommonService commonService;
     @Autowired
     private EmailUtil emailUtil;
+    @Autowired
+    private TencentAIUtil tencentAIUtil;
 
     // 验证码过期时间(分钟)
     private static final int expireTime = 15;
@@ -56,9 +62,12 @@ public class CommonController extends BaseController {
 
     @GetMapping(value = "")
     @ApiOperation(value = "welcome")
-    public String welcome() {
+    public void welcome(HttpServletResponse response) throws IOException {
         LOG.info("welcome --- LOG.info()");
-        return "<a href='/swagger-ui.html'>cn.wgn.website API</a>";
+        OutputStream outputStream = response.getOutputStream();
+        response.setHeader("content-type", "text/html;charset=UTF-8");
+        String data = "<a href='/swagger-ui.html'>cn.wgn.website API</a>";
+        outputStream.write(data.getBytes(StandardCharsets.UTF_8));
     }
 
     @PostMapping("login")
@@ -96,9 +105,10 @@ public class CommonController extends BaseController {
         return ApiRes.suc("上传成功", result);
     }
 
-    @GetMapping(value = "sendMail")
+    @PostMapping(value = "sendMail")
     @ApiOperation(value = "发送邮件")
-    public ApiRes<String> sendMail(String eMail) {
+    public ApiRes<String> sendMail(@RequestBody CommonData data) {
+        String eMail = data.getData();
         if (Strings.isNullOrEmpty(eMail)) {
             ApiRes.fail("eMail 不能为空!");
         }
@@ -118,5 +128,39 @@ public class CommonController extends BaseController {
         EmailInfo emailInfo = new EmailInfo(eMail, subject, content);
         boolean b = emailUtil.sendHtmlMail(emailInfo);
         return b ? ApiRes.suc("发送成功!") : ApiRes.err("发送失败");
+    }
+
+    @PostMapping(value = "textChat")
+    @ApiOperation(value = "智能闲聊")
+    public ApiRes<String> textChat(@RequestBody CommonData data, HttpServletRequest request) {
+        String question = data.getData();
+        if (Strings.isNullOrEmpty(question)) {
+            return ApiRes.suc("Success", "说点什么?");
+        }
+        // 登录用户使用token,否则每小时重置
+        String session = request.getHeader("token") == null
+                ? System.currentTimeMillis() / 3600000 + ""
+                : request.getHeader("token");
+        String answer = tencentAIUtil.textChat(session, question);
+        if (Strings.isNullOrEmpty(answer)) {
+            return ApiRes.suc("Success", "NLP TextChat Error!");
+        } else {
+            return ApiRes.suc("Success", answer);
+        }
+    }
+
+    @PostMapping(value = "textTranslate")
+    @ApiOperation(value = "中英互译")
+    public ApiRes<String> textTranslate(@RequestBody CommonData data) {
+        String text = data.getData();
+        if (Strings.isNullOrEmpty(text)) {
+            return ApiRes.suc("Success", "");
+        }
+        String trans = tencentAIUtil.textTranslate(text, 0);
+        if (Strings.isNullOrEmpty(trans)) {
+            return ApiRes.suc("Success", "NLP Translate Error!");
+        } else {
+            return ApiRes.suc("Success", trans);
+        }
     }
 }
