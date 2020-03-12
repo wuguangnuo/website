@@ -6,10 +6,8 @@ import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.exception.CosClientException;
 import com.qcloud.cos.exception.CosServiceException;
-import com.qcloud.cos.model.COSObjectSummary;
-import com.qcloud.cos.model.ListObjectsRequest;
-import com.qcloud.cos.model.ObjectListing;
-import com.qcloud.cos.model.PutObjectRequest;
+import com.qcloud.cos.http.HttpMethodName;
+import com.qcloud.cos.model.*;
 import com.qcloud.cos.region.Region;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,7 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -125,6 +125,11 @@ public class CosClientUtil {
         return "/website/" + path + "/" + tm + "/";
     }
 
+    /**
+     * 搜索文件列表
+     *
+     * @return
+     */
     public ObjectListing listObj() {
         // Bucket的命名格式为 BucketName-APPID ，此处填写的存储桶名称必须为此格式
         ListObjectsRequest listObjectsRequest = new ListObjectsRequest();
@@ -167,5 +172,36 @@ public class CosClientUtil {
             listObjectsRequest.setMarker(nextMarker);
         } while (objectListing.isTruncated());
         return objectListing;
+    }
+
+    /**
+     * 判断文件是否存在
+     *
+     * @param key
+     * @return
+     */
+    public boolean isExis(String key) {
+        try {
+            getClient().getObjectMetadata(bucketName, key);
+            return true;
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    /**
+     * 获取临时链接
+     *
+     * @param key
+     * @return
+     */
+    public String getTempUrl(String key) {
+        GeneratePresignedUrlRequest req =
+                new GeneratePresignedUrlRequest(bucketName, key, HttpMethodName.GET);
+        // 设置签名过期时间(可选)
+        Date expirationDate = new Date(System.currentTimeMillis() + 10L * 60L * 1000L);
+        req.setExpiration(expirationDate);
+        URL url = getClient().generatePresignedUrl(req);
+        return url.toString();
     }
 }
