@@ -16,10 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author WuGuangNuo
@@ -180,12 +177,11 @@ public class CosClientUtil {
      * @param key
      * @return
      */
-    public boolean isExis(String key) {
+    public Map getMeta(String key) {
         try {
-            getClient().getObjectMetadata(bucketName, key);
-            return true;
+            return getClient().getObjectMetadata(bucketName, key).getRawMetadata();
         } catch (Exception ignored) {
-            return false;
+            return null;
         }
     }
 

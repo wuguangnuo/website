@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * 文件分享系统
@@ -26,7 +29,16 @@ import java.nio.charset.StandardCharsets;
 public class ShareController {
     @Autowired
     private CosClientUtil cosClientUtil;
-    private String head = "<!DOCTYPE html><html><head><meta http-equiv='Content-Type'content='text/html;charset=utf-8'><meta http-equiv='X-UA-Compatible'content='IE=edge,chrome=1'><meta name='renderer'content='webkit|ie-comp|ie-stand'><meta name='viewport'content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no'><title>文件分享系统|諾</title><link rel='icon'type='image/x-icon'href='http://www.wuguangnuo.cn/favicon.ico'/><link rel='shortcut icon'type='image/x-icon'href='http://www.wuguangnuo.cn/favicon.ico'/><link rel='bookmark'type='image/x-icon'href='http://www.wuguangnuo.cn/favicon.ico'/></head><body>";
+    private String head = "<!DOCTYPE html><html><head>" +
+            "<meta http-equiv='Content-Type'content='text/html;charset=utf-8'>" +
+            "<meta http-equiv='X-UA-Compatible'content='IE=edge,chrome=1'>" +
+            "<meta name='renderer'content='webkit|ie-comp|ie-stand'>" +
+            "<meta name='viewport'content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no'>" +
+            "<title>文件分享系统|諾</title>" +
+            "<link rel='icon'type='image/x-icon'href='http://www.wuguangnuo.cn/favicon.ico'/>" +
+            "<link rel='shortcut icon'type='image/x-icon'href='http://www.wuguangnuo.cn/favicon.ico'/>" +
+            "<link rel='bookmark'type='image/x-icon'href='http://www.wuguangnuo.cn/favicon.ico'/>" +
+            "<style type='text/css'>*{font-family:'Courier New','Microsoft YaHei',SimSun}a{color:blue;text-decoration:none}</style></head><body>";
     private String foot = "</body></html>";
 
     @GetMapping(value = "")
@@ -34,15 +46,26 @@ public class ShareController {
     public void getFileUrl(String name, HttpServletResponse response) throws IOException {
         OutputStream outputStream = response.getOutputStream();
         response.setHeader("content-type", "text/html;charset=UTF-8");
-        String data = "";
+        String data;
 
         if (Strings.isNullOrEmpty(name)) {
             data = head + "<h1>链接错误</h1>" + foot;
         } else {
-            if (cosClientUtil.isExis("share/" + name)) {
-                data = head + "<p>点击下载&nbsp;<a style='font-size:2em'href='" + cosClientUtil.getTempUrl("share/" + name) + "'>" + name + "</a>&nbsp;链接生存时间10分钟</p>" + foot;
-            } else {
+            String key = "share/" + name;
+            Map meta = cosClientUtil.getMeta(key);
+            if (meta == null) {
                 data = head + "<h1>文件不存在</h1>" + foot;
+            } else {
+                String url = cosClientUtil.getTempUrl(key);
+                DecimalFormat df = new DecimalFormat("#,###");
+                data = head + "<h1>获取文件成功！</h1>" +
+                        "<h2>文件名称：<a href='" + url + "'>" + name + "</a></h2>" +
+                        "<h2>文件链接：<a href='" + url + "'>" + url + "</a></h2>" +
+                        "<p>链接生存时间10分钟</p>" +
+                        "<h2>Last-Modified：" + meta.get("Last-Modified") + "</h2>" +
+                        "<h2>Content-Length：" + df.format(meta.get("Content-Length")) + "&nbsp;Byte</h2>" +
+                        "<h2>Date：" + new Date() + "</h2>" +
+                        "<h2>Content-Type：" + meta.get("Content-Type") + "</h2>" + foot;
             }
         }
 
