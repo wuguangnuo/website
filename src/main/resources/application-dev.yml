@@ -31,6 +31,10 @@ private-config:
     secret-key: C******************************Q
     bucket-name: w*******************7
     region-name: a**********u
+  # 腾讯AI配置
+  tencent-ai:
+    app-id: 2********8
+    app-key: 2**************U
   # 菜单Json配置
   menu-json: D:/wuguangnuo/wgn.cn/website/src/main/resources/menu.json
   # 邮箱配置
@@ -41,4 +45,5 @@ private-config:
     from-user-name: 123@email.com
     from-user-password: 123456
     copy-to: wuguangnuo@qq.com
+  # IP地址库
   ip2region: D:/wuguangnuo/wgn.cn/website/src/main/resources/ip2region.db

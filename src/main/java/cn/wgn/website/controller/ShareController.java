@@ -38,7 +38,7 @@ public class ShareController {
             "<link rel='icon'type='image/x-icon'href='http://www.wuguangnuo.cn/favicon.ico'/>" +
             "<link rel='shortcut icon'type='image/x-icon'href='http://www.wuguangnuo.cn/favicon.ico'/>" +
             "<link rel='bookmark'type='image/x-icon'href='http://www.wuguangnuo.cn/favicon.ico'/>" +
-            "<style type='text/css'>*{font-family:'Courier New','Microsoft YaHei',SimSun}a{color:blue;text-decoration:none}</style></head><body>";
+            "<style type='text/css'>*{font-family:'Courier New','Microsoft YaHei',SimSun;word-break:break-all}a{color:blue;text-decoration:none}</style></head><body>";
     private String foot = "</body></html>";
 
     @GetMapping(value = "")
@@ -56,12 +56,12 @@ public class ShareController {
             if (meta == null) {
                 data = head + "<h1>文件不存在</h1>" + foot;
             } else {
-                String url = cosClientUtil.getTempUrl(key);
+                String url = cosClientUtil.getTmpUrl(key);
                 DecimalFormat df = new DecimalFormat("#,###");
                 data = head + "<h1>获取文件成功！</h1>" +
                         "<h2>文件名称：<a href='" + url + "'>" + name + "</a></h2>" +
                         "<h2>文件链接：<a href='" + url + "'>" + url + "</a></h2>" +
-                        "<p>链接生存时间10分钟</p>" +
+                        "<p>点击链接下载，链接生存时间10分钟</p>" +
                         "<h2>Last-Modified：" + meta.get("Last-Modified") + "</h2>" +
                         "<h2>Content-Length：" + df.format(meta.get("Content-Length")) + "&nbsp;Byte</h2>" +
                         "<h2>Date：" + new Date() + "</h2>" +
