@@ -21,8 +21,8 @@ public class WebSiteUtil {
     // 默认分页
     public static final Page PAGE_DEFAULT_SIZE = new Page(0, 10);
 
-    // Redis过期时间(分种)
-    public static final int EXPIRE_TIME = 9000000;
+    // Redis过期时间(秒)
+    public static final int EXPIRE_TIME = 7 * 24 * 3600;
 
     /**
      * 格式化时间

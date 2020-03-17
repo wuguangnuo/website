@@ -102,7 +102,7 @@ public class CommonServiceImpl extends BaseServiceImpl implements ICommonService
             EmailInfo emailInfo = new EmailInfo(
                     email,
                     "欢迎登录",
-                    "<div style='font-size:16px;user-select:none'><p>欢迎登录<strong style='color:red;font-size:20px;'>wuguangnuo.cn</strong>。</p><p>点击进入\uD83D\uDC49<a style='color:blue;text-decoration:none'href='http://api.wuguangnuo.cn:8800'>吴广诺API</a></p><p style='font-size:14px;font-family:Courier New'>@author&nbsp;<a style='color:black;text-decoration:none'href='https://github.com/wuguangnuo'>WuGuangNuo</a></p></div>"
+                    HtmlModel.mailBody("欢迎邮件", "<p>欢迎登录<strong style='color:red;font-size:20px;'>wuguangnuo.cn</strong>。</p>")
             );
             LOG.info("发送邮件：" + emailInfo.toString());
             emailUtil.sendHtmlMail(emailInfo);
@@ -111,7 +111,7 @@ public class CommonServiceImpl extends BaseServiceImpl implements ICommonService
                 EmailInfo emailInfo = new EmailInfo(
                         email,
                         "IP警告",
-                        "<div style='font-size:16px;user-select:none'><p>IP异常警告 form <strong style='color:red;font-size:20px;'>wuguangnuo.cn</strong>。</p><p>本次登录IP：<span style='color:red'>" + ipUtil.int2ip(ip) + "</span>，上次登录IP：<span style='color:red'>" + ipUtil.int2ip(vistorEntity.getIp()) + "</span></p><p>点击进入\uD83D\uDC49<a style='color:blue;text-decoration:none'href='http://api.wuguangnuo.cn:8800'>吴广诺API</a></p><p style='font-size:14px;font-family:Courier New'>@author&nbsp;<a style='color:black;text-decoration:none'href='https://github.com/wuguangnuo'>WuGuangNuo</a></p></div>"
+                        HtmlModel.mailBody("IP异常警告邮件", "<p>本次登录IP：<span style='color:red'>" + ipUtil.int2ip(ip) + "</span>，上次登录IP：<span style='color:red'>" + ipUtil.int2ip(vistorEntity.getIp()) + "</span></p>")
                 );
                 LOG.info("发送邮件：" + emailInfo.toString());
                 emailUtil.sendHtmlMail(emailInfo);

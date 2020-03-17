@@ -6,10 +6,7 @@ import cn.wgn.website.dto.common.AccountLogin;
 import cn.wgn.website.dto.utils.EmailInfo;
 import cn.wgn.website.enums.RedisPrefixKeyEnum;
 import cn.wgn.website.service.ICommonService;
-import cn.wgn.website.utils.CosClientUtil;
-import cn.wgn.website.utils.EmailUtil;
-import cn.wgn.website.utils.RedisUtil;
-import cn.wgn.website.utils.TencentAIUtil;
+import cn.wgn.website.utils.*;
 import com.google.code.kaptcha.Producer;
 import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
@@ -124,7 +121,7 @@ public class CommonController extends BaseController {
         }
 
         String subject = "测试邮件 from wgn API";
-        String content = "<div style='font-size:16px;user-select:none'><p>这是一封<strong style='color:red;font-size:20px;'>测试邮件</strong>。</p><p>点击进入\uD83D\uDC49<a style='color:blue;text-decoration:none'href='http://api.wuguangnuo.cn:8800'>吴广诺API</a></p><p style='font-size:14px;font-family:Courier New'>@author&nbsp;<a style='color:black;text-decoration:none'href='https://github.com/wuguangnuo'>WuGuangNuo</a></p></div>";
+        String content = HtmlModel.mailBody("测试邮件", "<p>测试邮件 from wgn API</p>");
         EmailInfo emailInfo = new EmailInfo(eMail, subject, content);
         boolean b = emailUtil.sendHtmlMail(emailInfo);
         return b ? ApiRes.suc("发送成功!") : ApiRes.err("发送失败");
