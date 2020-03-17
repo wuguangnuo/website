@@ -35,9 +35,9 @@ public class ShareController extends BaseController {
             "<meta name='renderer'content='webkit|ie-comp|ie-stand'>" +
             "<meta name='viewport'content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no'>" +
             "<title>文件分享系统|諾</title>" +
-            "<link rel='icon'type='image/x-icon'href='http://www.wuguangnuo.cn/favicon.ico'/>" +
-            "<link rel='shortcut icon'type='image/x-icon'href='http://www.wuguangnuo.cn/favicon.ico'/>" +
-            "<link rel='bookmark'type='image/x-icon'href='http://www.wuguangnuo.cn/favicon.ico'/>" +
+            "<link rel='icon'type='image/x-icon'href='https://t.wuguangnuo.cn/favicon.ico'/>" +
+            "<link rel='shortcut icon'type='image/x-icon'href='https://t.wuguangnuo.cn/favicon.ico'/>" +
+            "<link rel='bookmark'type='image/x-icon'href='https://t.wuguangnuo.cn/favicon.ico'/>" +
             "<style type='text/css'>*{font-family:'Courier New','Microsoft YaHei',SimSun;word-break:break-all}" +
             "html{cursor:url('https://wuguangnuo-1257896087.cos.ap-guangzhou.myqcloud.com/public/img/default.cur'),default}" +
             "a{color:blue;text-decoration:none;cursor:url('https://wuguangnuo-1257896087.cos.ap-guangzhou.myqcloud.com/public/img/select.cur'),default}" +
