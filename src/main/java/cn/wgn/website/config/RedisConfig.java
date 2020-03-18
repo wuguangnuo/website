@@ -98,7 +98,7 @@ public class RedisConfig {
 
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration
                 .defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(15L)) // 缓存时间 15 分钟
+                .entryTtl(Duration.ofSeconds(15 * 60L)) // 缓存时间 15 分钟
                 .disableCachingNullValues() // 空值不缓存
                 .serializeValuesWith( // Value 序列化
                         RedisSerializationContext.SerializationPair.fromSerializer(

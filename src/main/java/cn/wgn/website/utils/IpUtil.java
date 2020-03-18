@@ -137,4 +137,14 @@ public class IpUtil {
         ipRegion.setIsp(blocks[4]);
         return ipRegion;
     }
+
+    /**
+     * 获取IP地理位置
+     *
+     * @param number
+     * @return
+     */
+    public IpRegion getIpRegion(Integer number) {
+        return this.getIpRegion(this.int2ip(number));
+    }
 }

@@ -57,4 +57,15 @@ public class IpRegion {
     public void setIsp(String isp) {
         this.isp = isp;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "country='" + country + '\'' +
+                ", area='" + area + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", isp='" + isp + '\'' +
+                '}';
+    }
 }

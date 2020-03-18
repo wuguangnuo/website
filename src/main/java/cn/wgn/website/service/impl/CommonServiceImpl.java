@@ -99,6 +99,7 @@ public class CommonServiceImpl extends BaseServiceImpl implements ICommonService
                         .last("LIMIT 1")
         );
         if (vistorEntity == null) {
+            // 第一次登录
             EmailInfo emailInfo = new EmailInfo(
                     email,
                     "欢迎登录",
@@ -107,15 +108,24 @@ public class CommonServiceImpl extends BaseServiceImpl implements ICommonService
             LOG.info("发送邮件：" + emailInfo.toString());
             emailUtil.sendHtmlMail(emailInfo);
         } else {
-            if (vistorEntity.getIp() != ip) {
-                EmailInfo emailInfo = new EmailInfo(
-                        email,
-                        "IP警告",
-                        HtmlModel.mailBody("IP异常警告邮件", "<p>本次登录IP：<span style='color:red'>" + ipUtil.int2ip(ip) + "</span>，上次登录IP：<span style='color:red'>" + ipUtil.int2ip(vistorEntity.getIp()) + "</span></p>")
-                );
-                LOG.info("发送邮件：" + emailInfo.toString());
-                emailUtil.sendHtmlMail(emailInfo);
+            if (vistorEntity.getIp() == ip) {
+                // IP相同，放行
+                return;
             }
+            String city1 = ipUtil.getIpRegion(vistorEntity.getIp()).getCity();
+            String city2 = ipUtil.getIpRegion(ip).getCity();
+            if (city1.equals(city2) && !Strings.isNullOrEmpty(city1)) {
+                // 同城且不空，放行
+                return;
+            }
+            EmailInfo emailInfo = new EmailInfo(
+                    email,
+                    "IP警告",
+                    HtmlModel.mailBody("IP异常警告邮件", "<p>本次登录IP：<span style='color:red'>" + ipUtil.int2ip(ip) + "</span>" + ipUtil.getIpRegion(ip).toString() + "，" +
+                            "上次登录IP：<span style='color:red'>" + ipUtil.int2ip(vistorEntity.getIp()) + "</span>" + ipUtil.getIpRegion(vistorEntity.getIp()).toString() + "</p>")
+            );
+            LOG.info("发送邮件：" + emailInfo.toString());
+            emailUtil.sendHtmlMail(emailInfo);
         }
     }
 }

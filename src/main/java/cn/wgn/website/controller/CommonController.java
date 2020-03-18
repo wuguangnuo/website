@@ -52,8 +52,8 @@ public class CommonController extends BaseController {
     @Autowired
     private TencentAIUtil tencentAIUtil;
 
-    // 验证码过期时间(分钟)
-    private static final int expireTime = 15;
+    // 验证码过期时间(秒)
+    private static final int expireTime = 10 * 60;
     // 发邮件时间戳
     private static long timestamp = System.currentTimeMillis();
 
@@ -63,7 +63,7 @@ public class CommonController extends BaseController {
         LOG.info("welcome --- LOG.info()");
         OutputStream outputStream = response.getOutputStream();
         response.setHeader("content-type", "text/html;charset=UTF-8");
-        String data = "<a href='/swagger-ui.html'>cn.wgn.website API</a>";
+        String data = HtmlModel.welcomePage();
         outputStream.write(data.getBytes(StandardCharsets.UTF_8));
     }
 
