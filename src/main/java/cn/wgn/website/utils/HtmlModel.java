@@ -55,7 +55,7 @@ public class HtmlModel {
                 "<link rel='bookmark'type='image/x-icon'href='" + ICO_URL + "'/>" +
                 "</head><body>" +
                 "<h1>" + title + "！</h1>" + detail +
-                "<footer><p>Copyright &copy; 2020 <a href='http://www.wuguangnuo.cn'target='_blank'>wuguangnuo.cn</a> All Rights Reserved | Author by WuGN</p>" +
+                "<footer><p>Copyright &copy; 2020 <a href='https://www.wuguangnuo.cn'target='_blank'>wuguangnuo.cn</a> All Rights Reserved | Author by WuGN</p>" +
                 "<p style='color:#888'>京ICP备20006588号</p></footer></body>" +
                 "<script src='https://cdn.bootcss.com/clipboard.js/2.0.6/clipboard.min.js'></script>" +
                 "<script>new ClipboardJS('#copybtn')</script>" +

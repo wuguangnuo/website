@@ -43,7 +43,7 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
                 .title("系统api文档")
                 .description("wuguangnuo.cn 主站 API")
-//                .termsOfServiceUrl("http://www.wuguangnuo.cn")
+//                .termsOfServiceUrl("https://www.wuguangnuo.cn")
                 .version("alpha")
                 .build();
     }
