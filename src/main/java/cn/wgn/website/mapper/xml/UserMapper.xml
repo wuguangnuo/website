@@ -44,7 +44,7 @@
                 SELECT
                     t3.ip
                 FROM
-                    wu_vistor t3
+                    wu_call t3
                 WHERE
                     LEFT (t3.us, LENGTH(t.id) + 1) = t.id + ':'
                 ORDER BY
@@ -55,7 +55,7 @@
                 SELECT
                     count(1)
                 FROM
-                    wu_vistor t4
+                    wu_call t4
                 WHERE
                     TO_DAYS(NOW()) - TO_DAYS(t4.tm) &lt; 1
             ) AS todayNum,
@@ -63,7 +63,7 @@
                 SELECT
                     count(1)
                 FROM
-                    wu_vistor
+                    wu_call
             ) AS allNum,
             NULL AS weekChart,
             NULL AS lastAdd
