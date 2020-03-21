@@ -1,13 +1,11 @@
 package cn.wgn.website.controller;
 
 import cn.wgn.website.dto.ApiRes;
-import cn.wgn.website.dto.home.BlogListDto;
-import cn.wgn.website.dto.home.BlogListQuery;
-import cn.wgn.website.dto.home.BlogSideDto;
-import cn.wgn.website.dto.home.DiaryDto;
+import cn.wgn.website.dto.home.*;
 import cn.wgn.website.entity.*;
 import cn.wgn.website.service.IHomeService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,6 +140,18 @@ public class HomeController extends BaseController {
             return ApiRes.fail();
         } else {
             return ApiRes.suc(res);
+        }
+    }
+
+    @PostMapping(value = "vistorChart")
+    @ApiOperation(value = "获取访客图表")
+    public ApiRes<String> vistorChart(@RequestBody VistorChartDto dto) {
+        String res = homeService.vistorChart(dto);
+
+        if (Strings.isNullOrEmpty(res)) {
+            return ApiRes.fail();
+        } else {
+            return ApiRes.suc("Success", res);
         }
     }
 }

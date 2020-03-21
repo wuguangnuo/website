@@ -17,6 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <spring-boot.version>2.2.4.RELEASE</spring-boot.version>
+        <mysql-connector.version>8.0.19</mysql-connector.version>
         <logback.version>1.2.3</logback.version>
         <mybatis-plus.version>3.3.1</mybatis-plus.version>
         <swagger2.version>2.9.2</swagger2.version>
@@ -32,6 +33,8 @@
         <thumbnailator.version>0.4.11</thumbnailator.version>
         <mail.version>1.4.7</mail.version>
         <ip2region.version>1.7.2</ip2region.version>
+        <cos-sts.version>3.0.6</cos-sts.version>
+        <druid.version>1.1.21</druid.version>
     </properties>
 
     <dependencies>
@@ -55,6 +58,7 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
+            <version>${mysql-connector.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -170,7 +174,17 @@
         <dependency>
             <groupId>com.tencent.cloud</groupId>
             <artifactId>cos-sts-java</artifactId>
-            <version>3.0.6</version>
+            <version>${cos-sts.version}</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba</groupId>-->
+<!--            <artifactId>druid</artifactId>-->
+<!--            <version>${druid.version}</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${druid.version}</version>
         </dependency>
     </dependencies>
 

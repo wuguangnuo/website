@@ -13,6 +13,9 @@ public class HtmlModel {
             "<meta http-equiv='X-UA-Compatible'content='IE=edge,chrome=1'>" +
             "<meta name='renderer'content='webkit|ie-comp|ie-stand'>" +
             "<meta name='viewport'content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no'>" +
+            "<link rel='icon'type='image/x-icon'href='" + ICO_URL + "'/>" +
+            "<link rel='shortcut icon'type='image/x-icon'href='" + ICO_URL + "'/>" +
+            "<link rel='bookmark'type='image/x-icon'href='" + ICO_URL + "'/>" +
             "<style type='text/css'>*{font-family:'Courier New','Microsoft YaHei',SimSun;word-break:break-all}" +
             "html{cursor:url('https://wuguangnuo-1257896087.cos.ap-guangzhou.myqcloud.com/public/img/default.cur'),default}" +
             "a{color:blue;text-decoration:none}" +
@@ -50,9 +53,6 @@ public class HtmlModel {
     public static String sharePage(String title, String detail) {
         return COMMON_HEAD +
                 "<title>文件分享系统|諾</title>" +
-                "<link rel='icon'type='image/x-icon'href='" + ICO_URL + "'/>" +
-                "<link rel='shortcut icon'type='image/x-icon'href='" + ICO_URL + "'/>" +
-                "<link rel='bookmark'type='image/x-icon'href='" + ICO_URL + "'/>" +
                 "</head><body>" +
                 "<h1>" + title + "！</h1>" + detail +
                 "<footer><p>Copyright &copy; 2020 <a href='https://www.wuguangnuo.cn'target='_blank'>wuguangnuo.cn</a> All Rights Reserved | Author by WuGN</p>" +

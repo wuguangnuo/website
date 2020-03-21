@@ -71,4 +71,12 @@ public interface IHomeService extends IBaseService {
      * @return
      */
     BlogEntity getBlogDetail(Integer id);
+
+    /**
+     * 获取访客图表
+     *
+     * @param dto
+     * @return
+     */
+    String vistorChart(VistorChartDto dto);
 }

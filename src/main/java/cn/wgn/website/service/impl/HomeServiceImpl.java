@@ -4,12 +4,26 @@ import cn.wgn.website.dto.home.*;
 import cn.wgn.website.entity.*;
 import cn.wgn.website.mapper.*;
 import cn.wgn.website.service.IHomeService;
+import cn.wgn.website.utils.DateUtil;
 import cn.wgn.website.utils.WebSiteUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.abel533.echarts.AxisPointer;
+import com.github.abel533.echarts.Grid;
+import com.github.abel533.echarts.Legend;
+import com.github.abel533.echarts.Option;
+import com.github.abel533.echarts.axis.CategoryAxis;
+import com.github.abel533.echarts.axis.ValueAxis;
+import com.github.abel533.echarts.code.Magic;
+import com.github.abel533.echarts.code.PointerType;
+import com.github.abel533.echarts.code.Tool;
+import com.github.abel533.echarts.code.Trigger;
+import com.github.abel533.echarts.feature.MagicType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -193,5 +207,33 @@ public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
     @Override
     public BlogEntity getBlogDetail(Integer id) {
         return blogMapper.selectById(id);
+    }
+
+    /**
+     * 获取访客图表
+     *
+     * @param dto
+     * @return
+     */
+//    @Cacheable(value = "VistorChart", key = "#dto.toString()")
+    @Override
+    public String vistorChart(VistorChartDto dto) {
+        Option option = new Option();
+//        switch (dto.getType()){
+//            case "vistor":
+//        }
+        option.title().text("访客类型统计").subtext("api.wuguangnuo.cn 数据更新时间:" + DateUtil.dateFormat(null, DateUtil.MINUTE_PATTERN)).left("3%");
+//        option.tooltip().trigger(Trigger.axis);
+//        option.legend(new Legend().data(总访问/访客/谷歌));
+//        option.toolbox().show(true).right("3%").feature(Tool.mark, Tool.dataView,
+//                new MagicType(Magic.line, Magic.bar).show(true), Tool.restore, Tool.saveAsImage);
+//        option.calculable(true);
+//        option.xAxis(new CategoryAxis().data(yAxis));
+//        option.yAxis(new ValueAxis());
+//        option.grid(new Grid().top("20%").left("3%").right("3%").bottom("3%").containLabel(true));
+
+
+
+        return JSON.toJSONString(option);
     }
 }
