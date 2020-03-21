@@ -113,4 +113,65 @@ public class CacheServiceImpl implements ICacheService {
         }
         return JSON.toJSONString(option);
     }
+
+    /**
+     * 访客类型图表
+     * 默认最近三月
+     * wuguangnuo.cn
+     *
+     * @param dateTime1
+     * @param dateTime2
+     * @return
+     */
+    @Override
+    @Cacheable(value = "VistorChart", key = "")
+    public String getVistorChart(LocalDateTime dateTime1, LocalDateTime dateTime2) {
+        return null;
+    }
+
+    /**
+     * 受访页面图表
+     * 默认最近七天
+     * wuguangnuo.cn
+     *
+     * @param dateTime1
+     * @param dateTime2
+     * @return
+     */
+    @Override
+    @Cacheable(value = "LinkChart", key = "")
+    public String getLinkChart(LocalDateTime dateTime1, LocalDateTime dateTime2) {
+        return null;
+    }
+
+    /**
+     * 操作系统图表
+     * 默认最近七天
+     * wuguangnuo.cn
+     *
+     * @param dateTime1
+     * @param dateTime2
+     * @return
+     */
+    @Override
+    @Cacheable(value = "SystemChart", key = "")
+    public String getSystemChart(LocalDateTime dateTime1, LocalDateTime dateTime2) {
+        return null;
+    }
+
+    /**
+     * 客户端图表
+     * 默认最近七天
+     * wuguangnuo.cn
+     *
+     * @param dateTime1
+     * @param dateTime2
+     * @return
+     */
+    @Override
+    @Cacheable(value = "BrowserChart", key = "")
+    public String getBrowserChart(LocalDateTime dateTime1, LocalDateTime dateTime2) {
+        return null;
+    }
+
 }

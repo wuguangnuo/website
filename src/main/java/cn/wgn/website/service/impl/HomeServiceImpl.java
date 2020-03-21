@@ -3,29 +3,19 @@ package cn.wgn.website.service.impl;
 import cn.wgn.website.dto.home.*;
 import cn.wgn.website.entity.*;
 import cn.wgn.website.mapper.*;
+import cn.wgn.website.service.ICacheService;
 import cn.wgn.website.service.IHomeService;
-import cn.wgn.website.utils.DateUtil;
 import cn.wgn.website.utils.WebSiteUtil;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.abel533.echarts.AxisPointer;
-import com.github.abel533.echarts.Grid;
-import com.github.abel533.echarts.Legend;
-import com.github.abel533.echarts.Option;
-import com.github.abel533.echarts.axis.CategoryAxis;
-import com.github.abel533.echarts.axis.ValueAxis;
-import com.github.abel533.echarts.code.Magic;
-import com.github.abel533.echarts.code.PointerType;
-import com.github.abel533.echarts.code.Tool;
-import com.github.abel533.echarts.code.Trigger;
-import com.github.abel533.echarts.feature.MagicType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -48,6 +38,8 @@ public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
     private ToolMapper toolMapper;
     @Autowired
     private BlogMapper blogMapper;
+    @Autowired
+    private ICacheService cacheService;
 
     /**
      * 获取最新一篇日记
@@ -215,25 +207,39 @@ public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
      * @param dto
      * @return
      */
-//    @Cacheable(value = "VistorChart", key = "#dto.toString()")
     @Override
     public String vistorChart(VistorChartDto dto) {
-        Option option = new Option();
-//        switch (dto.getType()){
-//            case "vistor":
-//        }
-        option.title().text("访客类型统计").subtext("api.wuguangnuo.cn 数据更新时间:" + DateUtil.dateFormat(null, DateUtil.MINUTE_PATTERN)).left("3%");
-//        option.tooltip().trigger(Trigger.axis);
-//        option.legend(new Legend().data(总访问/访客/谷歌));
-//        option.toolbox().show(true).right("3%").feature(Tool.mark, Tool.dataView,
-//                new MagicType(Magic.line, Magic.bar).show(true), Tool.restore, Tool.saveAsImage);
-//        option.calculable(true);
-//        option.xAxis(new CategoryAxis().data(yAxis));
-//        option.yAxis(new ValueAxis());
-//        option.grid(new Grid().top("20%").left("3%").right("3%").bottom("3%").containLabel(true));
+        // 默认最近七天
+        LocalDate date1 = dto.getDate1() == null ? LocalDate.now().minusDays(6) : dto.getDate1();
+        LocalDate date2 = dto.getDate2() == null ? LocalDate.now() : dto.getDate2();
+        // 时间排序
+        if (date1.isAfter(date2)) {
+            LocalDate tmpDate = date1;
+            date1 = date2;
+            date2 = tmpDate;
+        }
+        LocalDateTime dateTime1 = LocalDateTime.of(date1, LocalTime.MIN);
+        LocalDateTime dateTime2 = LocalDateTime.of(date2, LocalTime.MAX);
 
+        String result;
+        switch (dto.getType()) {
+            case "vistor":
+                result = cacheService.getVistorChart(LocalDateTime.of(LocalDate.now().minusMonths(3), LocalTime.MIN), dateTime2);
+                break;
+            case "link":
+                result = cacheService.getLinkChart(dateTime1, dateTime2);
+                break;
+            case "system":
+                result = cacheService.getSystemChart(dateTime1, dateTime2);
+                break;
+            case "browser":
+                result = cacheService.getBrowserChart(dateTime1, dateTime2);
+                break;
+            default:
+                result = "";
+                break;
+        }
 
-
-        return JSON.toJSONString(option);
+        return result;
     }
 }

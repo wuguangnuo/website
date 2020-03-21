@@ -1,5 +1,7 @@
 package cn.wgn.website.service;
 
+import java.time.LocalDateTime;
+
 /**
  * Redis 缓存服务
  *
@@ -20,4 +22,40 @@ public interface ICacheService {
      * @return
      */
     String getHomeChart();
+
+    /**
+     * 访客类型图表
+     * 默认最近三月
+     * wuguangnuo.cn
+     *
+     * @return
+     */
+    String getVistorChart(LocalDateTime dateTime1, LocalDateTime dateTime2);
+
+    /**
+     * 受访页面图表
+     * 默认最近七天
+     * wuguangnuo.cn
+     *
+     * @return
+     */
+    String getLinkChart(LocalDateTime dateTime1, LocalDateTime dateTime2);
+
+    /**
+     * 操作系统图表
+     * 默认最近七天
+     * wuguangnuo.cn
+     *
+     * @return
+     */
+    String getSystemChart(LocalDateTime dateTime1, LocalDateTime dateTime2);
+
+    /**
+     * 客户端图表
+     * 默认最近七天
+     * wuguangnuo.cn
+     *
+     * @return
+     */
+    String getBrowserChart(LocalDateTime dateTime1, LocalDateTime dateTime2);
 }
