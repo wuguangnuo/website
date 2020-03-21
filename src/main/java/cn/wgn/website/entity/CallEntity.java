@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 访客统计
+ * 接口调用统计
  * </p>
  *
  * @author WuGuangNuo
