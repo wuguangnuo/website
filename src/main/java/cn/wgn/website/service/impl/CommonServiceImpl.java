@@ -5,10 +5,10 @@ import cn.wgn.website.dto.common.AccountLogin;
 import cn.wgn.website.dto.common.LoginData;
 import cn.wgn.website.dto.utils.EmailInfo;
 import cn.wgn.website.entity.UserEntity;
-import cn.wgn.website.entity.VistorEntity;
+import cn.wgn.website.entity.CallEntity;
 import cn.wgn.website.enums.RedisPrefixKeyEnum;
 import cn.wgn.website.mapper.UserMapper;
-import cn.wgn.website.mapper.VistorMapper;
+import cn.wgn.website.mapper.CallMapper;
 import cn.wgn.website.service.ICommonService;
 import cn.wgn.website.utils.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -37,7 +37,7 @@ public class CommonServiceImpl extends BaseServiceImpl implements ICommonService
     @Autowired
     private EmailUtil emailUtil;
     @Autowired
-    private VistorMapper vistorMapper;
+    private CallMapper callMapper;
 
     /**
      * 账号密码登录
@@ -92,13 +92,13 @@ public class CommonServiceImpl extends BaseServiceImpl implements ICommonService
         if (Strings.isNullOrEmpty(email)) {
             return;
         }
-        VistorEntity vistorEntity = vistorMapper.selectOne(
-                new QueryWrapper<VistorEntity>().lambda()
-                        .eq(VistorEntity::getUs, us)
-                        .orderByDesc(VistorEntity::getId)
+        CallEntity callEntity = callMapper.selectOne(
+                new QueryWrapper<CallEntity>().lambda()
+                        .eq(CallEntity::getUs, us)
+                        .orderByDesc(CallEntity::getId)
                         .last("LIMIT 1")
         );
-        if (vistorEntity == null) {
+        if (callEntity == null) {
             // 第一次登录
             EmailInfo emailInfo = new EmailInfo(
                     email,
@@ -108,11 +108,11 @@ public class CommonServiceImpl extends BaseServiceImpl implements ICommonService
             LOG.info("发送邮件：" + emailInfo.toString());
             emailUtil.sendHtmlMail(emailInfo);
         } else {
-            if (vistorEntity.getIp() == ip) {
+            if (callEntity.getIp() == ip) {
                 // IP相同，放行
                 return;
             }
-            String city1 = ipUtil.getIpRegion(vistorEntity.getIp()).getCity();
+            String city1 = ipUtil.getIpRegion(callEntity.getIp()).getCity();
             String city2 = ipUtil.getIpRegion(ip).getCity();
             if (city1.equals(city2) && !Strings.isNullOrEmpty(city1)) {
                 // 同城且不空，放行
@@ -122,7 +122,7 @@ public class CommonServiceImpl extends BaseServiceImpl implements ICommonService
                     email,
                     "IP警告",
                     HtmlModel.mailBody("IP异常警告邮件", "<p>本次登录IP：<span style='color:red'>" + ipUtil.int2ip(ip) + "</span>" + ipUtil.getIpRegion(ip).toString() + "，" +
-                            "上次登录IP：<span style='color:red'>" + ipUtil.int2ip(vistorEntity.getIp()) + "</span>" + ipUtil.getIpRegion(vistorEntity.getIp()).toString() + "</p>")
+                            "上次登录IP：<span style='color:red'>" + ipUtil.int2ip(callEntity.getIp()) + "</span>" + ipUtil.getIpRegion(callEntity.getIp()).toString() + "</p>")
             );
             LOG.info("发送邮件：" + emailInfo.toString());
             emailUtil.sendHtmlMail(emailInfo);

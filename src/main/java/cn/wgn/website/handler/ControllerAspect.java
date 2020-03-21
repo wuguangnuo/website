@@ -1,8 +1,8 @@
 package cn.wgn.website.handler;
 
-import cn.wgn.website.entity.VistorEntity;
+import cn.wgn.website.entity.CallEntity;
 import cn.wgn.website.enums.RedisPrefixKeyEnum;
-import cn.wgn.website.mapper.VistorMapper;
+import cn.wgn.website.mapper.CallMapper;
 import cn.wgn.website.utils.IpUtil;
 import cn.wgn.website.utils.RedisUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -31,7 +31,7 @@ public class ControllerAspect {
     @Autowired
     private IpUtil ipUtil;
     @Autowired
-    private VistorMapper vistorMapper;
+    private CallMapper callMapper;
     @Autowired
     private RedisUtil redisUtil;
 
@@ -45,13 +45,13 @@ public class ControllerAspect {
         String us = redisUtil.get(token, RedisPrefixKeyEnum.Token.toString());
 //        String serviePath = request.getServletPath();
 
-        VistorEntity vEntity = new VistorEntity();
+        CallEntity vEntity = new CallEntity();
         vEntity.setLk(request.getServletPath())
                 .setIp(ipUtil.getIp(request))
                 .setAg(request.getHeader("User-Agent"))
                 .setTm(LocalDateTime.now())
                 .setUs(us);
-        vistorMapper.insert(vEntity);
+        callMapper.insert(vEntity);
 
         return pjp.proceed();
 

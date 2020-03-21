@@ -10,7 +10,7 @@ import cn.wgn.website.enums.NovelTypeEnum;
 import cn.wgn.website.enums.StateEnum;
 import cn.wgn.website.mapper.NovelMapper;
 import cn.wgn.website.mapper.UserMapper;
-import cn.wgn.website.mapper.VistorMapper;
+import cn.wgn.website.mapper.CallMapper;
 import cn.wgn.website.service.ICacheService;
 import cn.wgn.website.service.IManageService;
 import cn.wgn.website.utils.*;
@@ -46,7 +46,7 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
     @Autowired
     private IpUtil ipUtil;
     @Autowired
-    private VistorMapper vistorMapper;
+    private CallMapper callMapper;
     @Autowired
     private ICacheService cacheService;
 

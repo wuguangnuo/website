@@ -143,7 +143,7 @@ public class HomeController extends BaseController {
         }
     }
 
-    @PostMapping(value = "vistorChart")
+    @PostMapping(value = "callChart")
     @ApiOperation(value = "获取访客图表")
     public ApiRes<String> vistorChart(@RequestBody VistorChartDto dto) {
         String res = homeService.vistorChart(dto);

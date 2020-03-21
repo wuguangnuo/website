@@ -1,7 +1,7 @@
 package cn.wgn.website.service.impl;
 
-import cn.wgn.website.entity.VistorEntity;
-import cn.wgn.website.mapper.VistorMapper;
+import cn.wgn.website.entity.CallEntity;
+import cn.wgn.website.mapper.CallMapper;
 import cn.wgn.website.service.ICacheService;
 import cn.wgn.website.utils.DateUtil;
 import cn.wgn.website.utils.FileUtil;
@@ -37,7 +37,7 @@ import java.util.List;
 @Service("cacheService")
 public class CacheServiceImpl implements ICacheService {
     @Autowired
-    private VistorMapper vistorMapper;
+    private CallMapper callMapper;
     @Autowired
     private FileUtil fileUtil;
 
@@ -66,9 +66,9 @@ public class CacheServiceImpl implements ICacheService {
     @Override
     @Cacheable(value = "HomeChart", key = "")
     public String getHomeChart() {
-        List<VistorEntity> vistorEntityList = vistorMapper.selectList(
-                new QueryWrapper<VistorEntity>().lambda()
-                        .between(VistorEntity::getTm, LocalDateTime.of(LocalDate.now(), LocalTime.MIN).minusDays(6), LocalDateTime.now())
+        List<CallEntity> callEntityList = callMapper.selectList(
+                new QueryWrapper<CallEntity>().lambda()
+                        .between(CallEntity::getTm, LocalDateTime.of(LocalDate.now(), LocalTime.MIN).minusDays(6), LocalDateTime.now())
         );
 
         // 日期坐标轴
@@ -79,7 +79,7 @@ public class CacheServiceImpl implements ICacheService {
 
         // LinkedHashMap<接口名称，LinkedHashMap<日期，数量>>
         LinkedHashMap<String, LinkedHashMap<String, Integer>> data = new LinkedHashMap<>();
-        for (VistorEntity e : vistorEntityList) {
+        for (CallEntity e : callEntityList) {
             String date = e.getTm().toLocalDate().toString();
             if (data.containsKey(e.getLk())) {
                 int num = data.get(e.getLk()).getOrDefault(date, 0) + 1;
