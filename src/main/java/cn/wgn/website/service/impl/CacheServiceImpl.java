@@ -9,6 +9,7 @@ import cn.wgn.website.mapper.VistorMapper;
 import cn.wgn.website.service.ICacheService;
 import cn.wgn.website.utils.DateUtil;
 import cn.wgn.website.utils.FileUtil;
+import cn.wgn.website.utils.WebSiteUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.abel533.echarts.*;
@@ -18,7 +19,10 @@ import com.github.abel533.echarts.code.*;
 import com.github.abel533.echarts.feature.MagicType;
 import com.github.abel533.echarts.series.Bar;
 import com.github.abel533.echarts.series.Line;
+import com.github.abel533.echarts.series.Pie;
+import com.github.abel533.echarts.series.Series;
 import com.github.abel533.echarts.style.ItemStyle;
+import com.github.abel533.echarts.style.itemstyle.Emphasis;
 import com.github.abel533.echarts.style.itemstyle.Normal;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,6 +131,7 @@ public class CacheServiceImpl implements ICacheService {
     /**
      * 访客类型图表
      * 默认最近三月
+     * 靠字典表中的正则匹配
      * wuguangnuo.cn
      *
      * @param dateTime1
@@ -230,6 +235,7 @@ public class CacheServiceImpl implements ICacheService {
     /**
      * 受访页面图表
      * 默认最近七天
+     * 网络蜘蛛字典表正则匹配
      * wuguangnuo.cn
      *
      * @param dateTime1
@@ -310,9 +316,7 @@ public class CacheServiceImpl implements ICacheService {
                 Tool.saveAsImage
         );
         option.xAxis(new CategoryAxis().data(yAxis).type(AxisType.category));
-
         option.yAxis(new ValueAxis().type(AxisType.value));
-
         option.series(new Line("总访问量")
                 .data(data.get("总访问量").values().toArray()));
         option.series(new Bar("访客")
@@ -328,6 +332,7 @@ public class CacheServiceImpl implements ICacheService {
     /**
      * 操作系统图表
      * 默认最近七天
+     * 本地正则匹配，显示哪些在字典表匹配
      * wuguangnuo.cn
      *
      * @param dateTime1
@@ -335,14 +340,66 @@ public class CacheServiceImpl implements ICacheService {
      * @return
      */
     @Override
-    @Cacheable(value = "SystemChart", key = "")
+    @Cacheable(value = "SystemChart", key = "#dateTime1.toLocalDate()+'_'+#dateTime2.toLocalDate()")
     public String getSystemChart(LocalDateTime dateTime1, LocalDateTime dateTime2) {
-        return null;
+        List<VistorEntity> vistorEntityList = vistorMapper.selectList(
+                new QueryWrapper<VistorEntity>().lambda()
+                        .select(VistorEntity::getAg)
+                        .between(VistorEntity::getTm, dateTime1, dateTime2)
+        );
+
+        // 系统列表
+        List<Dictionary> dictionaryList = dictionaryMapper.selectList(
+                new QueryWrapper<Dictionary>().lambda()
+                        .select(Dictionary::getCodeNote)
+                        .eq(Dictionary::getGroupKey, "system_type")
+        );
+        List<String> systemList = dictionaryList.stream().map(
+                Dictionary::getCodeNote
+        ).collect(Collectors.toList());
+        systemList.add("others");
+
+        // LinkedHashMap<系统类型, 数量>
+        LinkedHashMap<String, Integer> data = new LinkedHashMap<>();
+        for (String k : systemList) {
+            data.put(k, 0);
+        }
+        for (VistorEntity e : vistorEntityList) {
+            String key = WebSiteUtil.getSystem(e == null ? null : e.getAg(), systemList);
+            data.put(key, data.get(key) + 1);
+        }
+
+        Option option = new Option();
+        option.title().text("操作系统统计图").subtext("api.wuguangnuo.cn 数据更新时间:" + DateUtil.dateFormat(null, DateUtil.MINUTE_PATTERN)).left("3%");
+        option.tooltip().trigger(Trigger.item).formatter("{a}<br />{b}：{c}({d}%)");
+        option.legend(new Legend().data(data.keySet().toArray()).right("5%").orient(Orient.vertical));
+        option.toolbox().show(true).right("5%").bottom(0).feature(
+                Tool.dataView,
+                Tool.restore,
+                Tool.saveAsImage
+        );
+
+        Map[] maps = new HashMap[data.size()];
+        int i = 0;
+        for (String key : data.keySet()) {
+            Map tmpMap = new HashMap();
+            tmpMap.put("name", key);
+            tmpMap.put("value", data.get(key));
+            maps[i] = tmpMap;
+            i++;
+        }
+        option.series((Series) new Pie("操作系统")
+                .itemStyle(new ItemStyle().emphasis(new Emphasis().shadowBlur(10).shadowColor("rgba(0,0,0,0.5)").shadowOffsetX(0)))
+                .data(maps)
+        );
+
+        return JSON.toJSONString(option);
     }
 
     /**
      * 客户端图表
      * 默认最近七天
+     * 本地正则匹配，显示哪些在字典表匹配
      * wuguangnuo.cn
      *
      * @param dateTime1
@@ -350,9 +407,59 @@ public class CacheServiceImpl implements ICacheService {
      * @return
      */
     @Override
-    @Cacheable(value = "BrowserChart", key = "")
+    @Cacheable(value = "BrowserChart", key = "#dateTime1.toLocalDate()+'_'+#dateTime2.toLocalDate()")
     public String getBrowserChart(LocalDateTime dateTime1, LocalDateTime dateTime2) {
-        return null;
-    }
+        List<VistorEntity> vistorEntityList = vistorMapper.selectList(
+                new QueryWrapper<VistorEntity>().lambda()
+                        .select(VistorEntity::getAg)
+                        .between(VistorEntity::getTm, dateTime1, dateTime2)
+        );
 
+        // 客户端列表
+        List<Dictionary> dictionaryList = dictionaryMapper.selectList(
+                new QueryWrapper<Dictionary>().lambda()
+                        .select(Dictionary::getCodeNote)
+                        .eq(Dictionary::getGroupKey, "browser_type")
+        );
+        List<String> browserList = dictionaryList.stream().map(
+                Dictionary::getCodeNote
+        ).collect(Collectors.toList());
+        browserList.add("others");
+
+        // LinkedHashMap<客户端类型, 数量>
+        LinkedHashMap<String, Integer> data = new LinkedHashMap<>();
+        for (String k : browserList) {
+            data.put(k, 0);
+        }
+        for (VistorEntity e : vistorEntityList) {
+            String key = WebSiteUtil.getBrowser(e == null ? null : e.getAg(), browserList);
+            data.put(key, data.get(key) + 1);
+        }
+
+        Option option = new Option();
+        option.title().text("用户客户端统计图").subtext("api.wuguangnuo.cn 数据更新时间:" + DateUtil.dateFormat(null, DateUtil.MINUTE_PATTERN)).left("3%");
+        option.tooltip().trigger(Trigger.item).formatter("{a}<br />{b}：{c}({d}%)");
+        option.legend(new Legend().data(data.keySet().toArray()).right("5%").orient(Orient.vertical));
+        option.toolbox().show(true).right("5%").bottom(0).feature(
+                Tool.dataView,
+                Tool.restore,
+                Tool.saveAsImage
+        );
+
+        Map[] maps = new HashMap[data.size()];
+        int i = 0;
+        for (String key : data.keySet()) {
+            Map tmpMap = new HashMap();
+            tmpMap.put("name", key);
+            tmpMap.put("value", data.get(key));
+            maps[i] = tmpMap;
+            i++;
+        }
+        option.series((Series) new Pie("客户端")
+                .itemStyle(new ItemStyle().emphasis(new Emphasis().shadowBlur(10).shadowColor("rgba(0,0,0,0.5)").shadowOffsetX(0)))
+                .data(maps)
+        );
+
+        return JSON.toJSONString(option);
+    }
 }

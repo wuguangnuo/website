@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * WebSite 工具类
@@ -179,5 +181,108 @@ public class WebSiteUtil {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 获取操作系统
+     *
+     * @param ag   user-agent
+     * @param list 不存在的用others
+     * @return
+     */
+    public static String getSystem(String ag, List<String> list) {
+        if (Strings.isNullOrEmpty(ag)) {
+            return "others";
+        }
+        String os;
+        if (Pattern.matches("(?i)(.*)sitemap(.*)", ag) || Pattern.matches("(?i)(.*)Parser(.*)", ag)) {
+            os = "sitemap";
+        } else if (Pattern.matches("(?i)(.*)spider(.*)", ag) || Pattern.matches("(?i)(.*)bot(.*)", ag)) {
+            os = "spider";
+        } else if (Pattern.matches("(?i)(.*)win(.*)", ag) && Pattern.matches("(?i)(.*)[^.\\d]95(.*)", ag)) {
+            os = "Windows 95";
+        } else if (Pattern.matches("(?i)(.*)win(.*)", ag) && Pattern.matches("(?i)(.*)[^.\\d]98(.*)", ag)) {
+            os = "Windows 98";
+        } else if (Pattern.matches("(?i)(.*)win(.*)", ag) && Pattern.matches("(?i)(.*)nt\\s*5.0(.*)", ag)) {
+            os = "Windows 2000";
+        } else if (Pattern.matches("(?i)(.*)win(.*)", ag) && Pattern.matches("(?i)(.*)nt\\s*5.1(.*)", ag)) {
+            os = "Windows XP";
+        } else if (Pattern.matches("(?i)(.*)win(.*)", ag) && Pattern.matches("(?i)(.*)nt\\s*5.2(.*)", ag)) {
+            os = "Windows XP";
+        } else if (Pattern.matches("(?i)(.*)win(.*)", ag) && Pattern.matches("(?i)(.*)nt\\s*6.0(.*)", ag)) {
+            os = "Windows Vista";
+        } else if (Pattern.matches("(?i)(.*)win(.*)", ag) && Pattern.matches("(?i)(.*)nt\\s*6.1(.*)", ag)) {
+            os = "Windows 7";
+        } else if (Pattern.matches("(?i)(.*)win(.*)", ag) && Pattern.matches("(?i)(.*)nt\\s*6.2(.*)", ag)) {
+            os = "Windows 8";
+        } else if (Pattern.matches("(?i)(.*)win(.*)", ag) && Pattern.matches("(?i)(.*)nt\\s*10.0(.*)", ag)) {
+            os = "Windows 10";
+        } else if (Pattern.matches("(?i)(.*)win(.*)", ag) && Pattern.matches("(?i)(.*)nt(.*)", ag)) {
+            os = "Windows NT";
+        } else if (Pattern.matches("(?i)(.*)android\\s*([\\d\\.]+)(.*)", ag)) {
+            os = "Android";
+        } else if (Pattern.matches("(?i)(.*)iphone(.*)", ag)) {
+            os = "iPhone";
+        } else if (Pattern.matches("(?i)(.*)ipad(.*)", ag)) {
+            os = "iPad";
+        } else if (Pattern.matches("(?i)(.*)linux(.*)", ag)) {
+            os = "Linux";
+        } else if (Pattern.matches("(?i)(.*)unix(.*)", ag)) {
+            os = "Unix";
+        } else if (Pattern.matches("(?i)(.*)sun(.*)", ag) && Pattern.matches("(?i)(.*)os(.*)", ag)) {
+            os = "SunOS";
+        } else if (Pattern.matches("(?i)(.*)ibm(.*)", ag) && Pattern.matches("(?i)(.*)os(.*)", ag)) {
+            os = "IBM OS/2";
+        } else if (Pattern.matches("(?i)(.*)Mac(.*)", ag) && Pattern.matches("(?i)(.*)PC(.*)", ag)) {
+            os = "Macintosh";
+        } else if (Pattern.matches("(?i)(.*)Macintosh(.*)", ag) && Pattern.matches("(?i)(.*)Mac(.*)", ag)) {
+            os = "MacOS";
+        } else if (Pattern.matches("(?i)(.*)PowerPC(.*)", ag)) {
+            os = "PowerPC";
+        } else if (Pattern.matches("(?i)(.*)AIX(.*)", ag)) {
+            os = "AIX";
+        } else if (Pattern.matches("(?i)(.*)HPUX(.*)", ag)) {
+            os = "HPUX";
+        } else if (Pattern.matches("(?i)(.*)NetBSD(.*)", ag)) {
+            os = "NetBSD";
+        } else if (Pattern.matches("(?i)(.*)BSD(.*)", ag)) {
+            os = "BSD";
+        } else if (Pattern.matches("(?i)(.*)OSF1(.*)", ag)) {
+            os = "OSF1";
+        } else if (Pattern.matches("(?i)(.*)IRIX(.*)", ag)) {
+            os = "IRIX";
+        } else if (Pattern.matches("(?i)(.*)FreeBSD(.*)", ag)) {
+            os = "FreeBSD";
+        } else if (Pattern.matches("(?i)(.*)teleport(.*)", ag)) {
+            os = "teleport";
+        } else if (Pattern.matches("(?i)(.*)flashget(.*)", ag)) {
+            os = "flashget";
+        } else if (Pattern.matches("(?i)(.*)webzip(.*)", ag)) {
+            os = "webzip";
+        } else if (Pattern.matches("(?i)(.*)offline(.*)", ag)) {
+            os = "offline";
+        } else {
+            os = "others";
+        }
+        if (list == null || list.size() == 0) {
+            return os;
+        } else {
+            if (list.contains(os)) {
+                return os;
+            } else {
+                return "others";
+            }
+        }
+    }
+
+    /**
+     * 获取客户端类型
+     *
+     * @param ag   user-agent
+     * @param list 不存在的用others
+     * @return
+     */
+    public static String getBrowser(String ag, List<String> list) {
+        return "others";
     }
 }
