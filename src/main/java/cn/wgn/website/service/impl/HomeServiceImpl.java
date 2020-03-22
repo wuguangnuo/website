@@ -222,23 +222,23 @@ public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
         LocalDateTime dateTime2 = LocalDateTime.of(date2, LocalTime.MAX);
 
         String result;
-//        switch (dto.getType()) {
-//            case "vistor":
-                  result = cacheService.getVistorChart(LocalDateTime.of(LocalDate.now().minusMonths(3), LocalTime.MIN), dateTime2);
-//                break;
-//            case "link":
-//                result = cacheService.getLinkChart(dateTime1, dateTime2);
-//                break;
-//            case "system":
-//                result = cacheService.getSystemChart(dateTime1, dateTime2);
-//                break;
-//            case "browser":
-//                result = cacheService.getBrowserChart(dateTime1, dateTime2);
-//                break;
-//            default:
-//                result = "";
-//                break;
-//        }
+        switch (dto.getType()) {
+            case "vistor":
+                result = cacheService.getVistorChart(LocalDateTime.of(LocalDate.now().minusMonths(3), LocalTime.MIN), dateTime2);
+                break;
+            case "link":
+                result = cacheService.getLinkChart(dateTime1, dateTime2);
+                break;
+            case "system":
+                result = cacheService.getSystemChart(dateTime1, dateTime2);
+                break;
+            case "browser":
+                result = cacheService.getBrowserChart(dateTime1, dateTime2);
+                break;
+            default:
+                result = "chart type error!";
+                break;
+        }
 
         return result;
     }

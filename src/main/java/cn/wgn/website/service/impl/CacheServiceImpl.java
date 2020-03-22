@@ -30,6 +30,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Redis 缓存服务
@@ -60,7 +62,7 @@ public class CacheServiceImpl implements ICacheService {
      * @return
      */
     @Override
-    @Cacheable(value = "MenuJson", key = "")
+    @Cacheable(value = "MenuJson")
     public String getMenuJson() {
         return fileUtil.getMenuJson();
     }
@@ -71,7 +73,7 @@ public class CacheServiceImpl implements ICacheService {
      * @return
      */
     @Override
-    @Cacheable(value = "HomeChart", key = "")
+    @Cacheable(value = "HomeChart")
     public String getHomeChart() {
         List<CallEntity> callEntityList = callMapper.selectList(
                 new QueryWrapper<CallEntity>().lambda()
@@ -146,10 +148,10 @@ public class CacheServiceImpl implements ICacheService {
             yAxis[i] = LocalDate.now().minusDays(yAxis.length - 1 - i).toString();
         }
 
-        // 所有折线类型
+        // 爬虫折线类型
         List<Dictionary> dictionaryList = dictionaryMapper.selectList(
                 new QueryWrapper<Dictionary>().lambda()
-                        .eq(Dictionary::getGroupKey, "vistor_show")
+                        .eq(Dictionary::getGroupKey, "spider_type")
         );
 //        List<String> vistorShow = dictionaryList.stream().map(
 //                Dictionary::getCodeNote
@@ -157,10 +159,6 @@ public class CacheServiceImpl implements ICacheService {
         // all -> 全部
         Map<String, String> vistorShow = new HashMap<>();
         for (Dictionary d : dictionaryList) {
-//            改表后删除这三个条件
-            if (d.getCodeValue().equals("all") || d.getCodeValue().equals("vistor") || d.getCodeValue().equals("others")) {
-                continue;
-            }
             vistorShow.put(d.getCodeValue(), d.getCodeNote());
         }
 
@@ -223,8 +221,7 @@ public class CacheServiceImpl implements ICacheService {
         option.yAxis(new ValueAxis().type(AxisType.value));
         for (String key : data.keySet()) {
             option.series(new Line(key)
-                    .data(data.get(key).values().toArray())
-                    .name(key));
+                    .data(data.get(key).values().toArray()));
         }
 
         return JSON.toJSONString(option);
@@ -240,9 +237,92 @@ public class CacheServiceImpl implements ICacheService {
      * @return
      */
     @Override
-    @Cacheable(value = "LinkChart", key = "")
+    @Cacheable(value = "LinkChart", key = "#dateTime1.toLocalDate()+'_'+#dateTime2.toLocalDate()")
     public String getLinkChart(LocalDateTime dateTime1, LocalDateTime dateTime2) {
-        return null;
+        List<VistorEntity> vistorEntityList = vistorMapper.selectList(
+                new QueryWrapper<VistorEntity>().lambda()
+                        .select(VistorEntity::getLk, VistorEntity::getAg)
+                        .between(VistorEntity::getTm, dateTime1, dateTime2)
+        );
+
+        // 受访页面to
+        List<Dictionary> dictionaryList = dictionaryMapper.selectList(
+                new QueryWrapper<Dictionary>().lambda()
+                        .select(Dictionary::getCodeValue, Dictionary::getCodeNote)
+                        .eq(Dictionary::getGroupKey, "link_type")
+        );
+//        String[] yAxis = dictionaryList.stream().map(
+//                Dictionary::getCodeNote
+//        ).toArray(String[]::new);
+        List<String> yAxisList = dictionaryList.stream().map(
+                Dictionary::getCodeNote
+        ).collect(Collectors.toList());
+        yAxisList.add("其他页面");
+        String[] yAxis = new String[yAxisList.size()];
+        yAxisList.toArray(yAxis);
+
+        // LinkedHashMap<折线类型，LinkedHashMap<访问页面，数量>>
+        LinkedHashMap<String, LinkedHashMap<String, Integer>> data = new LinkedHashMap<>();
+
+        LinkedHashMap<String, Integer> zeroLine = new LinkedHashMap<>();
+        for (String d : yAxis) {
+            zeroLine.put(d, 0);
+        }
+
+        // 初始化接口名称
+        data.put("总访问量", (LinkedHashMap<String, Integer>) zeroLine.clone());
+        data.put("访客", (LinkedHashMap<String, Integer>) zeroLine.clone());
+        data.put("爬虫", (LinkedHashMap<String, Integer>) zeroLine.clone());
+
+        for (VistorEntity e : vistorEntityList) {
+            // 横坐标类型 主页-后台-日记
+            String linkType = "其他页面";
+            String ag = e.getAg();
+            String lk = e.getLk();
+            if (Strings.isNullOrEmpty(ag) || Strings.isNullOrEmpty(lk)) {
+                continue;
+            }
+            for (Dictionary d : dictionaryList) {
+                if (Pattern.matches(d.getCodeValue(), lk)) {
+                    linkType = d.getCodeNote();
+                    break;
+                }
+            }
+
+            data.get("总访问量").put(linkType, data.get("总访问量").getOrDefault(linkType, 0) + 1);
+
+            // 正则检测蜘蛛
+            if (ag.contains("spider") || ag.contains("bot")) {
+                data.get("爬虫").put(linkType, data.get("爬虫").getOrDefault(linkType, 0) + 1);
+            } else {
+                data.get("访客").put(linkType, data.get("访客").getOrDefault(linkType, 0) + 1);
+            }
+        }
+
+        Option option = new Option();
+        option.title().text("受访页面统计图").subtext("api.wuguangnuo.cn 数据更新时间:" + DateUtil.dateFormat(null, DateUtil.MINUTE_PATTERN)).left("3%");
+        option.tooltip().trigger(Trigger.axis).axisPointer(new AxisPointer().type(PointerType.cross));
+        option.legend(new Legend().data(data.keySet().toArray()));
+        option.toolbox().show(true).right("3%").feature(
+                Tool.dataView,
+                Tool.magicType,
+                Tool.restore,
+                Tool.saveAsImage
+        );
+        option.xAxis(new CategoryAxis().data(yAxis).type(AxisType.category));
+
+        option.yAxis(new ValueAxis().type(AxisType.value));
+
+        option.series(new Line("总访问量")
+                .data(data.get("总访问量").values().toArray()));
+        option.series(new Bar("访客")
+                .data(data.get("访客").values().toArray()));
+        option.series(new Bar("爬虫")
+                .data(data.get("爬虫").values().toArray()));
+
+        String result = JSON.toJSONString(option);
+        // 打补丁，增加阴影
+        return result.replace("\"xAxis\":[{", "\"xAxis\":[{\"axisPointer\":{\"type\":\"shadow\"},");
     }
 
     /**
