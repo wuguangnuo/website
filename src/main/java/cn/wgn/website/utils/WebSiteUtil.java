@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -283,6 +284,71 @@ public class WebSiteUtil {
      * @return
      */
     public static String getBrowser(String ag, List<String> list) {
-        return "others";
+        if (Strings.isNullOrEmpty(ag)) {
+            return "others";
+        }
+        String br, tmp;
+        if (!Strings.isNullOrEmpty(tmp = getFirstMatcher("(?i)sitemap", ag)) ||
+                !Strings.isNullOrEmpty(tmp = getFirstMatcher("(?i)Parser", ag))) {
+            br = "sitemap";
+        } else if (!Strings.isNullOrEmpty(tmp = getFirstMatcher("(?i)spider", ag)) ||
+                !Strings.isNullOrEmpty(tmp = getFirstMatcher("(?i)bot", ag))) {
+            br = "spider";
+        } else if (!Strings.isNullOrEmpty(tmp = getFirstMatcher("(?i)Firefox\\/([^;)]+)+", ag))) {
+            br = tmp;
+        } else if (!Strings.isNullOrEmpty(tmp = getFirstMatcher("(?i)Maxthon\\/([\\d\\.]+)", ag))) {
+            br = tmp;
+        } else if (!Strings.isNullOrEmpty(tmp = getFirstMatcher("(?i)MSIE\\s*([^;)]+)+", ag))) {
+            br = tmp.replace("MSIE", "IE");
+        } else if (!Strings.isNullOrEmpty(tmp = getFirstMatcher("(?i)OPR\\/([\\d\\.]+)", ag))) {
+            br = tmp.replace("OPR", "Opera");
+        } else if (!Strings.isNullOrEmpty(tmp = getFirstMatcher("(?i)Edge\\/([\\d\\.]+)", ag))) {
+            br = tmp;
+        } else if (!Strings.isNullOrEmpty(tmp = getFirstMatcher("(?i)Chrome\\/([\\d\\.]+)", ag))) {
+            br = tmp;
+        } else if (!Strings.isNullOrEmpty(tmp = getFirstMatcher("(?i)Safari\\/([\\d\\.]+)", ag))) {
+            br = tmp;
+        } else if (!Strings.isNullOrEmpty(tmp = getFirstMatcher("(?i)rv:([\\d\\.]+)", ag))) {
+            br = tmp.replace("rv:", "IE");
+        } else {
+            br = "others";
+        }
+        if (list == null || list.size() == 0) {
+            return br;
+        } else {
+            for (String i : list) {
+                if (br.startsWith(i)) {
+                    return i;
+                }
+            }
+            return "others";
+        }
+    }
+
+    /**
+     * 获取正则匹配第一个结果
+     *
+     * @param regex 正则表达式
+     * @param str   待匹配字符串
+     * @return 匹配到的部分
+     */
+    private static String getFirstMatcher(String regex, String str) {
+        Matcher m = Pattern.compile(regex).matcher(str);
+        if (m.find()) {
+            return m.group(0);
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * 正则匹配，模糊匹配
+     *
+     * @param reges 正则表达式
+     * @param str   待匹配字符串
+     * @return 是否匹配
+     */
+    private static boolean isMatches(String reges, String str) {
+        return Pattern.matches("(.*)" + reges + "(.*)", str);
     }
 }
