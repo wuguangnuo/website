@@ -4,6 +4,7 @@ import cn.wgn.website.dto.home.BlogListQuery;
 import cn.wgn.website.dto.home.*;
 import cn.wgn.website.entity.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.util.List;
 
@@ -79,4 +80,12 @@ public interface IHomeService extends IBaseService {
      * @return
      */
     String vistorChart(VistorChartDto dto);
+
+    /**
+     * 获取访客表格
+     *
+     * @param query
+     * @return
+     */
+    Page<VistorTable> vistorTable(VistorTableQuery query);
 }

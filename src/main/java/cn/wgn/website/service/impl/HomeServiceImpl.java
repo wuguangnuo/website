@@ -242,4 +242,15 @@ public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
 
         return result;
     }
+
+    /**
+     * 获取访客表格
+     *
+     * @param query
+     * @return
+     */
+    @Override
+    public Page<VistorTable> vistorTable(VistorTableQuery query) {
+        return null;
+    }
 }
