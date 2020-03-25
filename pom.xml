@@ -34,7 +34,9 @@
         <mail.version>1.4.7</mail.version>
         <ip2region.version>1.7.2</ip2region.version>
         <cos-sts.version>3.0.6</cos-sts.version>
+        <!-- You Can Add When You Need -->
         <druid.version>1.1.21</druid.version>
+        <urule.version>2.1.7</urule.version>
     </properties>
 
     <dependencies>
@@ -176,6 +178,8 @@
             <artifactId>cos-sts-java</artifactId>
             <version>${cos-sts.version}</version>
         </dependency>
+
+<!--You Can Add When You Need-->
 <!--        <dependency>-->
 <!--            <groupId>com.alibaba</groupId>-->
 <!--            <artifactId>druid</artifactId>-->
@@ -185,6 +189,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bstek.urule</groupId>
+            <artifactId>urule-console</artifactId>
+            <version>${urule.version}</version>
         </dependency>
     </dependencies>
 

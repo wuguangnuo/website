@@ -224,7 +224,7 @@ public class HomeServiceImpl extends BaseServiceImpl implements IHomeService {
         String result;
         switch (dto.getType()) {
             case "vistor":
-                result = cacheService.getVistorChart(LocalDateTime.of(LocalDate.now().minusMonths(3), LocalTime.MIN), dateTime2);
+                result = cacheService.getVistorChart(LocalDateTime.of(LocalDate.now().minusMonths(3), LocalTime.MIN), LocalDateTime.now());
                 break;
             case "link":
                 result = cacheService.getLinkChart(dateTime1, dateTime2);

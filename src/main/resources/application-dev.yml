@@ -6,7 +6,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/wuguangnuo?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false
+    jdbc-url: jdbc:mysql://127.0.0.1:3306/wuguangnuo?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false
     username: root
     password:
     druid:
@@ -44,6 +44,10 @@ spring:
     multipart:
       max-file-size: 16MB
       max-request-size: 16MB
+urule:
+  repository:
+    databasetype: mysql
+    datasourcename: datasource
 mybatis-plus:
   mapper-locations: classpath:cn/wgn/website/mapper/xml/*.xml
   configuration:
