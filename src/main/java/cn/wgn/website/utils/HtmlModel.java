@@ -70,6 +70,8 @@ public class HtmlModel {
     public static String welcomePage() {
         return COMMON_HEAD + "</head><body>" +
                 "<h1><a href='/swagger-ui.html'>cn.wgn.website API</a></h1>" +
+                "<p><a href='/druid'>cn.wgn.website DRUID</a></p>" +
+                "<p><a href='/urule/frame'>cn.wgn.website URULE</a></p>" +
                 "</body>" +
                 COMMON_FOOT;
     }
