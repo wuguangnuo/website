@@ -25,6 +25,9 @@ public class Novel {
     @ApiModelProperty(value = "小说类型")
     private String novelType;
 
+    @ApiModelProperty(value = "小说状态")
+    private String novelState;
+
     @ApiModelProperty(value = "小说内容")
     private String novelContent;
 

@@ -5,10 +5,12 @@ import cn.wgn.website.dto.CommonData;
 import cn.wgn.website.dto.manage.*;
 import cn.wgn.website.entity.NovelEntity;
 import cn.wgn.website.enums.NovelTypeEnum;
+import cn.wgn.website.enums.StateEnum;
 import cn.wgn.website.handler.Authorize;
 import cn.wgn.website.service.IManageService;
 import cn.wgn.website.utils.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -56,6 +58,14 @@ public class ManageController extends BaseController {
     @PostMapping("addEdit")
     @ApiOperation("新增小说")
     public ApiRes addEdit(@RequestBody NovelDto novelDto) {
+        String state = novelDto.getNovelState();
+        if (Strings.isNullOrEmpty(state)) {
+            novelDto.setNovelState(StateEnum.PRIVATE.getValue());
+        } else if (!StateEnum.PRIVATE.getValue().equals(state) &&
+                !StateEnum.PUBLIC.getValue().equals(state)) {
+            return ApiRes.err("Novel State Error");
+        }
+
         Object result = manageService.addNovel(novelDto, NovelTypeEnum.Html);
 
         if (result instanceof Number) {
@@ -69,6 +79,14 @@ public class ManageController extends BaseController {
     @PostMapping("addMarkdown")
     @ApiOperation("新增Markdown小说")
     public ApiRes addMarkdown(@RequestBody NovelDto novelDto) {
+        String state = novelDto.getNovelState();
+        if (Strings.isNullOrEmpty(state)) {
+            novelDto.setNovelState(StateEnum.PRIVATE.getValue());
+        } else if (!StateEnum.PRIVATE.getValue().equals(state) &&
+                !StateEnum.PUBLIC.getValue().equals(state)) {
+            return ApiRes.err("Novel State Error");
+        }
+
         Object result = manageService.addNovel(novelDto, NovelTypeEnum.Markdown);
 
         if (result instanceof Number) {
@@ -97,7 +115,7 @@ public class ManageController extends BaseController {
 
             String fileName = "小说列表";
             String excelName = "Sheet1";
-            String excelTitles = "ID,标题,作者,类型,内容,创建时间,更新时间";
+            String excelTitles = "ID,标题,作者,类型,状态,内容,创建时间,更新时间";
             try {
                 ExcelUtil.exportExcel(response, fileName, excelName, excelTitles, data);
             } catch (Exception e) {
@@ -119,12 +137,12 @@ public class ManageController extends BaseController {
     @Authorize("author")
     @PostMapping("novelDetail")
     @ApiOperation("查看小说")
-    public ApiRes<NovelEntity> novelDetail(@RequestBody CommonData data) {
+    public ApiRes<NovelDto> novelDetail(@RequestBody CommonData data) {
         Integer novelId = data.getId();
         if (novelId == null || novelId <= 0) {
             return ApiRes.fail("novel id 错误");
         }
-        NovelEntity result = manageService.novelDetail(novelId);
+        NovelDto result = manageService.novelDetail(novelId);
 
         if (result == null) {
             return ApiRes.fail();
@@ -136,7 +154,7 @@ public class ManageController extends BaseController {
     @Authorize("author")
     @PostMapping("novelDelete")
     @ApiOperation("删除小说")
-    public ApiRes<NovelEntity> novelDelete(@RequestBody CommonData data) {
+    public ApiRes<String> novelDelete(@RequestBody CommonData data) {
         Integer novelId = data.getId();
         if (novelId == null || novelId <= 0) {
             return ApiRes.fail("novel id 错误");

@@ -81,14 +81,14 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
             if (entity == null
                     || !novelTypeEnum.toString().equals(entity.getNovelType())
                     || !getUserData().getAccount().equals(entity.getNovelAuthor())) {
-                return "您是更新[" + novelTypeEnum.toString() + "]小说吗？为什么我找不到呢？";
+                return "您不是作者，不可修改文章！";
             }
             entity.setNovelAuthor(getUserData().getAccount())
                     .setNovelTitle(novelDto.getNovelTitle())
                     .setNovelContent(novelDto.getNovelContent())
                     .setNovelType(novelTypeEnum.toString())
                     .setUpdateTm(LocalDateTime.now())
-                    .setState(StateEnum.NORMAL.getValue());
+                    .setState(novelDto.getNovelState());
             novelMapper.updateById(entity);
             return entity.getId();
         } else {
@@ -97,7 +97,7 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
             entity.setNovelAuthor(getUserData().getAccount())
                     .setCreateTm(LocalDateTime.now())
                     .setNovelType(novelTypeEnum.toString())
-                    .setState(StateEnum.NORMAL.getValue());
+                    .setState(novelDto.getNovelState());
             novelMapper.insert(entity);
             return entity.getId();
         }
@@ -122,6 +122,7 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
             novel = new Novel();
             BeanUtils.copyProperties(entity, novel);
             novel.setNovelContent(WebSiteUtil.cutContent(entity.getNovelContent(), 100));
+            novel.setNovelState(StateEnum.getLabel(entity.getState()));
             result.add(novel);
         }
         novelPage.setRecords(result);
@@ -144,6 +145,7 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
             novel = new Novel();
             BeanUtils.copyProperties(entity, novel);
             novel.setNovelContent(WebSiteUtil.cutContent(entity.getNovelContent(), 100));
+            novel.setNovelState(StateEnum.getLabel(entity.getState()));
             result.add(novel);
         }
 
@@ -159,9 +161,12 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
      */
     private QueryWrapper<NovelEntity> novelListQw(NovelQueryDto dto) {
         QueryWrapper<NovelEntity> qw = new QueryWrapper<NovelEntity>();
-        if (getUserData().getAccount() != null) {
-            qw.lambda().like(NovelEntity::getNovelAuthor, getUserData().getAccount());
-        }
+        // 作者或公共
+        qw.lambda().and(
+                q -> q.eq(NovelEntity::getNovelAuthor, getUserData().getAccount())
+                        .or()
+                        .eq(NovelEntity::getState, StateEnum.PUBLIC.getValue())
+        );
         if (!Strings.isNullOrEmpty(dto.getNovelTitle())) {
             qw.lambda().like(NovelEntity::getNovelTitle, dto.getNovelTitle());
         }
@@ -180,7 +185,8 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
         if (dto.getUpdateTm2() != null) {
             qw.lambda().lt(NovelEntity::getCreateTm, dto.getUpdateTm2());
         }
-        qw.lambda().eq(NovelEntity::getState, StateEnum.NORMAL.getValue());
+        // 不展示不存在状态
+        qw.lambda().ne(NovelEntity::getState, StateEnum.NOTHING.getValue());
         if (!Strings.isNullOrEmpty(dto.getOrderBy())) {
             String[] s = dto.getOrderBy().split(" ");
             qw.orderBy(true, "ASC".equalsIgnoreCase(s[1]), s[0]);
@@ -197,12 +203,15 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
      * @return
      */
     @Override
-    public NovelEntity novelDetail(Integer novelId) {
+    public NovelDto novelDetail(Integer novelId) {
         NovelEntity entity = novelMapper.selectById(novelId);
         if (entity != null
-                && StateEnum.NORMAL.getValue().equals(entity.getState())
-                && getUserData().getAccount().equals(entity.getNovelAuthor())) {
-            return entity;
+                && (StateEnum.PUBLIC.getValue().equals(entity.getState())
+                || getUserData().getAccount().equals(entity.getNovelAuthor()))) {
+            NovelDto dto = new NovelDto();
+            BeanUtils.copyProperties(entity, dto);
+            dto.setNovelState(entity.getState());
+            return dto;
         } else {
             return null;
         }
@@ -220,12 +229,15 @@ public class ManageServiceImpl extends BaseServiceImpl implements IManageService
         String data;
         if (entity == null) {
             data = "Novel ID = [" + novelId + "]不存在!";
-        } else if (!StateEnum.NORMAL.getValue().equals(entity.getState())) {
-            data = "Novel ID = [" + novelId + "]已被删除!";
         } else if (!getUserData().getAccount().equals(entity.getNovelAuthor())) {
             data = "不是作者无权删除!";
         } else {
-            entity.setState(StateEnum.DELETE.getValue());
+            // 状态改为已删除，已删除的改为不存在
+            if (entity.getState().equals(StateEnum.DELETE.getValue())) {
+                entity.setState(StateEnum.NOTHING.getValue());
+            } else {
+                entity.setState(StateEnum.DELETE.getValue());
+            }
             int res = novelMapper.updateById(entity);
             if (res == 1) {
                 data = "1";

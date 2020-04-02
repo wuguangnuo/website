@@ -40,6 +40,7 @@ spring:
 #          - "*.css"
 #          - "*.ico"
           - "/druid/*"
+          - "/urule/*"
   servlet:
     multipart:
       max-file-size: 16MB

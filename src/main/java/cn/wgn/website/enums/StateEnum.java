@@ -7,9 +7,13 @@ package cn.wgn.website.enums;
  * @date Created in 2020/3/2 23:43
  */
 public enum StateEnum {
-    NOTHING("不存在", "0"),
+    NOTHING("不存在", "0"), // 永久删除
     NORMAL("正常", "1"),
-    DELETE("删除", "2"),
+    DELETE("已删除", "2"),
+
+    PRIVATE("自己可见", "11"),
+    PUBLIC("所有人可见", "12"),
+
     OTHER("其他", "99");
 
     String label;

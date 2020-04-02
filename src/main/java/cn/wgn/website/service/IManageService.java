@@ -44,7 +44,7 @@ public interface IManageService extends IBaseService {
      * @param novelId
      * @return
      */
-    NovelEntity novelDetail(Integer novelId);
+    NovelDto novelDetail(Integer novelId);
 
     /**
      * 删除小说(逻辑删除)
