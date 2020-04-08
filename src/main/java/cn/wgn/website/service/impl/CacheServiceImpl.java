@@ -112,8 +112,7 @@ public class CacheServiceImpl implements ICacheService {
         option.title().text("最近七天接口调用统计").subtext("api.wuguangnuo.cn 数据更新时间:" + DateUtil.dateFormat(null, DateUtil.MINUTE_PATTERN)).left("3%");
         option.tooltip().trigger(Trigger.axis).axisPointer(new AxisPointer().type(PointerType.shadow));
         option.legend(new Legend().top("8%").data(data.keySet().toArray()));
-        option.toolbox().show(true).right("3%").feature(Tool.mark, Tool.dataView,
-                new MagicType(Magic.line, Magic.bar).show(true), Tool.restore, Tool.saveAsImage);
+        option.toolbox().show(true).right("3%").feature(Tool.mark, Tool.dataView, Tool.restore, Tool.saveAsImage);
         option.calculable(true);
         option.xAxis(new CategoryAxis().data(yAxis));
         option.yAxis(new ValueAxis());
