@@ -160,4 +160,13 @@ public class CommonController extends BaseController {
             return ApiRes.suc("Success", trans);
         }
     }
+
+    @GetMapping("urule/*")
+    @ApiOperation("关闭URULE")
+    public void urule(HttpServletResponse response) throws IOException {
+        OutputStream outputStream = response.getOutputStream();
+        response.setHeader("content-type", "text/html;charset=UTF-8");
+        String data = HtmlModel.closeUrule();
+        outputStream.write(data.getBytes(StandardCharsets.UTF_8));
+    }
 }
