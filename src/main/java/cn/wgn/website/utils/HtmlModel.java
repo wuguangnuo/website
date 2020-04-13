@@ -83,7 +83,7 @@ public class HtmlModel {
      */
     public static String closeUrule() {
         return COMMON_HEAD + "</head><body>" +
-                "<h1>抱歉，本站不再对外提供 URULE 演示功能。</h1>"+
+                "<h1>抱歉，本站不再对外提供 URULE 演示功能。</h1>" +
                 "</body>" +
                 COMMON_FOOT;
     }
