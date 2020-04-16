@@ -52,7 +52,7 @@ public class HtmlModel {
      */
     public static String sharePage(String title, String detail) {
         return COMMON_HEAD +
-                "<title>文件分享系统|諾</title>" +
+                "<title>文件分享系统 | 諾</title>" +
                 "</head><body>" +
                 "<h1>" + title + "！</h1>" + detail +
                 "<footer><p>Copyright &copy; 2020 <a href='https://www.wuguangnuo.cn'target='_blank'>wuguangnuo.cn</a> All Rights Reserved | Author by WuGN</p>" +
@@ -68,11 +68,16 @@ public class HtmlModel {
      * @return API 欢迎跳转页
      */
     public static String welcomePage() {
-        return COMMON_HEAD + "</head><body>" +
+        // gn119.online 域名购买日期 2017-02-26 12:19:35
+        long diffDay = ((System.currentTimeMillis() - 1488082775000L) / 1000 / 3600 / 24) + 1;
+        return COMMON_HEAD +
+                "<title>API sys | 諾</title>" +
+                "</head><body>" +
                 "<h1><a href='/swagger-ui.html'>cn.wgn.website API</a></h1>" +
                 "<p><a href='/druid'>cn.wgn.website DRUID</a></p>" +
                 "<p><a href='/urule/frame'>cn.wgn.website URULE</a></p>" +
-                "</body>" +
+                "<footer><p>Copyright &copy; 2020 <a href='https://www.wuguangnuo.cn'target='_blank'>wuguangnuo.cn</a> All Rights Reserved | Author by WuGN</p>" +
+                "<p style='color:#888'>网站已运行" + diffDay + "天 | 京ICP备20006588号</p></footer></body>" +
                 COMMON_FOOT;
     }
 
