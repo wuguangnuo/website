@@ -34,9 +34,9 @@
         <mail.version>1.4.7</mail.version>
         <ip2region.version>1.7.2</ip2region.version>
         <cos-sts.version>3.0.6</cos-sts.version>
-        <!-- You Can Add When You Need -->
         <druid.version>1.1.21</druid.version>
         <urule.version>2.1.3</urule.version>
+        <jsoup.version>1.13.1</jsoup.version>
     </properties>
 
     <dependencies>
@@ -174,13 +174,12 @@
             <artifactId>cos-sts-java</artifactId>
             <version>${cos-sts.version}</version>
         </dependency>
-
-<!--You Can Add When You Need-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid.version}</version>
         </dependency>
+<!--        决策引擎-->
 <!--        <dependency>-->
 <!--            <groupId>com.bstek.urule</groupId>-->
 <!--            <artifactId>urule-console</artifactId>-->
@@ -191,6 +190,12 @@
 <!--                    <artifactId>slf4j-jdk14</artifactId>-->
 <!--                </exclusion>-->
 <!--            </exclusions>-->
+<!--        </dependency>-->
+<!--        解析网页-->
+<!--        <dependency>-->
+<!--            <groupId>org.jsoup</groupId>-->
+<!--            <artifactId>jsoup</artifactId>-->
+<!--            <version>${jsoup.version}</version>-->
 <!--        </dependency>-->
     </dependencies>
 

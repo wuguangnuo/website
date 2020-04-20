@@ -4,6 +4,7 @@ import cn.wgn.website.dto.ApiRes;
 import cn.wgn.website.dto.CommonData;
 import cn.wgn.website.dto.common.AccountLogin;
 import cn.wgn.website.dto.utils.EmailInfo;
+import cn.wgn.website.dto.utils.IpRegion;
 import cn.wgn.website.enums.RedisPrefixKeyEnum;
 import cn.wgn.website.service.ICommonService;
 import cn.wgn.website.utils.*;
@@ -28,6 +29,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -51,6 +54,8 @@ public class CommonController extends BaseController {
     private EmailUtil emailUtil;
     @Autowired
     private TencentAIUtil tencentAIUtil;
+    @Autowired
+    private IpUtil ipUtil;
 
     // 验证码过期时间(秒)
     private static final int expireTime = 10 * 60;
@@ -168,5 +173,35 @@ public class CommonController extends BaseController {
         response.setHeader("content-type", "text/html;charset=UTF-8");
         String data = HtmlModel.closeUrule();
         outputStream.write(data.getBytes(StandardCharsets.UTF_8));
+    }
+
+    @GetMapping("getIpList")
+    @ApiOperation("int或str,逗号分隔")
+    public ApiRes<String> getIpList(String str) {
+        if (Strings.isNullOrEmpty(str)) {
+            return ApiRes.err("Null");
+        }
+        String[] strings = str.split(",");
+        List<IpRegion> regionList = new ArrayList<>();
+
+        for (String s : strings) {
+            if (s.contains(".")) {
+                regionList.add(ipUtil.getIpRegion(s));
+            } else {
+                regionList.add(ipUtil.getIpRegion(Integer.valueOf(s)));
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (IpRegion r : regionList) {
+            // country + area + province + city + isp
+            sb.append(r.getCountry());
+            sb.append(r.getArea());
+            sb.append(r.getProvince());
+            sb.append(r.getCity());
+            sb.append(r.getIsp());
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        return ApiRes.suc("Success", sb.toString());
     }
 }
