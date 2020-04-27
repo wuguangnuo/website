@@ -147,4 +147,30 @@ public class IpUtil {
     public IpRegion getIpRegion(Integer number) {
         return this.getIpRegion(this.int2ip(number));
     }
+
+    /**
+     * 获取本机IP
+     *
+     * @return
+     */
+    public String getHostIp() {
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            return "127.0.0.1";
+        }
+    }
+
+    /**
+     * 获取本机名
+     *
+     * @return
+     */
+    public String getHostName() {
+        try {
+            return InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            return "未知";
+        }
+    }
 }
