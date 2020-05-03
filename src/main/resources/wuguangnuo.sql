@@ -212,3 +212,38 @@ CREATE TABLE `wu_vistor` (
   KEY `ag` (`ag`),
   KEY `tm` (`tm`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=143668 DEFAULT CHARSET=utf8 COMMENT='访客统计';
+
+-- ----------------------------
+-- Table structure for bot_biliol
+-- ----------------------------
+DROP TABLE IF EXISTS `bot_biliol`;
+CREATE TABLE `bot_biliol` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL COMMENT '标题',
+  `author` varchar(255) DEFAULT NULL COMMENT '作者',
+  `uid` varchar(255) DEFAULT NULL COMMENT '作者id',
+  `link` varchar(255) DEFAULT NULL COMMENT '链接',
+  `play_num` varchar(255) DEFAULT NULL COMMENT '播放量',
+  `dm_num` varchar(255) DEFAULT NULL COMMENT '弹幕量',
+  `ol_num` varchar(255) DEFAULT NULL COMMENT '当前在线量',
+  `create_tm` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='爬虫_bili在线列表';
+
+-- ----------------------------
+-- Table structure for bot_bilirk
+-- ----------------------------
+DROP TABLE IF EXISTS `bot_bilirk`;
+CREATE TABLE `bot_bilirk` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ranking` varchar(255) DEFAULT NULL COMMENT '排名',
+  `title` varchar(255) DEFAULT NULL COMMENT '标题',
+  `author` varchar(255) DEFAULT NULL COMMENT '作者',
+  `uid` varchar(255) DEFAULT NULL COMMENT '作者id',
+  `link` varchar(255) DEFAULT NULL COMMENT '链接',
+  `play_num` varchar(255) DEFAULT NULL COMMENT '播放量',
+  `dm_num` varchar(255) DEFAULT NULL COMMENT '弹幕量',
+  `score` varchar(255) DEFAULT NULL COMMENT '综合得分',
+  `create_tm` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='爬虫_bili排行榜';

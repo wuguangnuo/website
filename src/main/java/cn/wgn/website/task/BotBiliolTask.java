@@ -32,9 +32,9 @@ public class BotBiliolTask {
     private IBotBiliolService botBiliolService;
 
     /**
-     * 从0分钟开始，每隔5分钟执行
+     * 从0分钟开始，每隔10分钟执行
      */
-    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void botBiliolTask() {
         try {
             Document document = Jsoup.parse(new URL(URL), 10000);
@@ -67,9 +67,6 @@ public class BotBiliolTask {
             }
             // 批量保存
             botBiliolService.saveBatch(list);
-            list.forEach(e -> {
-                log.debug(e.toString());
-            });
         } catch (Exception e) {
             e.printStackTrace();
             log.error("[BotBiliolTask.java] 定时任务发生错误");

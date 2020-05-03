@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 定时爬取 bilibili 排行榜（全部投稿，三日排行）
+ * 定时爬取 bilibili 排行榜（默认：全站榜，全部分类，全部投稿，三日排行）
  * https://www.bilibili.com/ranking（https://www.bilibili.com/ranking/all/0/0/3）
  *
  * @author WuGuangNuo
@@ -32,9 +32,10 @@ public class BotBilirkTask {
     private IBotBilirkService botBilirkService;
 
     /**
-     * 从1分钟开始，每隔5分钟执行
+     * 每日 04:31 定时任务
+     * （Bili Rank榜单每日4:30更新）
      */
-    @Scheduled(cron = "0 1/5 * * * ?")
+    @Scheduled(cron = "0 31 4 1/1 * ?")
     public void botBilirkTask() {
         try {
             Document document = Jsoup.parse(new URL(URL), 10000);
@@ -69,9 +70,6 @@ public class BotBilirkTask {
             }
             // 批量保存
             botBilirkService.saveBatch(list);
-            list.forEach(e -> {
-                log.debug(e.toString());
-            });
         } catch (Exception e) {
             e.printStackTrace();
             log.error("[BotBilirkTask.java] 定时任务发生错误");
