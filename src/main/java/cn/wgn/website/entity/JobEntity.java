@@ -39,7 +39,7 @@ public class JobEntity implements Serializable {
     private String jobGroup;
 
     @ApiModelProperty(value = "调用目标字符串")
-    private String invokeTrget;
+    private String invokeTarget;
 
     @ApiModelProperty(value = "cron执行表达式")
     private String cronExpression;
@@ -57,13 +57,13 @@ public class JobEntity implements Serializable {
     private String createBy;
 
     @ApiModelProperty(value = "创建时间")
-    private LocalDateTime createTime;
+    private LocalDateTime createTm;
 
     @ApiModelProperty(value = "更新者")
     private String updateBy;
 
     @ApiModelProperty(value = "更新时间")
-    private LocalDateTime updateTime;
+    private LocalDateTime updateTm;
 
     @ApiModelProperty(value = "备注信息")
     private String remark;

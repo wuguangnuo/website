@@ -50,8 +50,11 @@ public class JobLogEntity implements Serializable {
     @ApiModelProperty(value = "异常信息")
     private String exceptionInfo;
 
-    @ApiModelProperty(value = "创建时间")
-    private String createTime;
+    @ApiModelProperty(value = "开始时间")
+    private LocalDateTime startTm;
+
+    @ApiModelProperty(value = "结束时间")
+    private LocalDateTime stopTm;
 
 
 }

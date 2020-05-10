@@ -351,4 +351,158 @@ public class WebSiteUtil {
     private static boolean isMatches(String reges, String str) {
         return Pattern.matches("(.*)" + reges + "(.*)", str);
     }
+
+    public static String substringBefore(String str, String separator) {
+        if (!Strings.isNullOrEmpty(str) && separator != null) {
+            if (separator.isEmpty()) {
+                return "";
+            } else {
+                int pos = str.indexOf(separator);
+                return pos == -1 ? str : str.substring(0, pos);
+            }
+        } else {
+            return str;
+        }
+    }
+
+    public static String substringAfter(String str, String separator) {
+        if (Strings.isNullOrEmpty(str)) {
+            return str;
+        } else if (separator == null) {
+            return "";
+        } else {
+            int pos = str.indexOf(separator);
+            return pos == -1 ? "" : str.substring(pos + separator.length());
+        }
+    }
+
+    public static String substringBeforeLast(String str, String separator) {
+        if (!Strings.isNullOrEmpty(str) && !Strings.isNullOrEmpty(separator)) {
+            int pos = str.lastIndexOf(separator);
+            return pos == -1 ? str : str.substring(0, pos);
+        } else {
+            return str;
+        }
+    }
+
+    public static String substringAfterLast(String str, String separator) {
+        if (Strings.isNullOrEmpty(str)) {
+            return str;
+        } else if (Strings.isNullOrEmpty(separator)) {
+            return "";
+        } else {
+            int pos = str.lastIndexOf(separator);
+            return pos != -1 && pos != str.length() - separator.length() ? str.substring(pos + separator.length()) : "";
+        }
+    }
+
+    public static String substringBetween(String str, String tag) {
+        return substringBetween(str, tag, tag);
+    }
+
+    public static String substringBetween(String str, String open, String close) {
+        if (str != null && open != null && close != null) {
+            int start = str.indexOf(open);
+            if (start != -1) {
+                int end = str.indexOf(close, start + open.length());
+                if (end != -1) {
+                    return str.substring(start + open.length(), end);
+                }
+            }
+            return null;
+        } else {
+            return null;
+        }
+    }
+
+    public static boolean containsIgnoreCase(CharSequence str, CharSequence searchStr) {
+        if (str != null && searchStr != null) {
+            int len = searchStr.length();
+            int max = str.length() - len;
+
+            for (int i = 0; i <= max; ++i) {
+                if (regionMatches(str, true, i, searchStr, 0, len)) {
+                    return true;
+                }
+            }
+
+            return false;
+        } else {
+            return false;
+        }
+    }
+
+    private static boolean regionMatches(CharSequence cs, boolean ignoreCase, int thisStart, CharSequence substring, int start, int length) {
+        if (cs instanceof String && substring instanceof String) {
+            return ((String) cs).regionMatches(ignoreCase, thisStart, (String) substring, start, length);
+        } else {
+            int index1 = thisStart;
+            int index2 = start;
+            int tmpLen = length;
+            int srcLen = cs.length() - thisStart;
+            int otherLen = substring.length() - start;
+            if (thisStart >= 0 && start >= 0 && length >= 0) {
+                if (srcLen >= length && otherLen >= length) {
+                    while (tmpLen-- > 0) {
+                        char c1 = cs.charAt(index1++);
+                        char c2 = substring.charAt(index2++);
+                        if (c1 != c2) {
+                            if (!ignoreCase) {
+                                return false;
+                            }
+
+                            if (Character.toUpperCase(c1) != Character.toUpperCase(c2) && Character.toLowerCase(c1) != Character.toLowerCase(c2)) {
+                                return false;
+                            }
+                        }
+                    }
+
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public static String replaceIgnoreCase(String text, String searchString, String replacement) {
+        int max = -1;
+        boolean ignoreCase = true;
+
+        if (!Strings.isNullOrEmpty(text) && !Strings.isNullOrEmpty(searchString) && replacement != null && max != 0) {
+            String searchText = text;
+            if (ignoreCase) {
+                searchText = text.toLowerCase();
+                searchString = searchString.toLowerCase();
+            }
+
+            int start = 0;
+            int end = searchText.indexOf(searchString, start);
+            if (end == -1) {
+                return text;
+            } else {
+                int replLength = searchString.length();
+                int increase = replacement.length() - replLength;
+                increase = increase < 0 ? 0 : increase;
+                increase *= max < 0 ? 16 : (max > 64 ? 64 : max);
+
+                StringBuilder buf;
+                for (buf = new StringBuilder(text.length() + increase); end != -1; end = searchText.indexOf(searchString, start)) {
+                    buf.append(text, start, end).append(replacement);
+                    start = end + replLength;
+                    --max;
+                    if (max == 0) {
+                        break;
+                    }
+                }
+
+                buf.append(text, start, text.length());
+                return buf.toString();
+            }
+        } else {
+            return text;
+        }
+    }
 }

@@ -274,6 +274,7 @@ CREATE TABLE `wu_job_log` (
   `job_message` varchar(500) DEFAULT NULL COMMENT '日志信息',
   `status` char(1) DEFAULT '0' COMMENT '执行状态（0正常 1失败）',
   `exception_info` varchar(2000) DEFAULT '' COMMENT '异常信息',
-  `create_tm` datetime DEFAULT NULL COMMENT '创建时间',
+  `start_Tm` datetime DEFAULT NULL COMMENT '开始时间',
+  `stop_Tm` datetime DEFAULT NULL COMMENT '结束时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='定时任务调度日志表';
