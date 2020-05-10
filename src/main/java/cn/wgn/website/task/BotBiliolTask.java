@@ -57,6 +57,7 @@ public class BotBiliolTask {
                 String dmNum = e.getElementsByClass("dm").get(0).childNode(1).toString();
                 String olNum = e.getElementsByClass("ol").get(0).child(0).html();
 
+                i++;
                 BotBiliolEntity entity = new BotBiliolEntity();
                 entity.setRanking(i + "");
                 entity.setTitle(title);
@@ -68,10 +69,10 @@ public class BotBiliolTask {
                 entity.setOlNum(olNum);
                 entity.setCreateTm(createTm);
                 list.add(entity);
-                i++;
             }
             // 批量保存
             botBiliolService.saveBatch(list);
+            log.debug("[BotBiliolTask.java] 定时任务执行完成");
         } catch (Exception e) {
             e.printStackTrace();
             log.error("[BotBiliolTask.java] 定时任务发生错误");
