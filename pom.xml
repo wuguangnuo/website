@@ -63,6 +63,8 @@
         <oshi-core.version>4.7.0</oshi-core.version>
         <!-- 调用Win平台接口(辅助oshi,Linux不需要) -->
         <jna.version>5.5.0</jna.version>
+        <!-- 定时任务 -->
+        <quartz.version>2.3.2</quartz.version>
     </properties>
 
     <dependencies>
@@ -238,7 +240,11 @@
         <!--            <artifactId>jna-platform</artifactId>-->
         <!--            <version>${jna.version}</version>-->
         <!--        </dependency>-->
-
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>${quartz.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

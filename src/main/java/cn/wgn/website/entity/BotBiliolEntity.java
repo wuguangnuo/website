@@ -36,6 +36,9 @@ public class BotBiliolEntity implements Serializable {
     @ApiModelProperty(value = "标题")
     private String title;
 
+    @ApiModelProperty(value = "排名")
+    private String ranking;
+
     @ApiModelProperty(value = "作者")
     private String author;
 

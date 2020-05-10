@@ -41,6 +41,9 @@ public class BotBiliolTask {
             Elements elements = document.getElementsByClass("online-list")
                     .get(0).getElementsByClass("ebox");
 
+            // Bili Online 无自带排名，此处加上排序
+            int i = 0;
+            assert elements.size() == 20;
             List<BotBiliolEntity> list = new ArrayList<>();
             LocalDateTime createTm = LocalDateTime.now();
             for (Element e : elements) {
@@ -55,6 +58,7 @@ public class BotBiliolTask {
                 String olNum = e.getElementsByClass("ol").get(0).child(0).html();
 
                 BotBiliolEntity entity = new BotBiliolEntity();
+                entity.setRanking(i + "");
                 entity.setTitle(title);
                 entity.setAuthor(author);
                 entity.setUid(uid);
@@ -64,6 +68,7 @@ public class BotBiliolTask {
                 entity.setOlNum(olNum);
                 entity.setCreateTm(createTm);
                 list.add(entity);
+                i++;
             }
             // 批量保存
             botBiliolService.saveBatch(list);

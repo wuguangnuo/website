@@ -42,6 +42,7 @@ public class BotBilirkTask {
             Elements elements = document.getElementsByClass("rank-list")
                     .get(0).getElementsByClass("rank-item");
 
+            assert elements.size() == 100;
             List<BotBilirkEntity> list = new ArrayList<>();
             LocalDateTime createTm = LocalDateTime.now();
             for (Element e : elements) {
