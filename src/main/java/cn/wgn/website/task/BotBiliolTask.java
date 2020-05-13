@@ -72,7 +72,7 @@ public class BotBiliolTask {
             }
             // 批量保存
             botBiliolService.saveBatch(list);
-            log.debug("[BotBiliolTask.java] 定时任务执行完成");
+            log.info("[BotBiliolTask.java] 定时任务执行完成");
         } catch (Exception e) {
             e.printStackTrace();
             log.error("[BotBiliolTask.java] 定时任务发生错误");

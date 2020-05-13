@@ -62,10 +62,10 @@ public class BotWeibotopTask {
             }
             // 批量保存
             botWeibotopService.saveBatch(list);
-            log.debug("[BotBilirkTask.java] 定时任务执行完成");
+            log.info("[BotWeibotopTask.java] 定时任务执行完成");
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("[BotBilirkTask.java] 定时任务发生错误");
+            log.error("[BotWeibotopTask.java] 定时任务发生错误");
             log.error(e.getMessage());
         }
     }

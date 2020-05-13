@@ -71,7 +71,7 @@ public class BotBilirkTask {
             }
             // 批量保存
             botBilirkService.saveBatch(list);
-            log.debug("[BotBilirkTask.java] 定时任务执行完成");
+            log.info("[BotBilirkTask.java] 定时任务执行完成");
         } catch (Exception e) {
             e.printStackTrace();
             log.error("[BotBilirkTask.java] 定时任务发生错误");
