@@ -2,6 +2,9 @@ package cn.wgn.website.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import cn.wgn.framework.web.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -16,19 +19,16 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author WuGuangNuo
- * @since 2020-02-16
+ * @since 2020-06-21
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("wu_demo")
-@ApiModel(value="Demo对象", description="諾的DEMO")
-public class DemoEntity implements Serializable {
+@ApiModel(value="DemoEntity对象", description="諾的DEMO")
+public class DemoEntity extends BaseEntity<DemoEntity> {
 
     private static final long serialVersionUID = 1L;
-
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
 
     @ApiModelProperty(value = "demo名称")
     private String demoTitle;
@@ -41,4 +41,11 @@ public class DemoEntity implements Serializable {
 
     @ApiModelProperty(value = "demo图片")
     private String demoImg;
+
+
+    @Override
+    protected Serializable pkVal() {
+        return null;
+    }
+
 }

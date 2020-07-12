@@ -1,31 +1,49 @@
 package cn.wgn.website.controller;
 
-import cn.wgn.website.dto.ApiRes;
-import cn.wgn.website.dto.home.*;
+import cn.wgn.framework.aspectj.annotation.Authorize;
+import cn.wgn.framework.web.ApiRes;
+import cn.wgn.framework.web.controller.BaseController;
+import cn.wgn.framework.web.service.IVisitorService;
 import cn.wgn.website.entity.*;
-import cn.wgn.website.service.IHomeService;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import cn.wgn.website.service.*;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
- * 主页接口(不需要权限)
+ * <p>
+ * https://www.wuguangnuo.cn
+ * 网站主页接口
+ * </p>
  *
  * @author WuGuangNuo
- * @date Created in 2020/2/16 10:50
+ * @date Created in 2020/7/5 17:18
  */
 @RequestMapping("home")
 @Api(tags = "主页")
 @RestController
 public class HomeController extends BaseController {
     @Autowired
-    private IHomeService homeService;
+    private IDiaryService diaryService;
+    @Autowired
+    private IDemoService demoService;
+    @Autowired
+    private IGameService gameService;
+    @Autowired
+    private IDocService docService;
+    @Autowired
+    private IToolService toolService;
+    @Autowired
+    private IBlogService blogService;
+    @Autowired
+    private IVisitorService visitorService;
 
     @GetMapping(value = "index")
     @ApiOperation(value = "首页")
@@ -33,10 +51,15 @@ public class HomeController extends BaseController {
         return ApiRes.suc();
     }
 
-    @PostMapping(value = "diary")
+    @GetMapping(value = "diary")
     @ApiOperation(value = "日记")
-    public ApiRes<DiaryDto> diary() {
-        DiaryDto res = homeService.getLastDiary();
+    public ApiRes<DiaryEntity> diary() {
+        // 获取最后一条
+        DiaryEntity res = diaryService.getOne(
+                new QueryWrapper<DiaryEntity>().lambda()
+                        .orderByDesc(DiaryEntity::getCreateTime)
+                        .last("LIMIT 1")
+        );
 
         if (res == null) {
             return ApiRes.fail();
@@ -45,10 +68,10 @@ public class HomeController extends BaseController {
         }
     }
 
-    @PostMapping(value = "demo")
+    @GetMapping(value = "demo")
     @ApiOperation(value = "示例")
-    public ApiRes<IPage<DemoEntity>> demo() {
-        IPage<DemoEntity> res = homeService.getDemo();
+    public ApiRes<List<DemoEntity>> demo() {
+        List<DemoEntity> res = demoService.randList();
 
         if (res == null) {
             return ApiRes.fail();
@@ -57,10 +80,10 @@ public class HomeController extends BaseController {
         }
     }
 
-    @PostMapping(value = "game")
+    @GetMapping(value = "game")
     @ApiOperation(value = "游戏")
-    public ApiRes<IPage<GameEntity>> game() {
-        IPage<GameEntity> res = homeService.getGame();
+    public ApiRes<List<GameEntity>> game() {
+        List<GameEntity> res = gameService.randList();
 
         if (res == null) {
             return ApiRes.fail();
@@ -69,10 +92,10 @@ public class HomeController extends BaseController {
         }
     }
 
-    @PostMapping(value = "doc")
+    @GetMapping(value = "doc")
     @ApiOperation(value = "开发文档")
-    public ApiRes<IPage<DocEntity>> doc() {
-        IPage<DocEntity> res = homeService.getDoc();
+    public ApiRes<List<DocEntity>> doc() {
+        List<DocEntity> res = docService.randList();
 
         if (res == null) {
             return ApiRes.fail();
@@ -81,10 +104,10 @@ public class HomeController extends BaseController {
         }
     }
 
-    @PostMapping(value = "tool")
+    @GetMapping(value = "tool")
     @ApiOperation(value = "工具箱")
-    public ApiRes<IPage<ToolEntity>> tool() {
-        IPage<ToolEntity> res = homeService.getTool();
+    public ApiRes<List<ToolEntity>> tool() {
+        List<ToolEntity> res = toolService.randList();
 
         if (res == null) {
             return ApiRes.fail();
@@ -95,20 +118,22 @@ public class HomeController extends BaseController {
 
     @PostMapping(value = "blogList")
     @ApiOperation(value = "博文列表")
-    public ApiRes<IPage> blogList(@RequestBody BlogListQuery query) {
-        IPage res = homeService.getBlogList(query);
+    public ApiRes<PageInfo<BlogEntity>> blogList(@RequestBody HashMap<String, String> query) {
+        this.startPage();
+        List<BlogEntity> res = blogService.queryBlogList(query);
 
         if (res == null) {
             return ApiRes.fail();
         } else {
-            return ApiRes.suc(res);
+            return pageData(res);
         }
     }
 
     @PostMapping(value = "blogList2")
     @ApiOperation(value = "博文列表2")
-    public ApiRes<BlogListDto> blogList2(@RequestBody BlogListQuery query) {
-        BlogListDto res = homeService.getBlogList2(query);
+    public ApiRes<HashMap<String, String>> blogList2(@RequestBody HashMap<String, String> query) {
+        this.startPage();
+        HashMap res = blogService.queryBlogList2(query);
 
         if (res == null) {
             return ApiRes.fail();
@@ -117,10 +142,10 @@ public class HomeController extends BaseController {
         }
     }
 
-    @PostMapping(value = "blogSide")
+    @GetMapping(value = "blogSide")
     @ApiOperation(value = "相关博客")
-    public ApiRes<List<BlogSideDto>> blogList() {
-        List<BlogSideDto> res = homeService.getBlogSide();
+    public ApiRes<List<BlogEntity>> blogSide() {
+        List<BlogEntity> res = blogService.randList(8);
 
         if (res == null) {
             return ApiRes.fail();
@@ -129,13 +154,13 @@ public class HomeController extends BaseController {
         }
     }
 
-    @PostMapping(value = "blogDetail")
+    @GetMapping(value = "blogDetail/{id}")
     @ApiOperation(value = "博文详情")
-    public ApiRes<BlogEntity> blogList(Integer id) {
+    public ApiRes<BlogEntity> blogDetail(@PathVariable("id") Integer id) {
         if (id == null || id <= 0) {
             return ApiRes.fail();
         }
-        BlogEntity res = homeService.getBlogDetail(id);
+        BlogEntity res = blogService.getById(id);
 
         if (res == null) {
             return ApiRes.fail();
@@ -146,8 +171,8 @@ public class HomeController extends BaseController {
 
     @PostMapping(value = "vistorChart")
     @ApiOperation(value = "获取访客图表")
-    public ApiRes<String> vistorChart(@RequestBody VistorChartDto dto) {
-        String res = homeService.vistorChart(dto);
+    public ApiRes<String> vistorChart(@RequestBody HashMap<String, String> query) {
+        String res = visitorService.vistorChart(query);
 
         if (Strings.isNullOrEmpty(res)) {
             return ApiRes.fail();
@@ -158,13 +183,8 @@ public class HomeController extends BaseController {
 
     @PostMapping(value = "vistorTable")
     @ApiOperation(value = "获取访客表格")
-    public ApiRes<Page<VistorTable>> vistorTable(@RequestBody VistorTableQuery query) {
-        Page<VistorTable> res = homeService.vistorTable(query);
-
-        if (res == null) {
-            return ApiRes.fail();
-        } else {
-            return ApiRes.suc(res);
-        }
+    public ApiRes vistorTable(@RequestBody HashMap<String, String> query) {
+        return ApiRes.err("未开发");
     }
+
 }

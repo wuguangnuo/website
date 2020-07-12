@@ -2,8 +2,11 @@ package cn.wgn.website.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import cn.wgn.framework.web.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.Version;
 import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,19 +20,16 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author WuGuangNuo
- * @since 2020-02-16
+ * @since 2020-06-21
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("wu_blog")
-@ApiModel(value="Blog对象", description="諾的博客")
-public class BlogEntity implements Serializable {
+@ApiModel(value="BlogEntity对象", description="諾的博客")
+public class BlogEntity extends BaseEntity<BlogEntity> {
 
     private static final long serialVersionUID = 1L;
-
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
 
     @ApiModelProperty(value = "文章标题")
     private String postTitle;
@@ -52,5 +52,10 @@ public class BlogEntity implements Serializable {
     @ApiModelProperty(value = "原链接")
     private String postLink;
 
+
+    @Override
+    protected Serializable pkVal() {
+        return null;
+    }
 
 }

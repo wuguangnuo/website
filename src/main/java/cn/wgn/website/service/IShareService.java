@@ -1,10 +1,17 @@
 package cn.wgn.website.service;
 
+import cn.wgn.framework.web.service.IBaseService;
+import cn.wgn.website.entity.ShareEntity;
+
 /**
+ * <p>
+ * 分享系统表 服务类
+ * </p>
+ *
  * @author WuGuangNuo
- * @date Created in 2020/4/13 10:28
+ * @since 2020-06-27
  */
-public interface IShareService {
+public interface IShareService extends IBaseService<ShareEntity> {
     /**
      * 分享页面Html
      *

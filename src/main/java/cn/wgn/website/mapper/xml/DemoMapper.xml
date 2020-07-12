@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.wgn.website.mapper.DemoMapper">
-
-<!--    获取示例列表-->
-    <select id="getDemo" resultType="cn.wgn.website.entity.DemoEntity">
-        SELECT * FROM `wu_demo` ORDER BY RAND()
-    </select>
-</mapper>

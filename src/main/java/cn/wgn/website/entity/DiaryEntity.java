@@ -2,11 +2,12 @@ package cn.wgn.website.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import cn.wgn.framework.web.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.Version;
 import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,19 +20,16 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author WuGuangNuo
- * @since 2020-02-16
+ * @since 2020-06-21
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("wu_diary")
-@ApiModel(value = "Diary对象", description = "諾的日记")
-public class DiaryEntity implements Serializable {
+@ApiModel(value="DiaryEntity对象", description="諾的日记")
+public class DiaryEntity extends BaseEntity<DiaryEntity> {
 
     private static final long serialVersionUID = 1L;
-
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
 
     @ApiModelProperty(value = "日记标题")
     private String diaryTitle;
@@ -44,4 +42,11 @@ public class DiaryEntity implements Serializable {
 
     @ApiModelProperty(value = "发布日期")
     private LocalDateTime diaryDate;
+
+
+    @Override
+    protected Serializable pkVal() {
+        return null;
+    }
+
 }

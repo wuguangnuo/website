@@ -1,59 +1,49 @@
 package cn.wgn.website.enums;
 
+import cn.wgn.framework.web.enums.BaseEnum;
+
 /**
- * 通用状态枚举
+ * 状态枚举
  *
  * @author WuGuangNuo
- * @date Created in 2020/3/2 23:43
+ * @date Created in 2020/7/8 22:05
  */
-public enum StateEnum {
-    NOTHING("不存在", "0"), // 永久删除
-    NORMAL("正常", "1"),
-    DELETE("已删除", "2"),
+public enum StateEnum implements BaseEnum<String> {
+    //
+    NOTHING("0", "不存在"),
+    NORMAL("1", "正常"),
+    DELETE("2", "已删除"),
+    //
+    PRIVATE("11", "自己可见"),
+    PUBLIC("12", "所有人可见"),
+    //
+    OTHER("99", "其他");
 
-    PRIVATE("自己可见", "11"),
-    PUBLIC("所有人可见", "12"),
+    private final String value;
+    private final String desc;
 
-    OTHER("其他", "99");
-
-    String label;
-    String value;
-
-    StateEnum(String label, String value) {
-        this.label = label;
+    StateEnum(String value, String desc) {
         this.value = value;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
+        this.desc = desc;
     }
 
     /**
-     * 根据给定的value查找对应的label
+     * Get Enum Value
      *
-     * @param value 给定的value，支持null
-     * @return 对应的label，没有找到或给定的value为null都返回""空字符串
+     * @return T(General : String, Integer, Long...)
      */
-    public static String getLabel(String value) {
-        if (value != null) {
-            for (StateEnum s : StateEnum.values()) {
-                if (s.getValue().equals(value)) {
-                    return s.getLabel();
-                }
-            }
-        }
-        return "";
+    @Override
+    public String getValue() {
+        return this.value;
+    }
+
+    /**
+     * Description
+     *
+     * @return String
+     */
+    @Override
+    public String getDesc() {
+        return this.desc;
     }
 }

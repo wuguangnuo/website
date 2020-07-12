@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wgn.framework.web.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.wgn.framework.web.entity.UserEntity">
+        <result column="id" property="id"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="create_by_id" property="createById"/>
+        <result column="create_by_name" property="createByName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modified_by_id" property="modifiedById"/>
+        <result column="modified_by_name" property="modifiedByName"/>
+        <result column="modified_time" property="modifiedTime"/>
+        <result column="remark" property="remark"/>
+        <result column="logic_del" property="logicDel"/>
+        <result column="version" property="version"/>
+        <result column="username" property="username"/>
+        <result column="realname" property="realname"/>
+        <result column="password" property="password"/>
+        <result column="roleid" property="roleid"/>
+        <result column="headimg" property="headimg"/>
+        <result column="email" property="email"/>
+        <result column="login_time" property="loginTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        tenant_id,
+        create_by_id,
+        create_by_name,
+        create_time,
+        modified_by_id,
+        modified_by_name,
+        modified_time,
+        remark,
+        logic_del,
+        version,
+        username, realname, password, roleid, headimg, email, login_time
+    </sql>
+
+    <!-- 更新不为空的信息 -->
+    <update id="updateButNull" parameterType="cn.wgn.framework.web.domain.ProfileDto">
+        UPDATE wu_user
+        SET id = #{id}
+        <if test="dto.username != null and dto.username != ''">
+            ,username = #{dto.username}
+        </if>
+        <if test="dto.realname != null and dto.realname != ''">
+            ,realname = #{dto.realname}
+        </if>
+        <if test="dto.password != null and dto.password != ''">
+            ,password = #{dto.password}
+        </if>
+        <if test="dto.headimg != null and dto.headimg != ''">
+            ,headimg = #{dto.headimg}
+        </if>
+        <if test="dto.email != null and dto.email != ''">
+            ,email = #{dto.email}
+        </if>
+        WHERE
+        id = #{id}
+    </update>
+</mapper>

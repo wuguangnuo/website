@@ -5,6 +5,9 @@ import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 
+/**
+ * 数据库类型转换
+ */
 public class MySqlServerTypeConvert implements ITypeConvert {
 
     @Override
@@ -46,13 +49,15 @@ public class MySqlServerTypeConvert implements ITypeConvert {
         } else if (t.contains("bit")) {
             return DbColumnType.BOOLEAN;
         } else if (t.contains("decimal") || t.contains("numeric")) {
-            return DbColumnType.DOUBLE;
+            return DbColumnType.BIG_DECIMAL;
         } else if (t.contains("money")) {
-            return DbColumnType.DOUBLE;
+            return DbColumnType.BIG_DECIMAL;
         } else if (t.contains("binary") || t.contains("image")) {
             return DbColumnType.BYTE_ARRAY;
         } else if (t.contains("float") || t.contains("real")) {
             return DbColumnType.FLOAT;
+        } else if (t.contains("double")) {
+            return DbColumnType.DOUBLE;
         }
         return DbColumnType.STRING;
     }

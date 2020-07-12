@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wgn.website.mapper.ToolMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.wgn.website.entity.ToolEntity">
+    <result column="id" property="id" />
+    <result column="tenant_id" property="tenantId" />
+    <result column="create_by_id" property="createById" />
+    <result column="create_by_name" property="createByName" />
+    <result column="create_time" property="createTime" />
+    <result column="modified_by_id" property="modifiedById" />
+    <result column="modified_by_name" property="modifiedByName" />
+    <result column="modified_time" property="modifiedTime" />
+    <result column="remark" property="remark" />
+    <result column="logic_del" property="logicDel" />
+    <result column="version" property="version" />
+        <result column="tool_title" property="toolTitle" />
+        <result column="tool_author" property="toolAuthor" />
+        <result column="tool_from" property="toolFrom" />
+        <result column="tool_link" property="toolLink" />
+        <result column="tool_img" property="toolImg" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        tenant_id,
+        create_by_id,
+        create_by_name,
+        create_time,
+        modified_by_id,
+        modified_by_name,
+        modified_time,
+        remark,
+        logic_del,
+        version,
+        tool_title, tool_author, tool_from, tool_link, tool_img
+    </sql>
+
+</mapper>

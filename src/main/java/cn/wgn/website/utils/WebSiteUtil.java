@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
  * @author WuGuangNuo
  * @date Created in 2020/2/16 21:42
  */
-@Component
 public class WebSiteUtil {
     // 最大分页
     public static final Page PAGE_MAX_SIZE = new Page(0, 200);

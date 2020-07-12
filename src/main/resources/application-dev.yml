@@ -6,7 +6,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/wuguangnuo?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/wuguangnuo5?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false
     username: root
     password:
     druid:
@@ -33,12 +33,12 @@ spring:
       web-stat-filter:
         enabled: true
         exclusions:
-#          - "*.js"
-#          - "*.gif"
-#          - "*.jpg"
-#          - "*.png"
-#          - "*.css"
-#          - "*.ico"
+          #          - "*.js"
+          #          - "*.gif"
+          #          - "*.jpg"
+          #          - "*.png"
+          #          - "*.css"
+          #          - "*.ico"
           - "/druid/*"
           - "/urule/*"
   servlet:
@@ -50,13 +50,13 @@ urule:
     databasetype: mysql
     datasourcename: datasource
 mybatis-plus:
-  mapper-locations: classpath:cn/wgn/website/mapper/xml/*.xml
   configuration:
     map-underscore-to-camel-case: true
 logging:
-  config: D:/wuguangnuo/wgn.cn/website/src/main/resources/logback-spring.xml
+  config: /wuguangnuo/wgn.cn/website/init/logback-spring.xml
   level:
     cn.wgn.website: debug
+    cn.wgn.framework: debug
     io.swagger.models.parameters.AbstractSerializableParameter: error
 server:
   port: 8800
@@ -72,8 +72,6 @@ private-config:
   tencent-ai:
     app-id: 2********8
     app-key: 2**************U
-  # 菜单Json配置
-  menu-json: D:/wuguangnuo/wgn.cn/website/src/main/resources/menu.json
   # 邮箱配置
   mail:
     ssl-factory: javax.net.ssl.SSLSocketFactory
@@ -83,4 +81,5 @@ private-config:
     from-user-password: 123456
     copy-to: wuguangnuo@qq.com
   # IP地址库
-  ip2region: D:/wuguangnuo/wgn.cn/website/src/main/resources/ip2region.db
+  ip2region: /wuguangnuo/wgn.cn/website/src/main/resources/ip2region.db
+  
