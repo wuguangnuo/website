@@ -16,4 +16,17 @@ public interface IJobLogService extends IBaseService<JobLogEntity> {
      * @return
      */
     List<JobLogEntity> selectJobLogPage(JobLogEntity jobLog);
+
+    /**
+     * 删除定时任务调度日志(多条)
+     *
+     * @param ids ids
+     * @return sucNum
+     */
+    int logRemove(Long[] ids);
+
+    /**
+     * 清空定时任务日志
+     */
+    void truncate();
 }

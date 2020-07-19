@@ -15,4 +15,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JobLogMapper extends BaseMapper<JobLogEntity> {
 
+    /**
+     * 清空定时任务日志
+     */
+    void truncate();
 }

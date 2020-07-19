@@ -74,7 +74,7 @@ public class ScheduleUtil {
 
         scheduler.scheduleJob(jobDetail, trigger);
 
-        if (JobConstants.PAUSE.equals(job.getStatus())) {
+        if (JobConstants.Status.PAUSE.getValue().equals(job.getStatus())) {
             scheduler.pauseJob(ScheduleUtil.getJobKey(jobId, jobGroup));
         }
     }

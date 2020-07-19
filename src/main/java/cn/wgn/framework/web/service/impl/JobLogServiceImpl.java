@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,5 +28,29 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogMapper, JobLogEntit
     @Override
     public List<JobLogEntity> selectJobLogPage(JobLogEntity jobLog) {
         return jobLogMapper.selectList(new QueryWrapper<>());
+    }
+
+    /**
+     * 删除定时任务调度日志(多条)
+     *
+     * @param ids ids
+     * @return sucNum
+     */
+    @Override
+    public int logRemove(Long[] ids) {
+        if (ids.length == 0) {
+            return 0;
+        }
+
+        List<Long> idList = Arrays.asList(ids);
+        return jobLogMapper.deleteBatchIds(idList);
+    }
+
+    /**
+     * 清空定时任务日志
+     */
+    @Override
+    public void truncate() {
+        jobLogMapper.truncate();
     }
 }

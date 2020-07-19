@@ -41,7 +41,6 @@ public class ControllerAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
 
-
         String token = request.getHeader("token");
         String us = redisUtil.get(token, RedisPrefixKeyEnum.TOKEN.getValue());
 //        String serviePath = request.getServletPath();

@@ -19,15 +19,26 @@ public class JobConstants {
     public static final String TASK_CLASS_NAME = "TASK_CLASS_NAME";
 
     // TASK 任务状态
+    public enum Status {
+        /**
+         * 任务状态：正常
+         */
+        NORMAL("0"),
+        /**
+         * 任务状态：暂停
+         */
+        PAUSE("1");
 
-    /**
-     * 任务状态：正常
-     */
-    public static final String NORMAL = "0";
-    /**
-     * 任务状态：暂停
-     */
-    public static final String PAUSE = "1";
+        private String value;
+
+        private Status(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
 
     // TASK 任务执行状态(JobLog)
 

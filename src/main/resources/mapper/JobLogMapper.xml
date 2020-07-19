@@ -21,4 +21,9 @@
         job_name, job_group, invoke_target, job_message, status, exception_info, start_time, stop_time
     </sql>
 
+    <!-- 清空定时任务日志 -->
+    <delete id="truncate">
+        truncate table wu_job_log
+    </delete>
+
 </mapper>

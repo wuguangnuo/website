@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -53,5 +53,8 @@ public class BiliolEntity {
 
     @ApiModelProperty(value = "当前在线量")
     private String olNum;
+
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createTime;
 
 }

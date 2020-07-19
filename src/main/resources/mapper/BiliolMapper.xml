@@ -14,13 +14,14 @@
         <result column="play_num" property="playNum" />
         <result column="dm_num" property="dmNum" />
         <result column="ol_num" property="olNum" />
+        <result column="create_time" property="createTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id,
         create_time,
-        ranking, title, author, uid, link, play_num, dm_num, ol_num
+        ranking, title, author, uid, link, play_num, dm_num, ol_num, create_time
     </sql>
 
 </mapper>

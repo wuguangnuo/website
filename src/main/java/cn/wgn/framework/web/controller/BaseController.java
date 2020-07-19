@@ -5,17 +5,13 @@ import cn.wgn.framework.utils.PageUtil;
 import cn.wgn.framework.web.ApiRes;
 import cn.wgn.framework.web.domain.PageDomain;
 import cn.wgn.framework.web.entity.BaseEntity;
-import cn.wgn.framework.web.entity.JobEntity;
-import cn.wgn.framework.web.service.impl.BaseServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -44,8 +40,8 @@ public abstract class BaseController<T extends BaseEntity> {
     /**
      * 返回 分页对象
      *
-     * @param data
-     * @return
+     * @param data List<T> data
+     * @return PageInfo<T> data
      */
     protected ApiRes<PageInfo<T>> pageData(List<T> data) {
         if (data == null) {
@@ -58,8 +54,8 @@ public abstract class BaseController<T extends BaseEntity> {
     /**
      * 返回 实体对象
      *
-     * @param data
-     * @return
+     * @param data T data
+     * @return ApiRes
      */
     protected ApiRes<T> resData(T data) {
         if (data == null) {
@@ -125,7 +121,7 @@ public abstract class BaseController<T extends BaseEntity> {
         }
     }
 
-    @DeleteMapping("delete")
+    @DeleteMapping("{id}")
     @ApiOperation("*删除数据")
     public ApiRes<String> delete(HttpServletRequest request, @RequestParam("id") Long id) {
         // 代理AOP，使被代理的对象可被注解修饰
