@@ -1,8 +1,8 @@
 package cn.wgn.framework.web.service.impl;
 
-import cn.wgn.framework.constant.Constants;
 import cn.wgn.framework.exception.CommonException;
 import cn.wgn.framework.utils.StringUtil;
+import cn.wgn.framework.utils.job.JobConstants;
 import cn.wgn.framework.utils.job.ScheduleUtil;
 import cn.wgn.framework.web.entity.JobEntity;
 import cn.wgn.framework.web.mapper.JobMapper;
@@ -70,7 +70,7 @@ public class JobServiceImpl extends BaseServiceImpl<JobMapper, JobEntity> implem
             throw new CommonException("jobId错误，未找到");
         }
         JobDataMap dataMap = new JobDataMap();
-        dataMap.put(Constants.TASK_PROPERTIES, jobEntity);
+        dataMap.put(JobConstants.TASK_PROPERTIES, jobEntity);
         scheduler.triggerJob(ScheduleUtil.getJobKey(jobId, jobEntity.getJobGroup()), dataMap);
         return Boolean.TRUE;
     }
