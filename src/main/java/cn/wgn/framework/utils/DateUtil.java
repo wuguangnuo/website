@@ -5,10 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -526,5 +523,23 @@ public class DateUtil {
             return LocalDateTime.now();
         }
         return LocalDateTime.ofInstant(new Date(date).toInstant(), ZoneId.systemDefault());
+    }
+
+    /**
+     * 计算时间差
+     *
+     * @param v1 较小值，空则当前时间
+     * @param v2 较大值，空则当前时间
+     * @return 相差毫秒数
+     */
+    public static Long diff(LocalDateTime v1, LocalDateTime v2) {
+        if (v1 == null) {
+            v1 = LocalDateTime.now();
+        }
+        if (v2 == null) {
+            v2 = LocalDateTime.now();
+        }
+        return v2.toInstant(ZoneOffset.of("+8")).toEpochMilli()
+                - v1.toInstant(ZoneOffset.of("+8")).toEpochMilli();
     }
 }

@@ -1,5 +1,6 @@
 package cn.wgn.framework.utils.job;
 
+import cn.wgn.framework.utils.DateUtil;
 import cn.wgn.framework.utils.StringUtil;
 import cn.wgn.framework.utils.spring.SpringUtil;
 import cn.wgn.framework.web.entity.JobEntity;
@@ -71,9 +72,7 @@ public abstract class AbstractQuartzJob implements Job {
         jobLogEntity.setInvokeTarget(jobEntity.getInvokeTarget());
         jobLogEntity.setStartTime(startTime);
         jobLogEntity.setStopTime(LocalDateTime.now());
-        // todo 使用DateUtil处理
-        long runMs = jobLogEntity.getStopTime().toInstant(ZoneOffset.of("+8")).toEpochMilli()
-                - jobLogEntity.getStartTime().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        long runMs = DateUtil.diff(jobLogEntity.getStartTime(), jobLogEntity.getStopTime());
         jobLogEntity.setJobMessage(jobLogEntity.getJobName() + " 总共耗时：" + runMs + "毫秒");
         if (e != null) {
             jobLogEntity.setStatus(JobConstants.FAIL);
