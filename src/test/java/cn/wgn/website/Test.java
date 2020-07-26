@@ -1,5 +1,6 @@
 package cn.wgn.website;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 
 /**
@@ -15,6 +16,8 @@ public class Test {
         map.put("c", "ccc");
 
         System.out.println(map.toString());
+
+        System.out.println(BigInteger.TEN.intValue());
 
     }
 }

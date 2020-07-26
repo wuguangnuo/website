@@ -48,14 +48,18 @@ public class JobServiceImpl extends BaseServiceImpl<JobMapper, JobEntity> implem
      * @return
      */
     @Override
+    @Transactional
     public Boolean createJob(JobEntity job) {
         job.setStatus(JobConstants.Status.PAUSE.getValue());
-        try {
-            ScheduleUtil.createScheduleJob(scheduler, job);
-        } catch (SchedulerException e) {
-            e.printStackTrace();
+        if (this.save(job)) {
+            try {
+                ScheduleUtil.createScheduleJob(scheduler, job);
+            } catch (SchedulerException e) {
+                e.printStackTrace();
+            }
+            return Boolean.TRUE;
         }
-        return this.save(job);
+        return Boolean.FALSE;
     }
 
     /**
@@ -171,7 +175,7 @@ public class JobServiceImpl extends BaseServiceImpl<JobMapper, JobEntity> implem
         if (updateById(job)) {
             scheduler.resumeJob(ScheduleUtil.getJobKey(jobId, jobGroup));
         } else {
-            throw new CommonException("暂停任务方法中，更新任务失败");
+            throw new CommonException("恢复任务方法中，更新任务失败");
         }
     }
 

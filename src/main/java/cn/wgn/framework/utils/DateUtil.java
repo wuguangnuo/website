@@ -514,4 +514,17 @@ public class DateUtil {
         }
         return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
+
+    /**
+     * Date To LocalDateTime
+     *
+     * @param date
+     * @return
+     */
+    public static LocalDateTime toLocalDateTime(Long date) {
+        if (date == null || date < 0) {
+            return LocalDateTime.now();
+        }
+        return LocalDateTime.ofInstant(new Date(date).toInstant(), ZoneId.systemDefault());
+    }
 }

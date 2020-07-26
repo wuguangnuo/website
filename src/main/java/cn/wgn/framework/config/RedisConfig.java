@@ -28,7 +28,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-/*
+/**
  * Redis 缓存配置
  *
  * @Author: WuGuangNuo

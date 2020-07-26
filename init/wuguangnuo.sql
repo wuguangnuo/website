@@ -14,6 +14,32 @@
 */
 
 -- ----------------------------
+-- Table structure for bot_acfunrk
+-- ----------------------------
+DROP TABLE IF EXISTS `bot_acfunrk`;
+CREATE TABLE `bot_acfunrk` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ranking` varchar(255) DEFAULT NULL COMMENT '排名',
+  `douga_id` varchar(255) DEFAULT NULL COMMENT '动画id(ac号)',
+  `title` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '标题',
+  `content_desc` varchar(1023) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '视频简介',
+  `user_id` varchar(255) DEFAULT NULL COMMENT '作者id',
+  `user_name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '作者',
+  `channel` varchar(255) DEFAULT NULL COMMENT '分类频道',
+  `contribute_time` datetime DEFAULT NULL COMMENT '投稿时间',
+  `fans_count` varchar(255) DEFAULT NULL COMMENT '粉丝数',
+  `contribution_count` varchar(255) DEFAULT NULL COMMENT '投稿量',
+  `view_count` varchar(255) DEFAULT NULL COMMENT '播放量',
+  `danmu_count` varchar(255) DEFAULT NULL COMMENT '弹幕量',
+  `comment_count` varchar(255) DEFAULT NULL COMMENT '评论数',
+  `stow_count` varchar(255) DEFAULT NULL COMMENT '收藏数',
+  `banana_count` varchar(255) DEFAULT NULL COMMENT '香蕉数',
+  `share_count` varchar(255) DEFAULT NULL COMMENT '分享数',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='a站全站综合排行榜';
+
+-- ----------------------------
 -- Table structure for bot_biliol
 -- ----------------------------
 DROP TABLE IF EXISTS `bot_biliol`;
@@ -38,8 +64,8 @@ DROP TABLE IF EXISTS `bot_bilirk`;
 CREATE TABLE `bot_bilirk` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `ranking` varchar(255) DEFAULT NULL COMMENT '排名',
-  `title` varchar(255) DEFAULT NULL COMMENT '标题',
-  `author` varchar(255) DEFAULT NULL COMMENT '作者',
+  `title` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '标题',
+  `author` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '作者',
   `uid` varchar(255) DEFAULT NULL COMMENT '作者id',
   `link` varchar(255) DEFAULT NULL COMMENT '链接',
   `play_num` varchar(255) DEFAULT NULL COMMENT '播放量',

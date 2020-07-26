@@ -19,7 +19,7 @@
     </sql>
 
     <!--    获取首页信息-->
-    <select id="getHomeInfo" resultType="cn.wgn.website.dto.HomeInfo">
+    <select id="getHomeInfo" resultType="cn.wgn.website.sys.dto.HomeInfo">
         SELECT
             t.headimg,
             t.username,

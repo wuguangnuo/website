@@ -30,7 +30,7 @@ public class CodeGenerator {
     private static final String DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
     private static final String URL = "jdbc:mysql://127.0.0.1:3306/" + DB_NAME;
 
-    private static final String[] TABLE_PREFIX = {"wu_", "bot_"}; // 需要生成的表前缀
+    private static final String[] TABLE_PREFIX = {"bot_"}; // 需要生成的表前缀
     private static final Boolean CONTENT_CUD = false; // 是否生成默认 Post,Put,Delete 方法(Get,Count已选)
     private static final Boolean FILE_OVERRIDE = true; // 是否覆盖原文件
     private static final Boolean TEST_MODEL = true; // 测试模式
@@ -62,7 +62,7 @@ public class CodeGenerator {
         sc.setInclude(getTables()); // 需要包含的表名，当enableSqlFilter为false时，允许正则表达式
         sc.setEntityLombokModel(true); // 实体是否为lombok模型，默认false
         sc.setRestControllerStyle(true); // 生成 @RestController 控制器
-//        sc.setEntityTableFieldAnnotationEnable(true); // 是否生成实体时，生成字段注解
+        sc.setEntityTableFieldAnnotationEnable(false); // 是否生成实体时，生成字段注解
         sc.setVersionFieldName("version"); // 乐观锁属性名称
         sc.setLogicDeleteFieldName("delete"); // 逻辑删除属性名称
 
@@ -81,7 +81,7 @@ public class CodeGenerator {
         gc.setOutputDir(TEST_MODEL ? "D://" : System.getProperty("user.dir") + "/src/main/java"); // 生成文件的输出目录
         gc.setFileOverride(FILE_OVERRIDE); // 是否覆盖已有文件
         gc.setOpen(false); // 是否打开输出目录
-//        gc.setEnableCache(true); // 是否在xml中添加二级缓存配置
+        gc.setEnableCache(false); // 是否在xml中添加二级缓存配置
         gc.setAuthor("WuGuangNuo"); // 开发人员
         gc.setKotlin(false); // 开启 Kotlin 模式
         gc.setSwagger2(true); // 开启 swagger2 模式

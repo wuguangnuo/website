@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -55,7 +56,7 @@ public abstract class AbstractQuartzJob implements Job {
     }
 
     /**
-     * 执行后
+     * 执行后将执行日志写入 JOB_LOG
      *
      * @param context   工作执行上下文对象
      * @param jobEntity 系统计划任务
@@ -76,7 +77,11 @@ public abstract class AbstractQuartzJob implements Job {
         jobLogEntity.setJobMessage(jobLogEntity.getJobName() + " 总共耗时：" + runMs + "毫秒");
         if (e != null) {
             jobLogEntity.setStatus(JobConstants.FAIL);
-            String errorMsg = StringUtil.substring(e.toString(), 0, 2000);
+            String errorMsg = StringUtil.substring(((InvocationTargetException) e).getTargetException().toString(), 0, 500);
+            Throwable cause = ((InvocationTargetException) e).getTargetException().getCause();
+            if (cause != null) {
+                errorMsg = errorMsg + "\r\n" + StringUtil.substring(cause.toString(), 0, 1500);
+            }
             jobLogEntity.setExceptionInfo(errorMsg);
         } else {
             jobLogEntity.setStatus(JobConstants.SUCESS);

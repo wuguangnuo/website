@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @Configuration
-@MapperScan({"cn.wgn.framework.web.mapper", "cn.wgn.website.mapper"})
+@MapperScan({"cn.wgn.framework.web.mapper", "cn.wgn.website.sys.mapper"})
 public class MybatisPlusConfig {
 
     /**

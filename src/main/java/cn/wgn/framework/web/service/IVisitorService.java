@@ -1,7 +1,7 @@
 package cn.wgn.framework.web.service;
 
 import cn.wgn.framework.web.entity.VisitorEntity;
-import cn.wgn.website.dto.HomeInfo;
+import cn.wgn.website.sys.dto.HomeInfo;
 
 import java.util.HashMap;
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.wgn.website.mapper.BilirkMapper">
+<mapper namespace="cn.wgn.website.sys.mapper.BilirkMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="cn.wgn.website.entity.BilirkEntity">
+    <resultMap id="BaseResultMap" type="cn.wgn.website.sys.entity.BilirkEntity">
     <result column="id" property="id" />
     <result column="create_time" property="createTime" />
         <result column="ranking" property="ranking" />
@@ -20,7 +20,7 @@
     <sql id="Base_Column_List">
         id,
         create_time,
-        ranking, title, author, uid, link, play_num, dm_num, score
+        ranking, title, author, uid, link, play_num, dm_num, score, create_time
     </sql>
 
 </mapper>

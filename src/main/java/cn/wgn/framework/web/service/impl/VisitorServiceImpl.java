@@ -7,7 +7,7 @@ import cn.wgn.framework.web.entity.VisitorEntity;
 import cn.wgn.framework.web.mapper.VisitorMapper;
 import cn.wgn.framework.web.service.ICacheService;
 import cn.wgn.framework.web.service.IVisitorService;
-import cn.wgn.website.dto.HomeInfo;
+import cn.wgn.website.sys.dto.HomeInfo;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

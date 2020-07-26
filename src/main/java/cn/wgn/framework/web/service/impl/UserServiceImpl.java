@@ -15,7 +15,7 @@ import cn.wgn.framework.web.enums.RedisPrefixKeyEnum;
 import cn.wgn.framework.web.mapper.UserMapper;
 import cn.wgn.framework.web.service.IUserService;
 import cn.wgn.framework.web.service.IVisitorService;
-import cn.wgn.website.utils.CosClientUtil;
+import cn.wgn.framework.utils.CosClientUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.base.Strings;
 import org.springframework.beans.BeanUtils;

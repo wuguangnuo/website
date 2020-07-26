@@ -2,6 +2,7 @@ package cn.wgn.framework.utils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -30,7 +31,7 @@ public class HttpUtil {
      * @param apiUrl api url
      * @return httpPost String
      */
-    public String httpPostMap(Map<String, String> param, String apiUrl) {
+    public static String httpPostMap(Map<String, String> param, String apiUrl) {
         try {
             for (Map.Entry<String, String> entry : param.entrySet()) {
                 entry.setValue(URLEncoder.encode(String.valueOf(entry.getValue()), "UTF-8"));
@@ -91,7 +92,7 @@ public class HttpUtil {
      * @param url   api url
      * @return httpPost String
      */
-    public String httpPostJson(String param, String url) {
+    public static String httpPostJson(String param, String url) {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         String responseInfo = null;
         try {
@@ -120,17 +121,34 @@ public class HttpUtil {
     }
 
     /**
-     * API 输出格式化
+     * 发送get请求 JSON
      *
-     * @param str JsonString
-     * @return ApiRes
+     * @param url api url
+     * @return httpGetJson String
      */
-//    public ApiRes<String> smoothString(String str) {
-//        String meta = JSONObject.parseObject(str).get("Meta").toString();
-//        int state = Integer.valueOf(JSONObject.parseObject(meta).get("State").toString());
-//        String msg = JSONObject.parseObject(meta).get("Msg").toString();
-//        String data = JSONObject.parseObject(str).get("Data") == null ? "" : JSONObject.parseObject(str).get("Data").toString();
-//
-//        return ApiRes.res(state, msg, data);
-//    }
+    public static String httpGetJson(String url) {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        String responseInfo = null;
+        try {
+            HttpGet httpGet = new HttpGet(url);
+            httpGet.addHeader("Content-Type", "application/json;charset=UTF-8");
+            CloseableHttpResponse response = httpclient.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            int status = response.getStatusLine().getStatusCode();
+            if (status >= 200 && status < 300) {
+                if (entity != null) {
+                    responseInfo = EntityUtils.toString(entity);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                httpclient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return responseInfo;
+    }
 }
