@@ -6,6 +6,11 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * 登录信息
+ *
+ * @author WuGuangNuo
+ */
 @Data
 @Accessors(chain = true)
 public class AccountLogin extends BaseDto {

@@ -8,6 +8,30 @@ package cn.wgn.framework.constant;
  */
 public class Constants {
     /**
+     * 通用状态值
+     */
+    public enum Status {
+        /**
+         * 状态：生效的
+         */
+        EFFECTIVE("1"),
+        /**
+         * 状态：失效的
+         */
+        INVALID("0");
+
+        private String value;
+
+        private Status(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
+    /**
      * Redis过期时间,一周(秒)
      */
     public static final Integer WEEK_EXPIRE = 7 * 24 * 3600;

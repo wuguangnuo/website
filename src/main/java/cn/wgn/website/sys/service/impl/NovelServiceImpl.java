@@ -48,10 +48,10 @@ public class NovelServiceImpl extends BaseServiceImpl<NovelMapper, NovelEntity> 
             NovelEntity entity = novelMapper.selectById(novelDto.getId());
             if (entity == null
                     || !novelTypeEnum.toString().equals(entity.getNovelType())
-                    || !getUserData().getAccount().equals(entity.getNovelAuthor())) {
+                    || !getUsername().equals(entity.getNovelAuthor())) {
                 return "您不是作者，不可修改文章！";
             }
-            entity.setNovelAuthor(getUserData().getAccount())
+            entity.setNovelAuthor(getUsername())
                     .setNovelTitle(novelDto.getNovelTitle())
                     .setNovelContent(novelDto.getNovelContent())
                     .setNovelType(novelTypeEnum.toString())
@@ -61,7 +61,7 @@ public class NovelServiceImpl extends BaseServiceImpl<NovelMapper, NovelEntity> 
         } else {
             NovelEntity entity = new NovelEntity();
             BeanUtils.copyProperties(novelDto, entity);
-            entity.setNovelAuthor(getUserData().getAccount())
+            entity.setNovelAuthor(getUsername())
                     .setNovelType(novelTypeEnum.toString())
                     .setStatus(novelDto.getNovelState());
             novelMapper.insert(entity);
@@ -98,7 +98,7 @@ public class NovelServiceImpl extends BaseServiceImpl<NovelMapper, NovelEntity> 
                 "create_by_id", "create_by_name", "create_time", "modified_by_id", "modified_by_name", "modified_time");
         // 作者或公共
         qw.lambda().and(
-                q -> q.eq(NovelEntity::getNovelAuthor, getUserData().getAccount())
+                q -> q.eq(NovelEntity::getNovelAuthor, getUsername())
                         .or()
                         .eq(NovelEntity::getStatus, NovelStateEnum.PUBLIC.getValue())
         );
@@ -142,7 +142,7 @@ public class NovelServiceImpl extends BaseServiceImpl<NovelMapper, NovelEntity> 
         NovelEntity entity = novelMapper.selectById(novelId);
         if (entity != null
                 && (NovelStateEnum.PUBLIC.getValue().equals(entity.getStatus())
-                || getUserData().getAccount().equals(entity.getNovelAuthor()))) {
+                || getUsername().equals(entity.getNovelAuthor()))) {
             NovelDto dto = new NovelDto();
             BeanUtils.copyProperties(entity, dto);
             dto.setNovelState(entity.getStatus());
@@ -164,7 +164,7 @@ public class NovelServiceImpl extends BaseServiceImpl<NovelMapper, NovelEntity> 
         String data;
         if (entity == null) {
             data = "Novel ID = [" + novelId + "]不存在!";
-        } else if (!getUserData().getAccount().equals(entity.getNovelAuthor())) {
+        } else if (!getUsername().equals(entity.getNovelAuthor())) {
             data = "不是作者无权删除!";
         } else {
             // 状态改为已删除，已删除的改为不存在
@@ -205,7 +205,7 @@ public class NovelServiceImpl extends BaseServiceImpl<NovelMapper, NovelEntity> 
         String filePath = WordUtil.html2Word(htmlBody);
         String url = cosClientUtil.uploadFile2Cos(new File(filePath), "noveldoc");
 
-        LOG.info("用户[" + getUserData().getAccount() + "]下载 Novel，ID=[" + id + "]，URL=[" + url + "]");
+        LOG.info("用户[" + getUserData() + "]下载 Novel，ID=[" + id + "]，URL=[" + url + "]");
         return url;
     }
 }

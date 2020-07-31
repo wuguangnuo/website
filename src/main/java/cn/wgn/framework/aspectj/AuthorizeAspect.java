@@ -1,27 +1,20 @@
 package cn.wgn.framework.aspectj;
 
 import cn.wgn.framework.aspectj.annotation.Authorize;
-import cn.wgn.framework.exception.CommonException;
-import cn.wgn.framework.utils.RedisUtil;
+import cn.wgn.framework.constant.MagicValue;
+import cn.wgn.framework.utils.StringUtil;
+import cn.wgn.framework.utils.TokenUtil;
+import cn.wgn.framework.utils.servlet.ServletUtil;
 import cn.wgn.framework.web.ApiRes;
 import cn.wgn.framework.web.domain.UserData;
-import cn.wgn.framework.web.entity.RoleMenuEntity;
-import cn.wgn.framework.web.enums.RedisPrefixKeyEnum;
-import cn.wgn.framework.web.service.IRoleMenuService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.google.common.base.Strings;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Spring Aop(aspect)
@@ -33,10 +26,6 @@ import java.util.List;
 @Aspect
 @Component
 public class AuthorizeAspect {
-    @Autowired
-    private RedisUtil redisUtil;
-    @Autowired
-    private IRoleMenuService roleMenuService;
 
     /**
      * Spring中使用@Pointcut注解来定义方法切入点
@@ -47,51 +36,31 @@ public class AuthorizeAspect {
      */
     @Around(value = "@annotation(authorize)")
     public Object deBefore(ProceedingJoinPoint pjp, Authorize authorize) throws Throwable {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert attributes != null : new CommonException("ServletRequest Null Error!");
-        HttpServletRequest request = attributes.getRequest();
         // 获取token
-        String token = request.getHeader("token");
-        // 获取注解
-        String[] codes = authorize.value();
-
+        String token = ServletUtil.getHeader(MagicValue.TOKEN);
         // 未登录
-        if (Strings.isNullOrEmpty(token) || !redisUtil.exists(token, RedisPrefixKeyEnum.TOKEN.getValue())) {
+        if (StringUtil.isEmpty(token)) {
             return ApiRes.unAuthorized();
         }
 
-        String[] arr = redisUtil.get(token, RedisPrefixKeyEnum.TOKEN.getValue()).split(":");
+        UserData userData = TokenUtil.getUserData();
+        // 获取注解
+        String[] codes = authorize.value();
+
+        if (userData == null || userData.getId() == null) {
+            return ApiRes.unAuthorized("登录信息过期，请重新登录");
+        }
         if (codes.length == 0) {
             // 注解为空,登陆即可
-            if (arr.length == 3) {
-                UserData userData = new UserData();
-                userData.setId(Long.valueOf(arr[0]));
-                userData.setAccount(arr[1]);
-                userData.setRoleId(Long.valueOf(arr[2]));
-                request.setAttribute("userData", userData);
-            }
             return pjp.proceed();
         } else {
-            int roleId = Integer.parseInt(arr[2]);
-            // roleId 的所有权限
-            List<RoleMenuEntity> powers = roleMenuService.list(
-                    new QueryWrapper<RoleMenuEntity>().lambda()
-                            .eq(RoleMenuEntity::getRoleId, roleId)
-            );
+            // 登录者的所有权限
+            Set<String> powers = userData.getPermissions();
 
             for (String code : codes) {
-                for (RoleMenuEntity power : powers) {
-                    if (code.equals(power.getMenuCode())) {
-                        // 身份匹配成功
-                        if (arr.length == 3) {
-                            UserData userData = new UserData();
-                            userData.setId(Long.valueOf(arr[0]));
-                            userData.setAccount(arr[1]);
-                            userData.setRoleId(Long.valueOf(arr[2]));
-                            request.setAttribute("userData", userData);
-                        }
-                        return pjp.proceed();
-                    }
+                if (powers.contains(code)) {
+                    // 身份匹配成功
+                    return pjp.proceed();
                 }
             }
 

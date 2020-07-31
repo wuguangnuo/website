@@ -182,6 +182,7 @@ public class JobController extends BaseController<JobEntity> {
     @Authorize
     @GetMapping("/log/export")
     public ApiRes<PageInfo<JobLogEntity>> logExport(JobLogEntity jobLogEntity) {
+        // todo,改造Excel导出工具
         return ApiRes.fail("待开发," + jobLogEntity.toString());
     }
 

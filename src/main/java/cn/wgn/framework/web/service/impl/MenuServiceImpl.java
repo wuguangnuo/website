@@ -80,7 +80,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, MenuEntity> imp
         // 获取用户的权限 匹配的code
         List<RoleMenuEntity> powers = roleMenuService.list(
                 new QueryWrapper<RoleMenuEntity>().lambda()
-                        .eq(RoleMenuEntity::getRoleId, getUserData().getRoleId())
+                        .eq(RoleMenuEntity::getRoleId, getUserData().getRoleid())
         );
 
         List<MenuEntity> result = new ArrayList<>();

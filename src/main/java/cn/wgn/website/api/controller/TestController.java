@@ -42,7 +42,7 @@ import java.util.UUID;
 @Api(tags = "演示")
 @RestController
 @RequestMapping("test")
-public class TestConttoller extends BaseController {
+public class TestController extends BaseController {
     @Autowired
     private Producer producer;
     @Autowired

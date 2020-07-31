@@ -64,3 +64,9 @@ public class ApiRes<T> {
         return result;
     }
 }
+
+
+//httpstatus 利用起来，到apires中和其他需要定义返回的地方。
+//减少模块间的引用和依赖
+//删除无用注释
+//某些非static 的 util改名成service

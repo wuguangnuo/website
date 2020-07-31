@@ -101,7 +101,11 @@ public class RedisUtil {
     }
 
     /**
-     * merge Key
+     * merge Key 合并key
+     *
+     * @param key    key
+     * @param prefix 前缀
+     * @return Redis key
      */
     private String mergeKey(String key, String prefix) {
         if (Strings.isNullOrEmpty(prefix)) {

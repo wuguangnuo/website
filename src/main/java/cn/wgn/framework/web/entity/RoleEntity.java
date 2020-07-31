@@ -32,7 +32,7 @@ public class RoleEntity extends BaseEntity<RoleEntity> {
     @ApiModelProperty(value = "角色描述")
     private String roleDescription;
 
-    @ApiModelProperty(value = "状态：1有效；2删除")
+    @ApiModelProperty(value = "状态：1有效；0失效")
     private Integer roleStatus;
 
 

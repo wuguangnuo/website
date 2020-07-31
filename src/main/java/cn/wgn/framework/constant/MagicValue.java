@@ -37,4 +37,19 @@ public class MagicValue {
      * 魔法值：ID号
      */
     public static final String ID = "id";
+
+    /**
+     * 魔法值：name
+     */
+    public static final String NAME = "name";
+
+    /**
+     * 魔法值：uuid
+     */
+    public static final String UUID = "uuid";
+
+    /**
+     * 魔法值：token
+     */
+    public static final String TOKEN = "token";
 }

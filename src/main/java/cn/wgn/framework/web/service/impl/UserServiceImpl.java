@@ -7,15 +7,17 @@ import cn.wgn.framework.utils.mail.EmailInfo;
 import cn.wgn.framework.utils.mail.EmailUtil;
 import cn.wgn.framework.web.ApiRes;
 import cn.wgn.framework.web.domain.AccountLogin;
-import cn.wgn.framework.web.domain.LoginData;
 import cn.wgn.framework.web.domain.ProfileDto;
+import cn.wgn.framework.web.domain.UserData;
+import cn.wgn.framework.web.entity.RoleEntity;
 import cn.wgn.framework.web.entity.UserEntity;
+import cn.wgn.framework.web.entity.UserRoleEntity;
 import cn.wgn.framework.web.entity.VisitorEntity;
-import cn.wgn.framework.web.enums.RedisPrefixKeyEnum;
 import cn.wgn.framework.web.mapper.UserMapper;
+import cn.wgn.framework.web.service.IRoleService;
+import cn.wgn.framework.web.service.IUserRoleService;
 import cn.wgn.framework.web.service.IUserService;
 import cn.wgn.framework.web.service.IVisitorService;
-import cn.wgn.framework.utils.CosClientUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.base.Strings;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +27,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -41,13 +47,15 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
     @Autowired
     private CosClientUtil cosClientUtil;
     @Autowired
-    private RedisUtil redisUtil;
-    @Autowired
     private IpUtil ipUtil;
     @Autowired
     private EmailUtil emailUtil;
     @Autowired
     private IVisitorService visitorService;
+    @Autowired
+    private IRoleService roleService;
+    @Autowired
+    private IUserRoleService userRoleService;
 
 
     /**
@@ -73,25 +81,16 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
             return ApiRes.fail("密码错误");
         }
 
-        String token = IdUtil.simpleUUID();
-        String redisValue = userEntity.getId() + ":" + userEntity.getUsername() + ":" + userEntity.getRoleid();
-        // Redis : DB.Sys -> Id:No:RoleId
-        redisUtil.set(token,
-                RedisPrefixKeyEnum.TOKEN.getValue(),
-                redisValue,
-                Constants.WEEK_EXPIRE);
-
-        LoginData loginData = new LoginData();
-        BeanUtils.copyProperties(userEntity, loginData);
-        loginData.setToken(token);
-
         userEntity.setLoginTime(LocalDateTime.now());
         this.updateById(userEntity);
 
-        // 检测IP并发出警告
-        checkIp(redisValue, IpUtil.getIp(request), userEntity.getEmail());
+        UserData userData = buildUserData(userEntity);
+        String token = TokenUtil.createToken(userData);
 
-        return ApiRes.suc("登录成功", loginData);
+        // 检测IP并发出警告
+        checkIp(userEntity.getUsername(), IpUtil.getIp(request), userEntity.getEmail());
+
+        return ApiRes.suc("登录成功", token);
     }
 
     /**
@@ -229,5 +228,35 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
 
         String url = cosClientUtil.uploadFile2Cos(file, "headimg");
         return url;
+    }
+
+    /**
+     * 创建 UserData 对象
+     *
+     * @param entity UserEntity
+     * @return
+     */
+    private UserData buildUserData(UserEntity entity) {
+        List<UserRoleEntity> userRoleList = userRoleService.list(
+                new QueryWrapper<UserRoleEntity>().lambda()
+                        .eq(UserRoleEntity::getUserId, entity.getId())
+        );
+        List<Long> roleIds = userRoleList.stream().map(UserRoleEntity::getRoleId).collect(Collectors.toList());
+        List<RoleEntity> roleList = roleService.list(
+                new QueryWrapper<RoleEntity>().lambda()
+                        .eq(RoleEntity::getRoleStatus, Constants.Status.EFFECTIVE.getValue())
+                        .in(RoleEntity::getId, roleIds)
+        );
+        List<String> roleNames = roleList.stream().map(RoleEntity::getRoleName).collect(Collectors.toList());
+        Set<String> permpissions = new HashSet<>(roleNames);
+
+        return new UserData()
+                .setId(entity.getId())
+                .setUsername(entity.getUsername())
+                .setRealname(entity.getRealname())
+                .setRoleid(entity.getRoleid())
+                .setPermissions(permpissions)
+                .setHeadimg(entity.getHeadimg())
+                .setEmail(entity.getEmail());
     }
 }

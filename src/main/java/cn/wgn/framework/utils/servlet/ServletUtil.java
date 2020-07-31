@@ -67,7 +67,17 @@ public class ServletUtil {
         return getRequest().getSession();
     }
 
-    public static ServletRequestAttributes getRequestAttributes() {
+    /**
+     * 获取 header
+     *
+     * @param name header
+     * @return
+     */
+    public static String getHeader(String name) {
+        return getRequest().getHeader(name);
+    }
+
+    private static ServletRequestAttributes getRequestAttributes() {
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         return (ServletRequestAttributes) attributes;
     }

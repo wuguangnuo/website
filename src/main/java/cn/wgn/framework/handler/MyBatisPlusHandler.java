@@ -1,17 +1,11 @@
 package cn.wgn.framework.handler;
 
-import cn.wgn.framework.exception.CommonException;
-import cn.wgn.framework.utils.servlet.ServletUtil;
-import cn.wgn.framework.web.domain.UserData;
+import cn.wgn.framework.utils.TokenUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 /**
@@ -23,6 +17,9 @@ import java.time.LocalDateTime;
 @Slf4j
 @Component
 public class MyBatisPlusHandler implements MetaObjectHandler {
+//    @Autowired
+//    private TokenUtil tokenUtil;
+
     /**
      * 插入数据填充
      *
@@ -34,10 +31,8 @@ public class MyBatisPlusHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
 
         try {
-            ServletRequestAttributes attributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
-            UserData userData = (UserData) attributes.getRequest().getAttribute("userData");
-            this.strictInsertFill(metaObject, "createById", Long.class, userData.getId());
-            this.strictInsertFill(metaObject, "createByName", String.class, userData.getAccount());
+            this.strictInsertFill(metaObject, "createById", Long.class, TokenUtil.getUserId());
+            this.strictInsertFill(metaObject, "createByName", String.class, TokenUtil.getUserName());
         } catch (NullPointerException e) {
             String objName = metaObject.getOriginalObject().getClass().getName();
             log.info("[" + objName + "]插入填充进行了不安全的操作，无法获取操作人信息");
@@ -55,10 +50,8 @@ public class MyBatisPlusHandler implements MetaObjectHandler {
         this.strictUpdateFill(metaObject, "modifiedTime", LocalDateTime.class, LocalDateTime.now());
 
         try {
-            ServletRequestAttributes attributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
-            UserData userData = (UserData) attributes.getRequest().getAttribute("userData");
-            this.strictInsertFill(metaObject, "modifiedById", Long.class, userData.getId());
-            this.strictInsertFill(metaObject, "modifiedByName", String.class, userData.getAccount());
+            this.strictInsertFill(metaObject, "modifiedById", Long.class, TokenUtil.getUserId());
+            this.strictInsertFill(metaObject, "modifiedByName", String.class, TokenUtil.getUserName());
         } catch (NullPointerException e) {
             String objName = metaObject.getOriginalObject().getClass().getName();
             log.info("[" + objName + "]更新填充进行了不安全的操作，无法获取操作人信息");

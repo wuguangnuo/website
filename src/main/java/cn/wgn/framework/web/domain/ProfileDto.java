@@ -1,9 +1,10 @@
 package cn.wgn.framework.web.domain;
 
-import cn.wgn.framework.web.domain.BaseDto;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
+ * 用于个人信息界面
+ *
  * @author WuGuangNuo
  * @date Created in 2020/6/27 20:47
  */
