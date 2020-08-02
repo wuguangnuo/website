@@ -35,9 +35,6 @@ public class UserEntity extends BaseEntity<UserEntity> {
     @ApiModelProperty(value = "密码MD5")
     private String password;
 
-    @ApiModelProperty(value = "权限默认0")
-    private Integer roleid;
-
     private String headimg;
 
     private String email;

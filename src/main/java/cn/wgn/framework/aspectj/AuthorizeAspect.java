@@ -14,6 +14,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -55,7 +56,7 @@ public class AuthorizeAspect {
             return pjp.proceed();
         } else {
             // 登录者的所有权限
-            Set<String> powers = userData.getPermissions();
+            List<String> powers = userData.getMenuList();
 
             for (String code : codes) {
                 if (powers.contains(code)) {

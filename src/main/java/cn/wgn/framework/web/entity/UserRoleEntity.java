@@ -36,7 +36,6 @@ public class UserRoleEntity extends BaseEntity<UserRoleEntity> {
     @ApiModelProperty(value = "角色id")
     private Long roleId;
 
-
     @Override
     protected Serializable pkVal() {
         return null;

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,11 +30,14 @@ public class UserData extends BaseDto {
     @ApiModelProperty(value = "姓名")
     private String realname;
 
-    @ApiModelProperty(value = "权限id")
-    private Integer roleid;
+    @ApiModelProperty(value = "职位列表")
+    private Set<Long> position;
 
     @ApiModelProperty(value = "权限列表")
-    private Set<String> permissions;
+    private Set<Long> permissions;
+
+    @ApiModelProperty(value = "菜单列表")
+    private List<String> menuList;
 
     @ApiModelProperty(value = "头像")
     private String headimg;

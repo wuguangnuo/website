@@ -24,14 +24,6 @@
             t.headimg,
             t.username,
             t.realname,
-            (
-                SELECT
-                    t2.role_name
-                FROM
-                    wu_role t2
-                WHERE
-                    t2.id = t.roleid
-            ) AS role,
             t.login_time AS loginTime,
             (
                 SELECT

@@ -9,15 +9,9 @@ import cn.wgn.framework.web.ApiRes;
 import cn.wgn.framework.web.domain.AccountLogin;
 import cn.wgn.framework.web.domain.ProfileDto;
 import cn.wgn.framework.web.domain.UserData;
-import cn.wgn.framework.web.entity.RoleEntity;
-import cn.wgn.framework.web.entity.UserEntity;
-import cn.wgn.framework.web.entity.UserRoleEntity;
-import cn.wgn.framework.web.entity.VisitorEntity;
+import cn.wgn.framework.web.entity.*;
 import cn.wgn.framework.web.mapper.UserMapper;
-import cn.wgn.framework.web.service.IRoleService;
-import cn.wgn.framework.web.service.IUserRoleService;
-import cn.wgn.framework.web.service.IUserService;
-import cn.wgn.framework.web.service.IVisitorService;
+import cn.wgn.framework.web.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.base.Strings;
 import org.springframework.beans.BeanUtils;
@@ -56,6 +50,10 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
     private IRoleService roleService;
     @Autowired
     private IUserRoleService userRoleService;
+    @Autowired
+    private IRoleMenuService roleMenuService;
+    @Autowired
+    private IMenuService menuService;
 
 
     /**
@@ -242,21 +240,27 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
                 new QueryWrapper<UserRoleEntity>().lambda()
                         .eq(UserRoleEntity::getUserId, entity.getId())
         );
-        List<Long> roleIds = userRoleList.stream().map(UserRoleEntity::getRoleId).collect(Collectors.toList());
-        List<RoleEntity> roleList = roleService.list(
-                new QueryWrapper<RoleEntity>().lambda()
-                        .eq(RoleEntity::getRoleStatus, Constants.Status.EFFECTIVE.getValue())
-                        .in(RoleEntity::getId, roleIds)
+        // 所有职位的id
+        Set<Long> position = userRoleList.stream().map(UserRoleEntity::getRoleId).collect(Collectors.toSet());
+
+        List<RoleMenuEntity> roleMenuList = roleMenuService.list(
+                new QueryWrapper<RoleMenuEntity>().lambda()
+                        .in(RoleMenuEntity::getRoleId, position)
         );
-        List<String> roleNames = roleList.stream().map(RoleEntity::getRoleName).collect(Collectors.toList());
-        Set<String> permpissions = new HashSet<>(roleNames);
+        // 所有菜单的id
+        Set<Long> permissions = roleMenuList.stream().map(RoleMenuEntity::getMenuId).collect(Collectors.toSet());
+
+        List<String> menuList = menuService.list(
+                new QueryWrapper<MenuEntity>().lambda().in(MenuEntity::getId, permissions)
+        ).stream().map(MenuEntity::getCode).collect(Collectors.toList());
 
         return new UserData()
                 .setId(entity.getId())
                 .setUsername(entity.getUsername())
                 .setRealname(entity.getRealname())
-                .setRoleid(entity.getRoleid())
-                .setPermissions(permpissions)
+                .setPosition(position)
+                .setPermissions(permissions)
+                .setMenuList(menuList)
                 .setHeadimg(entity.getHeadimg())
                 .setEmail(entity.getEmail());
     }

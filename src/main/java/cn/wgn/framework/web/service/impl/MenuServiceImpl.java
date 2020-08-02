@@ -14,10 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -56,13 +53,13 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, MenuEntity> imp
                 menuTree.setIcon(m.getIcon())
                         .setIndex(m.getUrl())
                         .setTitle(m.getName())
-                        .setSubs(new HashMap<>());
+                        .setSubs(new ArrayList<>());
             } else {
                 item = new HashMap<>();
                 item.put("text", m.getName());
                 item.put("value", m.getUrl().substring(m.getUrl().lastIndexOf("/")));
                 assert menuTree != null;
-                menuTree.setSubs(item);
+                menuTree.getSubs().add(item);
             }
         }
         result.add(menuTree);
@@ -78,17 +75,12 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, MenuEntity> imp
         List<MenuEntity> menus = cacheService.getMenuJson();
 
         // 获取用户的权限 匹配的code
-        List<RoleMenuEntity> powers = roleMenuService.list(
-                new QueryWrapper<RoleMenuEntity>().lambda()
-                        .eq(RoleMenuEntity::getRoleId, getUserData().getRoleid())
-        );
+        Set<Long> powers = getUserData().getPermissions();
 
         List<MenuEntity> result = new ArrayList<>();
         for (MenuEntity m : menus) {
-            for (RoleMenuEntity p : powers) {
-                if (m.getId().equals(p.getMenuId())) {
-                    result.add(m);
-                }
+            if (powers.contains(m.getId())) {
+                result.add(m);
             }
         }
 

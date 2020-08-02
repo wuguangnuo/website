@@ -5,6 +5,7 @@ import cn.wgn.framework.utils.servlet.ServletUtil;
 import cn.wgn.framework.web.domain.UserData;
 import cn.wgn.framework.web.enums.RedisPrefixKeyEnum;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
@@ -155,7 +156,7 @@ public class TokenUtil {
             }
             Claims claims = parseToken(token);
             return Long.valueOf(claims.get(MagicValue.ID) + "");
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | JwtException e) {
             return null;
         }
     }
@@ -173,7 +174,7 @@ public class TokenUtil {
             }
             Claims claims = parseToken(token);
             return (String) claims.get(MagicValue.NAME);
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | JwtException e) {
             return null;
         }
     }

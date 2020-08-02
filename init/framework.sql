@@ -119,7 +119,6 @@ CREATE TABLE `wu_user` (
   `username` varchar(32) NOT NULL COMMENT '登陆名',
   `realname` varchar(32) DEFAULT NULL,
   `password` char(32) NOT NULL COMMENT '密码MD5',
-  `roleid` int(1) NOT NULL DEFAULT '0' COMMENT '权限默认0',
   `headimg` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `login_time` datetime DEFAULT NULL COMMENT '最后一次登陆时间',

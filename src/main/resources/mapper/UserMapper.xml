@@ -18,7 +18,6 @@
         <result column="username" property="username"/>
         <result column="realname" property="realname"/>
         <result column="password" property="password"/>
-        <result column="roleid" property="roleid"/>
         <result column="headimg" property="headimg"/>
         <result column="email" property="email"/>
         <result column="login_time" property="loginTime"/>
@@ -37,7 +36,7 @@
         remark,
         logic_del,
         version,
-        username, realname, password, roleid, headimg, email, login_time
+        username, realname, password, headimg, email, login_time
     </sql>
 
     <!-- 更新不为空的信息 -->

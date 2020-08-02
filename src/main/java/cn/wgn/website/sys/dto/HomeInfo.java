@@ -16,8 +16,8 @@ public class HomeInfo extends BaseDto {
     private String username;
     @ApiModelProperty("姓名")
     private String realname;
-    @ApiModelProperty("身份")
-    private String role;
+//    @ApiModelProperty("身份")
+//    private String role;
     @ApiModelProperty("最后一次登陆时间")
     private String loginTime;
     @ApiModelProperty("登录IP")
@@ -57,13 +57,13 @@ public class HomeInfo extends BaseDto {
         this.realname = realname;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
+//    public String getRole() {
+//        return role;
+//    }
+//
+//    public void setRole(String role) {
+//        this.role = role;
+//    }
 
     public String getLoginTime() {
         return loginTime;

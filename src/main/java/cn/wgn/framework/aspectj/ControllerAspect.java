@@ -4,6 +4,7 @@ import cn.wgn.framework.utils.TokenUtil;
 import cn.wgn.framework.utils.ip.IpUtil;
 import cn.wgn.framework.web.entity.VisitorEntity;
 import cn.wgn.framework.web.service.IVisitorService;
+import io.jsonwebtoken.JwtException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -39,12 +40,21 @@ public class ControllerAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
 
+        // jwt 非标准格式认为未登录
+        String us;
+        Long id = TokenUtil.getUserId();
+        if (id == null) {
+            us = null;
+        } else {
+            us = id + ":" + TokenUtil.getUserName();
+        }
+
         VisitorEntity vEntity = new VisitorEntity();
         vEntity.setLk(request.getServletPath())
                 .setIp(IpUtil.getIp(request))
                 .setAg(request.getHeader("User-Agent"))
                 .setTm(LocalDateTime.now())
-                .setUs(TokenUtil.getUserId() + ":" + TokenUtil.getUserName());
+                .setUs(us);
         visitorService.save(vEntity);
 
         return pjp.proceed();

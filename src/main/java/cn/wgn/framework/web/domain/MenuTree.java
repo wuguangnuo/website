@@ -18,5 +18,5 @@ public class MenuTree extends BaseDto {
     private String icon;
     private String index;
     private String title;
-    private HashMap<String, String> subs;
+    private List<HashMap<String, String>> subs;
 }
