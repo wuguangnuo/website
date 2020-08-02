@@ -82,4 +82,9 @@ private-config:
     copy-to: wuguangnuo@qq.com
   # IP地址库
   ip2region: /wuguangnuo/wgn.cn/website/src/main/resources/ip2region.db
-  
+  # token 配置
+  token:
+    # 令牌密钥
+    secret: wuguangnuo.cn
+    # 令牌有效期（单位分钟）
+    expireTime: 60

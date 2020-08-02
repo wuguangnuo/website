@@ -10,7 +10,7 @@
     </parent>
     <groupId>cn.wgn</groupId>
     <artifactId>website</artifactId>
-    <version>4.0.0</version>
+    <version>5.0.0</version>
     <name>website</name>
     <description>wuguangnuo.cn website</description>
 
@@ -69,6 +69,8 @@
         <jna.version>5.5.0</jna.version>
         <!-- 定时任务 -->
         <quartz.version>2.3.2</quartz.version>
+        <!-- Json web token -->
+        <jjwt.version>0.9.1</jjwt.version>
     </properties>
 
     <dependencies>
@@ -131,6 +133,7 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
             <version>${mybatis-plus.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.github.pagehelper</groupId>
@@ -172,6 +175,7 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>${freemarker.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.github.penggle</groupId>
@@ -266,6 +270,12 @@
             <artifactId>quartz</artifactId>
             <version>${quartz.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

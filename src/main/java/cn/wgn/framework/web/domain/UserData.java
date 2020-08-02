@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -41,8 +42,5 @@ public class UserData extends BaseDto {
     private String email;
 
     @ApiModelProperty(value = "最后一次登录时间")
-    private Long lastLogin;
-
-    @ApiModelProperty(value = "本次登录过期时间")
-    private Long expireTime;
+    private LocalDateTime lastLogin;
 }

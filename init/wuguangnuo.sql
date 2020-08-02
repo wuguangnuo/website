@@ -46,8 +46,8 @@ DROP TABLE IF EXISTS `bot_biliol`;
 CREATE TABLE `bot_biliol` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `ranking` varchar(255) DEFAULT NULL COMMENT '排名',
-  `title` varchar(255) DEFAULT NULL COMMENT '标题',
-  `author` varchar(255) DEFAULT NULL COMMENT '作者',
+  `title` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '标题',
+  `author` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '作者',
   `uid` varchar(255) DEFAULT NULL COMMENT '作者id',
   `link` varchar(255) DEFAULT NULL COMMENT '链接',
   `play_num` varchar(255) DEFAULT NULL COMMENT '播放量',

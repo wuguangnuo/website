@@ -3,6 +3,7 @@ package cn.wgn.framework.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -48,13 +49,19 @@ public class RedisConfig {
      * 默认时间格式
      */
     private static final String DEFAULT_TIME_FORMAT = "HH:mm:ss";
+    /**
+     * 默认缓存时间 60 分钟
+     */
+    private static final Long DEFAULT_REDIS_TIME = 60 * 60L;
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
         ObjectMapper objectMapper = new ObjectMapper();
+        //设置所有访问权限以及所有的实际类型都可序列化和反序列化
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        //启用反序列化所需的类型信息,在属性中添加@class
+        objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
 
         // LocalDateTime系列序列化和反序列化模块，继承自jsr310，我们在这里修改了日期格式
         JavaTimeModule javaTimeModule = new JavaTimeModule();
@@ -98,7 +105,7 @@ public class RedisConfig {
 
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration
                 .defaultCacheConfig()
-                .entryTtl(Duration.ofSeconds(15 * 60L)) // 缓存时间 15 分钟
+                .entryTtl(Duration.ofSeconds(DEFAULT_REDIS_TIME)) // 缓存时间 60 分钟
                 .disableCachingNullValues() // 空值不缓存
                 .serializeValuesWith( // Value 序列化
                         RedisSerializationContext.SerializationPair.fromSerializer(

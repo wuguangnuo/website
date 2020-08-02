@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,10 +54,67 @@ public class TokenUtil {
         TokenUtil.redisUtil = redisUtil;
     }
 
-    // 一分钟
-    private static final long MILLIS_MINUTE = 60 * 1000L;
-    // 不足20分钟时刷新
-    private static final Long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
+    /**
+     * 不足20分钟时刷新
+     */
+    private static final Long MINUTE_FRESH = 20L;
+
+    /**
+     * 创建令牌
+     *
+     * @param userData 用户信息
+     * @return 令牌
+     */
+    public static String createToken(UserData userData) {
+        String uuid = IdUtil.fastSimpleUUID();
+        userData.setUuid(uuid);
+        refreshToken(userData);
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(MagicValue.UUID, uuid);
+        claims.put(MagicValue.ID, userData.getId());
+        claims.put(MagicValue.NAME, userData.getUsername());
+        return createToken(claims);
+    }
+
+    /**
+     * 删除令牌
+     *
+     * @param uuid
+     */
+    public static void deleteToken(String uuid) {
+        redisUtil.delete(uuid, RedisPrefixKeyEnum.TOKEN.getValue());
+    }
+
+    /**
+     * 验证令牌有效期，小于20分钟，自动刷新缓存
+     *
+     * @param uuid 要刷新的uuid
+     * @return 令牌
+     */
+    public static UserData verifyToken(String uuid) {
+        // -1:无限时间,-2:不存在
+        long expireTime = redisUtil.getExpire(uuid, RedisPrefixKeyEnum.TOKEN.getValue());
+        UserData userData = redisUtil.get(uuid, RedisPrefixKeyEnum.TOKEN.getValue(), UserData.class);
+        if (expireTime <= MINUTE_FRESH * 60 && expireTime > 0) {
+            userData.setUuid(uuid);
+            refreshToken(userData);
+            userData.setLastLogin(LocalDateTime.now());
+        }
+        return userData;
+    }
+
+    /**
+     * 刷新令牌有效期
+     *
+     * @param userData 登录信息
+     */
+    public static void refreshToken(UserData userData) {
+        userData.setLastLogin(LocalDateTime.now());
+        // 根据uuid将loginUser缓存
+        redisUtil.set(userData.getUuid(), RedisPrefixKeyEnum.TOKEN.getValue()
+                , userData, expireTime * 60);
+    }
 
     /**
      * 获取用户身份信息
@@ -81,70 +139,43 @@ public class TokenUtil {
             // Redis 不存在或过期
             return null;
         }
-        return redisUtil.get(uuid, RedisPrefixKeyEnum.TOKEN.getValue(), UserData.class);
+        return verifyToken(uuid);
     }
 
     /**
-     * 设置用户身份信息
-     */
-//    public void setLoginUser(UserData userData) {
-//        if (StringUtil.isNotNull(userData) && StringUtil.isNotEmpty(userData.getToken())) {
-//            refreshToken(userData);
-//        }
-//    }
-
-    /**
-     * 删除用户身份信息
-     */
-//    public static void delUserData(String token) {
-//        if (StringUtil.isNotEmpty(token)) {
-//            redisUtil.delete(token, RedisPrefixKeyEnum.TOKEN.getValue());
-//        }
-//    }
-
-    /**
-     * 创建令牌
+     * 从令牌中获取用户ID
      *
-     * @param userData 用户信息
-     * @return 令牌
+     * @return
      */
-    public static String createToken(UserData userData) {
-        String uuid = IdUtil.fastSimpleUUID();
-        userData.setUuid(uuid);
-        refreshToken(userData);
-
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(MagicValue.UUID, uuid);
-        claims.put(MagicValue.ID, userData.getId());
-        claims.put(MagicValue.NAME, userData.getUsername());
-        return createToken(claims);
-    }
-
-    /**
-     * 验证令牌有效期，相差不足20分钟，自动刷新缓存
-     *
-     * @param userData 用户信息
-     * @return 令牌
-     */
-    public static void verifyToken(UserData userData) {
-        long expireTime = userData.getExpireTime();
-        long currentTime = System.currentTimeMillis();
-        if (expireTime - currentTime <= MILLIS_MINUTE_TEN) {
-            refreshToken(userData);
+    public static Long getUserId() {
+        try {
+            String token = ServletUtil.getHeader(MagicValue.TOKEN);
+            if (StringUtil.isEmpty(token)) {
+                return null;
+            }
+            Claims claims = parseToken(token);
+            return Long.valueOf(claims.get(MagicValue.ID) + "");
+        } catch (NullPointerException e) {
+            return null;
         }
     }
 
     /**
-     * 刷新令牌有效期
+     * 从令牌中获取用户
      *
-     * @param userData 登录信息
+     * @return
      */
-    public static void refreshToken(UserData userData) {
-        userData.setLastLogin(System.currentTimeMillis());
-        userData.setExpireTime(userData.getLastLogin() + expireTime * MILLIS_MINUTE);
-        // 根据uuid将loginUser缓存
-        redisUtil.set(userData.getUuid(), RedisPrefixKeyEnum.TOKEN.getValue()
-                , userData, expireTime * 60);
+    public static String getUserName() {
+        try {
+            String token = ServletUtil.getHeader(MagicValue.TOKEN);
+            if (StringUtil.isEmpty(token)) {
+                return null;
+            }
+            Claims claims = parseToken(token);
+            return (String) claims.get(MagicValue.NAME);
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 
     /**
@@ -172,39 +203,4 @@ public class TokenUtil {
                 .getBody();
     }
 
-    /**
-     * 从令牌中获取用户ID
-     *
-     * @return
-     */
-    public static Long getUserId() {
-        try {
-            String token = ServletUtil.getHeader(MagicValue.TOKEN);
-            if (StringUtil.isEmpty(token)) {
-                return null;
-            }
-            Claims claims = parseToken(token);
-            return (Long) claims.get(MagicValue.ID);
-        } catch (NullPointerException e) {
-            return null;
-        }
-    }
-
-    /**
-     * 从令牌中获取用户
-     *
-     * @return
-     */
-    public static String getUserName() {
-        try {
-            String token = ServletUtil.getHeader(MagicValue.TOKEN);
-            if (StringUtil.isEmpty(token)) {
-                return null;
-            }
-            Claims claims = parseToken(token);
-            return (String) claims.get(MagicValue.NAME);
-        } catch (NullPointerException e) {
-            return null;
-        }
-    }
 }

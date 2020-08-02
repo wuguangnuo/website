@@ -169,7 +169,7 @@ public class StringUtil {
      * 去空格
      */
     public static String trim(String str) {
-        return (str == null ? "" : str.trim());
+        return (str == null ? EMPTY : str.trim());
     }
 
     /**
@@ -368,7 +368,7 @@ public class StringUtil {
         // 快速检查
         if (name == null || name.isEmpty()) {
             // 没必要转换
-            return "";
+            return EMPTY;
         } else if (!name.contains("_")) {
             // 不含下划线，仅将首字母大写
             return name.substring(0, 1).toUpperCase() + name.substring(1);
@@ -415,7 +415,7 @@ public class StringUtil {
     public static String substringBefore(String str, String separator) {
         if (!isEmpty(str) && separator != null) {
             if (separator.isEmpty()) {
-                return "";
+                return EMPTY;
             } else {
                 int pos = str.indexOf(separator);
                 return pos == -1 ? str : str.substring(0, pos);
@@ -429,10 +429,10 @@ public class StringUtil {
         if (isEmpty(str)) {
             return str;
         } else if (separator == null) {
-            return "";
+            return EMPTY;
         } else {
             int pos = str.indexOf(separator);
-            return pos == -1 ? "" : str.substring(pos + separator.length());
+            return pos == -1 ? EMPTY : str.substring(pos + separator.length());
         }
     }
 
@@ -449,10 +449,10 @@ public class StringUtil {
         if (isEmpty(str)) {
             return str;
         } else if (isEmpty(separator)) {
-            return "";
+            return EMPTY;
         } else {
             int pos = str.lastIndexOf(separator);
-            return pos != -1 && pos != str.length() - separator.length() ? str.substring(pos + separator.length()) : "";
+            return pos != -1 && pos != str.length() - separator.length() ? str.substring(pos + separator.length()) : EMPTY;
         }
     }
 

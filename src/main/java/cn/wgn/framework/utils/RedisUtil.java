@@ -101,6 +101,18 @@ public class RedisUtil {
     }
 
     /**
+     * 查看 TTL
+     *
+     * @param key
+     * @return Time To Live
+     * -1:无限时间
+     * -2:不存在
+     */
+    public long getExpire(String key, String prefix) {
+        return redisTemplate.getExpire(mergeKey(key, prefix));
+    }
+
+    /**
      * merge Key 合并key
      *
      * @param key    key

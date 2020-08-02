@@ -90,7 +90,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
         // 检测IP并发出警告
         checkIp(userEntity.getUsername(), IpUtil.getIp(request), userEntity.getEmail());
 
-        return ApiRes.suc("登录成功", token);
+        userData.setUuid(token);
+        return ApiRes.suc("登录成功", userData);
     }
 
     /**
