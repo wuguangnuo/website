@@ -17,9 +17,6 @@ import java.time.LocalDateTime;
 @Slf4j
 @Component
 public class MyBatisPlusHandler implements MetaObjectHandler {
-//    @Autowired
-//    private TokenUtil tokenUtil;
-
     /**
      * 插入数据填充
      *
@@ -30,12 +27,13 @@ public class MyBatisPlusHandler implements MetaObjectHandler {
         log.debug("start insert fill for [" + metaObject.getOriginalObject().getClass().getName() + "]");
         this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
 
-        try {
-            this.strictInsertFill(metaObject, "createById", Long.class, TokenUtil.getUserId());
-            this.strictInsertFill(metaObject, "createByName", String.class, TokenUtil.getUserName());
-        } catch (NullPointerException e) {
-            String objName = metaObject.getOriginalObject().getClass().getName();
-            log.info("[" + objName + "]插入填充进行了不安全的操作，无法获取操作人信息");
+        Long userId = TokenUtil.getUserId();
+        String userName = TokenUtil.getUserName();
+        if (userId != null) {
+            this.strictInsertFill(metaObject, "createById", Long.class, userId);
+        }
+        if (userName != null) {
+            this.strictInsertFill(metaObject, "createByName", String.class, userName);
         }
     }
 
@@ -49,12 +47,13 @@ public class MyBatisPlusHandler implements MetaObjectHandler {
         log.debug("start update fill for [" + metaObject.getOriginalObject().getClass().getName() + "]");
         this.strictUpdateFill(metaObject, "modifiedTime", LocalDateTime.class, LocalDateTime.now());
 
-        try {
-            this.strictInsertFill(metaObject, "modifiedById", Long.class, TokenUtil.getUserId());
-            this.strictInsertFill(metaObject, "modifiedByName", String.class, TokenUtil.getUserName());
-        } catch (NullPointerException e) {
-            String objName = metaObject.getOriginalObject().getClass().getName();
-            log.info("[" + objName + "]更新填充进行了不安全的操作，无法获取操作人信息");
+        Long userId = TokenUtil.getUserId();
+        String userName = TokenUtil.getUserName();
+        if (userId != null) {
+            this.strictInsertFill(metaObject, "modifiedById", Long.class, userId);
+        }
+        if (userName != null) {
+            this.strictInsertFill(metaObject, "modifiedByName", String.class, userName);
         }
     }
 }
