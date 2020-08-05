@@ -1,5 +1,6 @@
 package cn.wgn.website.sys.service.impl;
 
+import cn.wgn.framework.utils.EnumUtil;
 import cn.wgn.framework.utils.WordUtil;
 import cn.wgn.framework.web.service.impl.BaseServiceImpl;
 import cn.wgn.website.sys.dto.NovelDto;
@@ -80,8 +81,8 @@ public class NovelServiceImpl extends BaseServiceImpl<NovelMapper, NovelEntity> 
     public List<NovelEntity> novelList(NovelQueryDto dto) {
         List<NovelEntity> novelList = this.list(novelListQw(dto));
         for (NovelEntity e : novelList) {
-            e.setStatus(NovelStateEnum.valueOf(e.getStatus()).getDesc());
-            e.setNovelType(NovelTypeEnum.valueOf(e.getNovelType()).getDesc());
+            e.setStatus(EnumUtil.getEnumByValue(e.getStatus(), NovelStateEnum.class).getDesc());
+            e.setNovelType(EnumUtil.getEnumByValue(e.getNovelType(), NovelTypeEnum.class).getDesc());
         }
         return novelList;
     }
