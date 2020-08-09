@@ -1,6 +1,5 @@
 package cn.wgn.framework.web.service.impl;
 
-import cn.wgn.framework.constant.Constants;
 import cn.wgn.framework.utils.*;
 import cn.wgn.framework.utils.ip.IpUtil;
 import cn.wgn.framework.utils.mail.EmailInfo;
@@ -21,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,11 +41,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
     @Autowired
     private IpUtil ipUtil;
     @Autowired
-    private EmailUtil emailUtil;
-    @Autowired
     private IVisitorService visitorService;
-    @Autowired
-    private IRoleService roleService;
     @Autowired
     private IUserRoleService userRoleService;
     @Autowired
@@ -86,7 +80,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
         String token = TokenUtil.createToken(userData);
 
         // 检测IP并发出警告
-        checkIp(userEntity.getUsername(), IpUtil.getIp(request), userEntity.getEmail());
+        checkIp(userEntity.getId() + ":" + userEntity.getUsername(), IpUtil.getIp(request), userEntity.getEmail());
 
         userData.setUuid(token);
         return ApiRes.suc("登录成功", userData);
@@ -117,7 +111,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
                     HtmlModel.mailBody("欢迎邮件", "<p>欢迎登录<strong style='color:red;font-size:20px;'>wuguangnuo.cn</strong>。</p>")
             );
             LOG.info("发送邮件：" + emailInfo.toString());
-            emailUtil.sendHtmlMail(emailInfo);
+            EmailUtil.sendHtmlMail(emailInfo);
         } else {
             if (visitorEntity.getIp() == ip) {
                 // IP相同，放行
@@ -136,7 +130,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
                             "上次登录IP：<span style='color:red'>" + IpUtil.int2ip(visitorEntity.getIp()) + "</span>" + ipUtil.getIpRegion(visitorEntity.getIp()).toString() + "</p>")
             );
             LOG.info("发送邮件：" + emailInfo.toString());
-            emailUtil.sendHtmlMail(emailInfo);
+            EmailUtil.sendHtmlMail(emailInfo);
         }
     }
 

@@ -35,7 +35,7 @@ CREATE TABLE `wu_job_log` (
   `invoke_target` varchar(500) NOT NULL COMMENT '调用目标字符串',
   `job_message` varchar(500) DEFAULT NULL COMMENT '日志信息',
   `status` char(1) DEFAULT '0' COMMENT '执行状态（0正常 1失败）',
-  `exception_info` varchar(2000) DEFAULT '' COMMENT '异常信息',
+  `exception_info` varchar(2000) DEFAULT NULL COMMENT '异常信息',
   `start_time` datetime DEFAULT NULL COMMENT '开始时间',
   `stop_time` datetime DEFAULT NULL COMMENT '停止时间',
   PRIMARY KEY (`id`)
