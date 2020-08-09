@@ -1,6 +1,7 @@
 package cn.wgn.framework.utils.mail;
 
 import com.google.common.base.Strings;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,18 +19,49 @@ import java.util.Properties;
  */
 @Component
 public class EmailUtil {
+
+    @Getter
+    private static String sslFactory;
+    @Getter
+    private static String smtpServer;
+    @Getter
+    private static String port;
+    @Getter
+    private static String fromUserName;
+    @Getter
+    private static String fromUserPassword;
+    @Getter
+    private static String copyTo;
+
     @Value("${private-config.mail.ssl-factory}")
-    private String sslFactory;
+    public void setSslFactory(String sslFactory) {
+        EmailUtil.sslFactory = sslFactory;
+    }
+
     @Value("${private-config.mail.smtp-server}")
-    private String smtpServer;
+    public void setSmtpServer(String smtpServer) {
+        EmailUtil.smtpServer = smtpServer;
+    }
+
     @Value("${private-config.mail.port}")
-    private String port;
+    public void setPort(String port) {
+        EmailUtil.port = port;
+    }
+
     @Value("${private-config.mail.from-user-name}")
-    private String fromUserName;
+    public void setFromUserName(String fromUserName) {
+        EmailUtil.fromUserName = fromUserName;
+    }
+
     @Value("${private-config.mail.from-user-password}")
-    private String fromUserPassword;
+    public void setFromUserPassword(String fromUserPassword) {
+        EmailUtil.fromUserPassword = fromUserPassword;
+    }
+
     @Value("${private-config.mail.copy-to}")
-    private String copyTo;
+    public void setCopyTo(String copyTo) {
+        EmailUtil.copyTo = copyTo;
+    }
 
     /**
      * 进行base64加密，防止中文乱码
@@ -49,7 +81,7 @@ public class EmailUtil {
      * @param emailInfo 邮件信息
      * @return Success: true; Error: false
      */
-    public boolean sendHtmlMail(EmailInfo emailInfo) {
+    public static boolean sendHtmlMail(EmailInfo emailInfo) {
         Properties properties = new Properties();
         properties.put("mail.smtp.host", smtpServer);
         properties.put("mail.transport.protocol", "smtp");

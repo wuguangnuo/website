@@ -50,8 +50,6 @@ public class TestController extends BaseController {
     @Autowired
     private CosClientUtil cosClientUtil;
     @Autowired
-    private EmailUtil emailUtil;
-    @Autowired
     private TencentAIUtil tencentAIUtil;
     @Autowired
     private IpUtil ipUtil;
@@ -112,7 +110,7 @@ public class TestController extends BaseController {
         String subject = "测试邮件 from wgn API";
         String content = HtmlModel.mailBody("测试邮件", "<p>测试邮件 from wgn API</p>");
         EmailInfo emailInfo = new EmailInfo(eMail, subject, content);
-        boolean b = emailUtil.sendHtmlMail(emailInfo);
+        boolean b = EmailUtil.sendHtmlMail(emailInfo);
         return b ? ApiRes.suc("发送成功!") : ApiRes.err("发送失败");
     }
 
