@@ -1,6 +1,6 @@
-package cn.wgn.website.sys.mapper;
+package cn.wgn.framework.web.mapper;
 
-import cn.wgn.website.sys.entity.DictionaryEntity;
+import cn.wgn.framework.web.entity.DictionaryEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package cn.wgn.framework.web.mapper;
 
 import cn.wgn.framework.web.entity.VisitorEntity;
-import cn.wgn.website.sys.dto.HomeInfo;
+import cn.wgn.framework.web.domain.HomeInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

@@ -1,7 +1,6 @@
-package cn.wgn.website.sys.entity;
+package cn.wgn.framework.web.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import cn.wgn.framework.web.entity.BaseEntity;
 
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;

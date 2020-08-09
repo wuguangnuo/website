@@ -80,7 +80,7 @@ public class PatrolTask {
             EmailInfo emailInfo = new EmailInfo("wuguangnuo@qq.com", subject, content);
             EmailUtil.sendHtmlMail(emailInfo);
         }
-        log.info(report);
+        log.info(report.replaceAll("<p>", "\r\n").replaceAll("</p>", ""));
     }
 
     /**

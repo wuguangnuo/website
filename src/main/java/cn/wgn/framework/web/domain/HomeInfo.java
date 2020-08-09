@@ -1,6 +1,5 @@
-package cn.wgn.website.sys.dto;
+package cn.wgn.framework.web.domain;
 
-import cn.wgn.framework.web.domain.BaseDto;
 import io.swagger.annotations.ApiModelProperty;
 
 /**

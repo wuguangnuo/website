@@ -4,7 +4,7 @@ import cn.wgn.framework.aspectj.annotation.Authorize;
 import cn.wgn.framework.web.ApiRes;
 import cn.wgn.framework.web.controller.BaseController;
 import cn.wgn.framework.web.service.IVisitorService;
-import cn.wgn.website.sys.dto.HomeInfo;
+import cn.wgn.framework.web.domain.HomeInfo;
 import cn.wgn.website.sys.service.IBlogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

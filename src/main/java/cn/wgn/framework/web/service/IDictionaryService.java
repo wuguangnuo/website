@@ -1,7 +1,6 @@
-package cn.wgn.website.sys.service;
+package cn.wgn.framework.web.service;
 
-import cn.wgn.framework.web.service.IBaseService;
-import cn.wgn.website.sys.entity.DictionaryEntity;
+import cn.wgn.framework.web.entity.DictionaryEntity;
 
 /**
  * <p>
