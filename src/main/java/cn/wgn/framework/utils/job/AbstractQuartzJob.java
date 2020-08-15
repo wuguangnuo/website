@@ -12,9 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 /**
  * 抽象quartz调用
@@ -76,11 +76,11 @@ public abstract class AbstractQuartzJob implements Job {
         jobLogEntity.setJobMessage(jobLogEntity.getJobName() + " 总共耗时：" + runMs + "毫秒");
         if (e != null) {
             jobLogEntity.setStatus(JobConstants.FAIL);
-            String errorMsg = StringUtil.substring(((InvocationTargetException) e).getTargetException().toString(), 0, 500);
-            Throwable cause = ((InvocationTargetException) e).getTargetException().getCause();
-            if (cause != null) {
-                errorMsg = errorMsg + "\r\n" + StringUtil.substring(cause.toString(), 0, 1500);
-            }
+
+            // 获取exception的详细错误信息
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw, true));
+            String errorMsg = StringUtil.substring(sw.toString(), 0, 2000);
             jobLogEntity.setExceptionInfo(errorMsg);
         } else {
             jobLogEntity.setStatus(JobConstants.SUCESS);

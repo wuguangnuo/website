@@ -1,9 +1,12 @@
 package cn.wgn.framework.utils.job;
 
+import cn.wgn.framework.utils.DateUtil;
 import org.quartz.CronExpression;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * cron表达式工具类
@@ -23,21 +26,6 @@ public class CronUtil {
     }
 
     /**
-     * 返回一个字符串值,表示该消息无效Cron表达式给出有效性
-     *
-     * @param cronExpression Cron表达式
-     * @return String 无效时返回表达式错误描述,如果有效返回null
-     */
-    public static String getInvalidMessage(String cronExpression) {
-        try {
-            new CronExpression(cronExpression);
-            return null;
-        } catch (ParseException pe) {
-            return pe.getMessage();
-        }
-    }
-
-    /**
      * 返回下一个执行时间根据给定的Cron表达式
      *
      * @param cronExpression Cron表达式
@@ -49,6 +37,33 @@ public class CronUtil {
             return cron.getNextValidTimeAfter(new Date(System.currentTimeMillis()));
         } catch (ParseException e) {
             throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    /**
+     * 获得Cron表达式将来x次执行结果
+     *
+     * @param cronExpression Cron表达式
+     * @param x              执行x次，默认5次
+     * @return
+     */
+    public static List<String> getNextX(String cronExpression, Integer x) {
+        if ((x = x == null ? 5 : x) > 0) {
+            CronExpression cron;
+            try {
+                cron = new CronExpression(cronExpression);
+            } catch (ParseException e) {
+                return null;
+            }
+            Date date = new Date();
+            List<String> list = new ArrayList<>();
+            for (int i = 0; i < x; i++) {
+                date = cron.getNextValidTimeAfter(date);
+                list.add(DateUtil.dateFormat(date, DateUtil.DATE_TIME_PATTERN));
+            }
+            return list;
+        } else {
+            return null;
         }
     }
 }

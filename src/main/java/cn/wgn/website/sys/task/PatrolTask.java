@@ -29,8 +29,17 @@ import java.util.List;
 @Slf4j
 @Component("patrolTask")
 public class PatrolTask {
+    /**
+     * 执行次数
+     */
     private static int count = 0;
+    /**
+     * 系统启动时间戳
+     */
     private static final long TM = System.currentTimeMillis();
+    /**
+     * 最近发送邮件时间戳
+     */
     private static long lastEmail = 0;
     @Autowired
     private IJobLogService jobLogService;
@@ -55,8 +64,8 @@ public class PatrolTask {
         int errNum = jobLogService.count(qw);
 
         // 定时任务错误警报邮件：
-        // 最近10次出现大于等于5次异常发出警报
-        // 警报每天最多发一次。（00:00-08:00不发送）
+        // 1.最近10次出现大于等于3次异常发出警报
+        // 2.警报每天最多发一次。（00:00-08:00不发送）
         List<JobLogEntity> list = jobLogService.list(
                 new LambdaQueryWrapper<JobLogEntity>()
                         .select(JobLogEntity::getStatus)
@@ -68,12 +77,12 @@ public class PatrolTask {
         String report = "<p>======== REPORT ========" +
                 "</p><p>现在时间：" + DateUtil.dateFormat(null, DateUtil.HOUR_PATTERN) + "，系统已运行：" + DateUtil.diffDate(TM) +
                 "</p><p>内存使用率：" + new DecimalFormat("###.###").format(memoryPercent) + "%" +
-                "</p><p>巡警医生执行次数：" + count +
+                "</p><p>巡警医生执行次数：" + new DecimalFormat("#,###").format(count) +
                 "</p><p>定时任务最近一天内执行次数：" + allNum + "，其中错误次数：" + errNum +
                 "</p><p>定时任务最近10次执行错误数：" + x +
                 "</p><p>======== END ========</p>";
 
-        if (x >= 5 && isEmail()) {
+        if (x >= 3 && isEmail()) {
             lastEmail = System.currentTimeMillis();
             String subject = "巡警医生报告邮件 from wgn API";
             String content = HtmlModel.mailBody("巡警医生报告邮件", report);
@@ -85,7 +94,8 @@ public class PatrolTask {
 
     /**
      * 当前时间段是否可发送邮件
-     * 距上一次大于24小时，不在0:00-8:00时段
+     * 1.距上一次大于24小时
+     * 2.不在0:00-8:00时段
      */
     private static boolean isEmail() {
         long oneDay = 24 * 3600 * 1000L;
