@@ -2,7 +2,6 @@ package cn.wgn.framework.utils;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Decoder;
 
 import java.io.*;
 
@@ -47,24 +46,16 @@ public class FileUtil {
      * @return
      */
     public static MultipartFile base64ToMultipart(String base64) {
-        try {
-            String[] baseStr = base64.split(",");
+        String[] baseStr = base64.split(",");
+        byte[] b = Base64Util.decode(baseStr[1]);
 
-            BASE64Decoder decoder = new BASE64Decoder();
-            byte[] b = new byte[0];
-            b = decoder.decodeBuffer(baseStr[1]);
-
-            for (int i = 0; i < b.length; ++i) {
-                if (b[i] < 0) {
-                    b[i] += 256;
-                }
+        for (int i = 0; i < b.length; ++i) {
+            if (b[i] < 0) {
+                b[i] += 256;
             }
-
-            return new Base64DecodeMultipartFile(b, baseStr[0]);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
         }
+
+        return new Base64DecodeMultipartFile(b, baseStr[0]);
     }
 }
 
@@ -85,7 +76,7 @@ class Base64DecodeMultipartFile implements MultipartFile {
 
     @Override
     public String getOriginalFilename() {
-        return System.currentTimeMillis() + (int) Math.random() * 10000 + "." + header.split("/")[1];
+        return System.currentTimeMillis() + (int) (Math.random() * 10000) + "." + header.split("/")[1];
     }
 
     @Override
@@ -104,12 +95,12 @@ class Base64DecodeMultipartFile implements MultipartFile {
     }
 
     @Override
-    public byte[] getBytes() throws IOException {
+    public byte[] getBytes() {
         return imgContent;
     }
 
     @Override
-    public InputStream getInputStream() throws IOException {
+    public InputStream getInputStream() {
         return new ByteArrayInputStream(imgContent);
     }
 

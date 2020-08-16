@@ -2,9 +2,7 @@ package cn.wgn.framework.utils;
 
 import com.google.common.base.Strings;
 import com.google.common.io.BaseEncoding;
-import sun.misc.BASE64Decoder;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -54,11 +52,8 @@ public class EncryptUtil {
         if (Strings.isNullOrEmpty(str)) {
             return "";
         }
-        try {
-            str = encryptKey(new String(new BASE64Decoder().decodeBuffer(str), StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        str = encryptKey(new String(Base64Util.decode(str), StandardCharsets.UTF_8));
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < str.length(); ++i) {
             builder.append(((char) (str.charAt(i) ^ str.charAt(++i))));

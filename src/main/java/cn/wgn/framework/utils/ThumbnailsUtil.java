@@ -2,7 +2,6 @@ package cn.wgn.framework.utils;
 
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.stereotype.Component;
-import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageOutputStream;
@@ -65,9 +64,8 @@ public class ThumbnailsUtil {
             ImageIO.write(bI, "jpg", imageOut);
 
             // 图片转换为base64并返回
-            BASE64Encoder encoder = new BASE64Encoder();
             byte[] bytes = outputStream.toByteArray();
-            return encoder.encodeBuffer(bytes).trim().replaceAll("\r\n", "");
+            return Base64Util.encode(bytes).trim().replaceAll("\r\n", "");
         } catch (Exception e) {
             return e.toString();
         }
