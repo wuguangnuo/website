@@ -88,3 +88,6 @@ private-config:
     secret: wuguangnuo.cn
     # 令牌有效期（单位分钟）
     expireTime: 60
+  bt:
+    # 宝塔API接口密钥
+    btSign: F******************************K
