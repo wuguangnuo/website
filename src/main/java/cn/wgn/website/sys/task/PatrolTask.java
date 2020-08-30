@@ -9,6 +9,7 @@ import cn.wgn.framework.utils.mail.EmailInfo;
 import cn.wgn.framework.utils.mail.EmailUtil;
 import cn.wgn.framework.web.entity.JobLogEntity;
 import cn.wgn.framework.web.service.IJobLogService;
+import cn.wgn.website.sys.mapper.TaskMapper;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -50,12 +51,23 @@ public class PatrolTask {
      */
     @Value("${private-config.bt.btSign}")
     private String btSign;
+
+    /**
+     * 数据库库名
+     */
+    private static String dbName = "wuguangnuo";
+    /**
+     * 数据库容量信息(前5条)
+     */
+    private static int dbInfoLimit = 5;
     /**
      * 获取系统基础统计API
      */
     private static final String SYSTEM_TOTAL = "http://bt.wuguangnuo.cn:8888/system?action=GetSystemTotal";
     @Autowired
     private IJobLogService jobLogService;
+    @Autowired
+    private TaskMapper taskMapper;
 
     /**
      * 巡警医生
@@ -91,22 +103,29 @@ public class PatrolTask {
         );
         long x = list.stream().map(JobLogEntity::getStatus).filter(JobConstants.FAIL::equals).count();
 
+        // 数据库容量信息(前5条)
+        List<HashMap<String, String>> dbInfo = taskMapper.getDBInfo(dbName, dbInfoLimit);
+
         StringBuilder sb = new StringBuilder();
         DecimalFormat numberFormat = new DecimalFormat("#,###");
         sb.append("<p>======== REPORT ========");
-        sb.append("</p><p>现在时间：" + DateUtil.dateFormat(null, DateUtil.HOUR_PATTERN) + "，系统已运行：" + DateUtil.diffDate(TM));
+        sb.append("</p><p>※现在时间：" + DateUtil.dateFormat(null, DateUtil.HOUR_PATTERN) + "，系统已运行：" + DateUtil.diffDate(TM));
         if (isSysSuc) {
             double memRealUsed = Double.parseDouble(object.get("memRealUsed") + "");
             double memTotal = Double.parseDouble(object.get("memTotal") + "");
             double memoryPercent = (memRealUsed / memTotal) * 100D;
-            sb.append("</p><p>服务器信息：" + object.get("system") + "，已运行" + object.get("time"));
-            sb.append("</p><p>物理内存使用情况：" + memRealUsed + "/" + memTotal + "（" + new DecimalFormat("###.###").format(memoryPercent) + "%）");
+            sb.append("</p><p>※服务器信息：" + object.get("system") + "，已运行" + object.get("time"));
+            sb.append("</p><p>  物理内存使用情况：" + memRealUsed + "/" + memTotal + "（" + new DecimalFormat("###.###").format(memoryPercent) + "%）");
         } else {
-            sb.append("</p><p>获取系统信息失败：" + object.get("msg"));
+            sb.append("</p><p>※获取系统信息失败：" + object.get("msg"));
         }
-        sb.append("</p><p>巡警医生执行次数：" + numberFormat.format(count));
-        sb.append("</p><p>定时任务最近一天内执行次数：" + numberFormat.format(allNum) + "，其中错误次数：" + numberFormat.format(errNum));
-        sb.append("</p><p>定时任务最近10次执行错误数：" + x);
+        sb.append("</p><p>※巡警医生执行次数：" + numberFormat.format(count));
+        sb.append("</p><p>※定时任务最近一天内执行次数：" + numberFormat.format(allNum) + "，其中错误次数：" + numberFormat.format(errNum));
+        sb.append("</p><p>  定时任务最近10次执行错误数：" + x);
+        sb.append("</p><p>※数据库“" + dbName + "”容量信息（前" + dbInfoLimit + "条）");
+        for (HashMap<String, String> i : dbInfo) {
+            sb.append("</p><p>  " + i.toString());
+        }
         sb.append("</p><p>======== END ========</p>");
 
         // 达到条件发送邮件
