@@ -2,9 +2,7 @@ package cn.wgn.website.api.controller;
 
 import cn.wgn.framework.constant.MagicValue;
 import cn.wgn.framework.aspectj.annotation.Authorize;
-import cn.wgn.framework.utils.HtmlModel;
-import cn.wgn.framework.utils.RedisUtil;
-import cn.wgn.framework.utils.TencentAIUtil;
+import cn.wgn.framework.utils.*;
 import cn.wgn.framework.utils.ip.IpRegion;
 import cn.wgn.framework.utils.ip.IpUtil;
 import cn.wgn.framework.utils.mail.EmailInfo;
@@ -12,9 +10,9 @@ import cn.wgn.framework.utils.mail.EmailUtil;
 import cn.wgn.framework.web.ApiRes;
 import cn.wgn.framework.web.controller.BaseController;
 import cn.wgn.framework.web.enums.RedisPrefixKeyEnum;
-import cn.wgn.framework.utils.CosClientUtil;
 import com.google.code.kaptcha.Producer;
 import com.google.common.base.Strings;
+import com.qcloud.cos.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -51,6 +49,8 @@ public class TestController extends BaseController {
     private CosClientUtil cosClientUtil;
     @Autowired
     private TencentAIUtil tencentAIUtil;
+    @Autowired
+    private BaiduAIUtil baiduAIUtil;
     @Autowired
     private IpUtil ipUtil;
 
@@ -176,5 +176,29 @@ public class TestController extends BaseController {
         }
         sb.deleteCharAt(sb.length() - 1);
         return ApiRes.suc("Success", sb.toString());
+    }
+
+    @PostMapping(value = "/classify")
+    @ApiOperation(value = "人像分割")
+    public String classify(@RequestBody HashMap<String, String> map) {
+        String img = map.get("img");
+        if (StringUtils.isNullOrEmpty(img)) {
+            return "HashMap{key=\"img\", value=\"图片base64(包含URI)\"}";
+        }
+
+        String[] imgs = img.split(",");
+        if (imgs.length != 2) {
+            return "图片需要含URI";
+        }
+
+        String base64 = baiduAIUtil.classify(imgs[1]);
+        if (Strings.isNullOrEmpty(base64)) {
+            return "图片错误，识别失败";
+        }
+
+        String imgUrl = cosClientUtil.uploadFile2Cos(FileUtil.base64ToMultipart(imgs[0] + "," + base64), "temp/baiduAiClassify");
+        String imgUrlOrigin = cosClientUtil.uploadFile2Cos(FileUtil.base64ToMultipart(img), "temp/baiduAiClassify");
+
+        return "完成，处理后图片: \n" + imgUrl + "\n原图: \n" + imgUrlOrigin;
     }
 }
