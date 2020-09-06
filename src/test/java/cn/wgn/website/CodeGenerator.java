@@ -24,11 +24,11 @@ import java.util.Map;
  */
 public class CodeGenerator {
 
-    private static final String DB_NAME = "wuguangnuo5";
+    private static final String DB_NAME = "wuguangnuo";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
     private static final String DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://127.0.0.1:3306/" + DB_NAME;
+    private static final String URL = "jdbc:mysql://127.0.0.1:3306/" + DB_NAME + "?serverTimezone=UTC";
 
     private static final String[] TABLE_PREFIX = {"bot_"}; // 需要生成的表前缀
     private static final Boolean CONTENT_CUD = false; // 是否生成默认 Post,Put,Delete 方法(Get,Count已选)

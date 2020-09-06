@@ -103,6 +103,21 @@ CREATE TABLE `bot_zhihuhot` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='爬虫知乎热搜';
 
 -- ----------------------------
+-- Table structure for bot_baidutop
+-- ----------------------------
+DROP TABLE IF EXISTS `bot_baidutop`;
+CREATE TABLE `bot_baidutop` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ranking` varchar(255) DEFAULT NULL COMMENT '排名',
+  `title` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '标题',
+  `score` varchar(255) DEFAULT NULL COMMENT '搜索指数',
+  `state` varchar(255) DEFAULT NULL COMMENT '状态',
+  `trend` varchar(255) DEFAULT NULL COMMENT '趋势',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='百度风云榜实时热点排行榜';
+
+-- ----------------------------
 -- Table structure for wu_blog
 -- ----------------------------
 DROP TABLE IF EXISTS `wu_blog`;
