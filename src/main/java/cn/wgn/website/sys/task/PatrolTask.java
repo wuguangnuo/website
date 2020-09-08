@@ -103,8 +103,8 @@ public class PatrolTask {
         );
         long x = list.stream().map(JobLogEntity::getStatus).filter(JobConstants.FAIL::equals).count();
 
-        // 数据库容量信息(前5条)
-        List<HashMap<String, String>> dbInfo = taskMapper.getDBInfo(dbName, dbInfoLimit);
+        // 数据库容量信息(前5条) 2020-09-08关闭查询数据库信息，原因INFORMATION_SCHEMA视图信息不准确
+//        List<HashMap<String, String>> dbInfo = taskMapper.getDBInfo(dbName, dbInfoLimit);
 
         StringBuilder sb = new StringBuilder();
         DecimalFormat numberFormat = new DecimalFormat("#,###");
@@ -122,10 +122,10 @@ public class PatrolTask {
         sb.append("</p><p>※巡警医生执行次数：" + numberFormat.format(count));
         sb.append("</p><p>※定时任务最近一天内执行次数：" + numberFormat.format(allNum) + "，其中错误次数：" + numberFormat.format(errNum));
         sb.append("</p><p>  定时任务最近10次执行错误数：" + x);
-        sb.append("</p><p>※数据库“" + dbName + "”容量信息（前" + dbInfoLimit + "条）");
-        for (HashMap<String, String> i : dbInfo) {
-            sb.append("</p><p>  " + i.toString());
-        }
+//        sb.append("</p><p>※数据库“" + dbName + "”容量信息（前" + dbInfoLimit + "条）");
+//        for (HashMap<String, String> i : dbInfo) {
+//            sb.append("</p><p>  " + i.toString());
+//        }
         sb.append("</p><p>======== END ========</p>");
 
         // 达到条件发送邮件
