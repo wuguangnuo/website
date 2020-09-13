@@ -1,3 +1,8 @@
+server:
+  port: 8800
+
+debug: true
+
 spring:
   redis:
     database: 0
@@ -45,49 +50,19 @@ spring:
     multipart:
       max-file-size: 16MB
       max-request-size: 16MB
+
 urule:
   repository:
     databasetype: mysql
     datasourcename: datasource
+
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
+
 logging:
-  config: /wuguangnuo/wgn.cn/website/init/logback-spring.xml
+  config: D:/wuguangnuo/wgn.cn/website/init/logback-spring.xml
   level:
     cn.wgn.website: debug
     cn.wgn.framework: debug
     io.swagger.models.parameters.AbstractSerializableParameter: error
-server:
-  port: 8800
-
-private-config:
-  # 腾讯COS配置
-  cos:
-    secret-id: A********************************9
-    secret-key: C******************************Q
-    bucket-name: w*******************7
-    region-name: a**********u
-  # 腾讯AI配置
-  tencent-ai:
-    app-id: 2********8
-    app-key: 2**************U
-  # 邮箱配置
-  mail:
-    ssl-factory: javax.net.ssl.SSLSocketFactory
-    smtp-server: smtp.***.com
-    port: 465
-    from-user-name: 123@email.com
-    from-user-password: 123456
-    copy-to: wuguangnuo@qq.com
-  # IP地址库
-  ip2region: /wuguangnuo/wgn.cn/website/src/main/resources/ip2region.db
-  # token 配置
-  token:
-    # 令牌密钥
-    secret: wuguangnuo.cn
-    # 令牌有效期（单位分钟）
-    expireTime: 60
-  bt:
-    # 宝塔API接口密钥
-    btSign: F******************************K

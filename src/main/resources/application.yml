@@ -1,3 +1,34 @@
 spring:
   profiles:
     active: dev
+
+private-config:
+  # 腾讯COS配置
+  cos:
+    secret-id: A********************************9
+    secret-key: C******************************Q
+    bucket-name: w*******************7
+    region-name: a**********u
+  # 腾讯AI配置
+  tencent-ai:
+    app-id: 2********8
+    app-key: 2**************U
+  # 邮箱配置
+  mail:
+    ssl-factory: javax.net.ssl.SSLSocketFactory
+    smtp-server: smtp.***.com
+    port: 465
+    from-user-name: 123@email.com
+    from-user-password: 123456
+    copy-to: wuguangnuo@qq.com
+  # IP地址库
+  ip2region: /wuguangnuo/wgn.cn/website/src/main/resources/ip2region.db
+  # token 配置
+  token:
+    # 令牌密钥
+    secret: wuguangnuo.cn
+    # 令牌有效期（单位分钟）
+    expireTime: 60
+  bt:
+    # 宝塔API接口密钥
+    btSign: F******************************K
