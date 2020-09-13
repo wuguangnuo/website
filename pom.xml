@@ -58,7 +58,7 @@
         <!-- 腾讯COS权限 -->
         <cos-sts.version>3.0.6</cos-sts.version>
         <!-- druid数据库连接池 -->
-        <druid.version>1.1.23</druid.version>
+        <druid.version>1.1.21</druid.version>
         <!-- urule决策引擎 -->
         <urule.version>2.1.3</urule.version>
         <!-- jsoup解析HTML -->
@@ -91,13 +91,6 @@
         <!--            <artifactId>spring-boot-starter-security</artifactId>-->
         <!--            <version>${spring-boot.version}</version>-->
         <!--        </dependency>-->
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <version>${spring-boot.version}</version>
-            <scope>runtime</scope>
-        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
