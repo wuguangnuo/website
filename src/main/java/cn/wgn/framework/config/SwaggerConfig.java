@@ -27,19 +27,35 @@ import java.util.List;
 public class SwaggerConfig {
     @Bean
     public Docket createRestApi() {
+        String groupName = "framework";
         return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
+                .groupName(groupName)
+                .apiInfo(apiInfo(groupName))
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("cn.wgn.framework.web.controller"))
+//                .paths(Predicates.not(PathSelectors.regex("/error.*")))
+                .build()
+                .securitySchemes(getSecuritySchemes())
+                .securityContexts(getSecuriryContext());
+    }
+
+    @Bean
+    public Docket createRestApi1() {
+        String groupName = "website";
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName(groupName)
+                .apiInfo(apiInfo(groupName))
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("cn.wgn.website"))
                 .paths(Predicates.not(PathSelectors.regex("/error.*")))
                 .build()
                 .securitySchemes(getSecuritySchemes())
                 .securityContexts(getSecuriryContext());
     }
 
-    private ApiInfo apiInfo() {
+    private ApiInfo apiInfo(String groupName) {
         return new ApiInfoBuilder()
-                .title("系统API文档")
+                .title("系统API文档-" + groupName)
                 .description("wuguangnuo.cn 主站接口")
                 .termsOfServiceUrl("https://github.com/wuguangnuo")
                 .version("Beta")

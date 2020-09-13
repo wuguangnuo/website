@@ -24,7 +24,7 @@ import java.util.List;
  * @author WuGuangNuo
  * @date Created in 2020/6/14 13:57
  */
-@Api(tags = "*调度")
+@Api(tags = "调度")
 @RestController
 @RequestMapping("job")
 public class JobController extends BaseController<JobEntity> {

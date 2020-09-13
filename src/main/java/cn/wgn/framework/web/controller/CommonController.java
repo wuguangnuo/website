@@ -25,7 +25,7 @@ import java.io.OutputStream;
  * @author WuGuangNuo
  * @date Created in 2020/5/29 23:34
  */
-@Api(tags = "*通用")
+@Api(tags = "通用")
 @RestController
 public class CommonController {
     public Logger LOG = LoggerFactory.getLogger(getClass());
