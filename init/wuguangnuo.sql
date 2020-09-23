@@ -118,6 +118,25 @@ CREATE TABLE `bot_baidutop` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='百度风云榜实时热点排行榜';
 
 -- ----------------------------
+-- Table structure for bot_clav
+-- ----------------------------
+DROP TABLE IF EXISTS `bot_clav`;
+CREATE TABLE `bot_clav` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '标题',
+  `part` varchar(255) DEFAULT NULL COMMENT '分区',
+  `author` varchar(255) DEFAULT NULL COMMENT '作者',
+  `upload_time` varchar(255) DEFAULT NULL COMMENT '上传时间',
+  `url` varchar(255) DEFAULT NULL COMMENT '详情页地址',
+  `bt_path` varchar(255) DEFAULT NULL COMMENT '种子路径',
+  `status` char(1) DEFAULT NULL COMMENT '执行状态（0正常 1失败）',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `url` (`url`) USING BTREE,
+  KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='草榴社區';
+
+-- ----------------------------
 -- Table structure for wu_blog
 -- ----------------------------
 DROP TABLE IF EXISTS `wu_blog`;
