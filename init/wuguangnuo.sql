@@ -127,6 +127,8 @@ CREATE TABLE `bot_clav` (
   `part` varchar(255) DEFAULT NULL COMMENT '分区',
   `author` varchar(255) DEFAULT NULL COMMENT '作者',
   `upload_time` varchar(255) DEFAULT NULL COMMENT '上传时间',
+  `reply_num` varchar(20) DEFAULT NULL COMMENT '回复数',
+  `download_num` varchar(20) DEFAULT NULL COMMENT '下载量',
   `url` varchar(255) DEFAULT NULL COMMENT '详情页地址',
   `bt_path` varchar(255) DEFAULT NULL COMMENT '种子路径',
   `status` char(1) DEFAULT NULL COMMENT '执行状态（0正常 1失败）',

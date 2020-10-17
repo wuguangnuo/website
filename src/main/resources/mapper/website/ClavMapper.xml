@@ -10,6 +10,8 @@
         <result column="part" property="part"/>
         <result column="author" property="author"/>
         <result column="upload_time" property="uploadTime"/>
+        <result column="reply_num" property="replyNum"/>
+        <result column="download_num" property="downloadNum"/>
         <result column="url" property="url"/>
         <result column="bt_path" property="btPath"/>
         <result column="status" property="status"/>
@@ -19,7 +21,7 @@
     <sql id="Base_Column_List">
         id,
         create_time,
-        title, part, author, upload_time, url, bt_path, status
+        title, part, author, upload_time, reply_num, download_num, url, bt_path, status
     </sql>
 
 </mapper>

@@ -42,6 +42,12 @@ public class ClavEntity {
     @ApiModelProperty(value = "上传时间")
     private String uploadTime;
 
+    @ApiModelProperty(value = "回复数")
+    private String replyNum;
+
+    @ApiModelProperty(value = "下载量")
+    private String downloadNum;
+
     @ApiModelProperty(value = "详情页地址")
     private String url;
 
