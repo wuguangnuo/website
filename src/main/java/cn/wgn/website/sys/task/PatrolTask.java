@@ -93,7 +93,7 @@ public class PatrolTask {
         int errNum = jobLogService.count(qw);
 
         // 定时任务错误警报邮件：
-        // 1.最近10次出现大于等于3次异常发出警报
+        // 1.最近10次出现大于等于2次异常发出警报
         // 2.警报每天最多发一次。（00:00-08:00不发送）
         List<JobLogEntity> list = jobLogService.list(
                 new LambdaQueryWrapper<JobLogEntity>()
@@ -129,7 +129,7 @@ public class PatrolTask {
         sb.append("</p><p>======== END ========</p>");
 
         // 达到条件发送邮件
-        if (x >= 3 && isEmail()) {
+        if (x >= 2 && isEmail()) {
             lastEmail = System.currentTimeMillis();
             String subject = "巡警医生报告邮件 from wgn API";
             String content = HtmlModel.mailBody("巡警医生报告邮件", sb.toString());
