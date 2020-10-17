@@ -36,7 +36,7 @@ public class BiliTask {
      * 定时爬取 bilibili 排行榜
      * （默认：全站榜，全部分类，全部投稿，三日排行）
      */
-    private static final String BILI_RK_URL = "https://www.bilibili.com/ranking";
+    private static final String BILI_RK_URL = "https://www.bilibili.com/v/popular/rank/all";
 
 
     @Autowired
