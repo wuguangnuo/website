@@ -1,7 +1,6 @@
 package cn.wgn.framework.utils.mail;
 
 import com.google.common.base.Strings;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,17 +19,11 @@ import java.util.Properties;
 @Component
 public class EmailUtil {
 
-    @Getter
     private static String sslFactory;
-    @Getter
     private static String smtpServer;
-    @Getter
     private static String port;
-    @Getter
     private static String fromUserName;
-    @Getter
     private static String fromUserPassword;
-    @Getter
     private static String copyTo;
 
     @Value("${private-config.mail.ssl-factory}")
@@ -61,6 +54,30 @@ public class EmailUtil {
     @Value("${private-config.mail.copy-to}")
     public void setCopyTo(String copyTo) {
         EmailUtil.copyTo = copyTo;
+    }
+
+    public static String getSslFactory() {
+        return sslFactory;
+    }
+
+    public static String getSmtpServer() {
+        return smtpServer;
+    }
+
+    public static String getPort() {
+        return port;
+    }
+
+    public static String getFromUserName() {
+        return fromUserName;
+    }
+
+    public static String getFromUserPassword() {
+        return fromUserPassword;
+    }
+
+    public static String getCopyTo() {
+        return copyTo;
     }
 
     /**

@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
@@ -18,8 +16,6 @@ import java.time.LocalDateTime;
  * @author WuGuangNuo
  * @since 2020-06-21
  */
-@Data
-@Accessors(chain = true)
 @TableName("bot_zhihuhot")
 @ApiModel(value="ZhihuhotEntity对象", description="爬虫知乎热搜")
 public class ZhihuhotEntity {
@@ -41,4 +37,44 @@ public class ZhihuhotEntity {
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getRanking() {
+        return ranking;
+    }
+
+    public void setRanking(String ranking) {
+        this.ranking = ranking;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
 }

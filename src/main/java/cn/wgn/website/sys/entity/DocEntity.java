@@ -7,9 +7,6 @@ import cn.wgn.framework.web.entity.BaseEntity;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -19,9 +16,6 @@ import lombok.experimental.Accessors;
  * @author WuGuangNuo
  * @since 2020-06-21
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
 @TableName("wu_doc")
 @ApiModel(value="DocEntity对象", description="开发文档")
 public class DocEntity extends BaseEntity<DocEntity> {
@@ -46,4 +40,35 @@ public class DocEntity extends BaseEntity<DocEntity> {
         return null;
     }
 
+    public String getDocTitle() {
+        return docTitle;
+    }
+
+    public void setDocTitle(String docTitle) {
+        this.docTitle = docTitle;
+    }
+
+    public BigDecimal getDocPrice() {
+        return docPrice;
+    }
+
+    public void setDocPrice(BigDecimal docPrice) {
+        this.docPrice = docPrice;
+    }
+
+    public String getDocLink() {
+        return docLink;
+    }
+
+    public void setDocLink(String docLink) {
+        this.docLink = docLink;
+    }
+
+    public String getDocImg() {
+        return docImg;
+    }
+
+    public void setDocImg(String docImg) {
+        this.docImg = docImg;
+    }
 }

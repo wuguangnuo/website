@@ -1,17 +1,10 @@
 package cn.wgn.framework.web.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import cn.wgn.framework.web.entity.BaseEntity;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -21,9 +14,6 @@ import lombok.experimental.Accessors;
  * @author WuGuangNuo
  * @since 2020-06-21
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
 @TableName("wu_menu")
 @ApiModel(value="MenuEntity对象", description="菜单表")
 public class MenuEntity extends BaseEntity<MenuEntity> {
@@ -48,4 +38,35 @@ public class MenuEntity extends BaseEntity<MenuEntity> {
         return null;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

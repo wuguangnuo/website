@@ -5,11 +5,12 @@ import cn.wgn.website.sys.entity.BiliolEntity;
 import cn.wgn.website.sys.entity.BilirkEntity;
 import cn.wgn.website.sys.service.IBiliolService;
 import cn.wgn.website.sys.service.IBilirkService;
-import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,9 +26,10 @@ import java.util.List;
  * @author WuGuangNuo
  * @date Created in 2020/7/19 11:48
  */
-@Slf4j
 @Component("biliTask")
 public class BiliTask {
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     /**
      * B站在线列表链接
      */

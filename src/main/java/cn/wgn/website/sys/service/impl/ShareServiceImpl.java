@@ -100,20 +100,20 @@ public class ShareServiceImpl extends BaseServiceImpl<ShareMapper, ShareEntity> 
         );
         if (shareEntity == null) {
             shareEntity = new ShareEntity();
-            shareEntity.setName(name)
-                    .setContentType((String) meta.get("Content-Type"))
-                    .setContentLength((Long) meta.get("Content-Length"))
-                    .setLastModified((Date) meta.get("Last-Modified"))
-                    .setStatus("1")
-                    .setSuccessNum(1L)
-                    .setRequestNum(1L);
+            shareEntity.setName(name);
+            shareEntity.setContentType((String) meta.get("Content-Type"));
+            shareEntity.setContentLength((Long) meta.get("Content-Length"));
+            shareEntity.setLastModified((Date) meta.get("Last-Modified"));
+            shareEntity.setStatus("1");
+            shareEntity.setSuccessNum(1L);
+            shareEntity.setRequestNum(1L);
             this.save(shareEntity);
         } else {
-            shareEntity.setContentType((String) meta.get("Content-Type"))
-                    .setContentLength((Long) meta.get("Content-Length"))
-                    .setLastModified((Date) meta.get("Last-Modified"))
-                    .setSuccessNum(shareEntity.getSuccessNum() + 1)
-                    .setRequestNum(shareEntity.getRequestNum() + 1);
+            shareEntity.setContentType((String) meta.get("Content-Type"));
+            shareEntity.setContentLength((Long) meta.get("Content-Length"));
+            shareEntity.setLastModified((Date) meta.get("Last-Modified"));
+            shareEntity.setSuccessNum(shareEntity.getSuccessNum() + 1);
+            shareEntity.setRequestNum(shareEntity.getRequestNum() + 1);
             this.updateById(shareEntity);
         }
     }

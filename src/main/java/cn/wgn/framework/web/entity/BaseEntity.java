@@ -3,9 +3,6 @@ package cn.wgn.framework.web.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
@@ -13,9 +10,6 @@ import java.time.LocalDateTime;
  * @author WuGuangNuo
  * @date Created in 2020/5/25 22:56
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
 public abstract class BaseEntity<T extends BaseEntity<?>> extends Model<T> {
     @ApiModelProperty(value = "主键")
     @TableId(value = "id", type = IdType.AUTO)
@@ -58,4 +52,92 @@ public abstract class BaseEntity<T extends BaseEntity<?>> extends Model<T> {
     @ApiModelProperty(value = "逻辑删除")
     @TableLogic
     private Integer logicDel;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(Long tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public Long getCreateById() {
+        return createById;
+    }
+
+    public void setCreateById(Long createById) {
+        this.createById = createById;
+    }
+
+    public String getCreateByName() {
+        return createByName;
+    }
+
+    public void setCreateByName(String createByName) {
+        this.createByName = createByName;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public Long getModifiedById() {
+        return modifiedById;
+    }
+
+    public void setModifiedById(Long modifiedById) {
+        this.modifiedById = modifiedById;
+    }
+
+    public String getModifiedByName() {
+        return modifiedByName;
+    }
+
+    public void setModifiedByName(String modifiedByName) {
+        this.modifiedByName = modifiedByName;
+    }
+
+    public LocalDateTime getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(LocalDateTime modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public Integer getLogicDel() {
+        return logicDel;
+    }
+
+    public void setLogicDel(Integer logicDel) {
+        this.logicDel = logicDel;
+    }
 }

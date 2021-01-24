@@ -1,15 +1,12 @@
 package cn.wgn.website.sys.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import cn.wgn.framework.web.entity.BaseEntity;
-
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -19,9 +16,6 @@ import lombok.experimental.Accessors;
  * @author WuGuangNuo
  * @since 2020-06-21
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
 @TableName("wu_blog")
 @ApiModel(value="BlogEntity对象", description="諾的博客")
 public class BlogEntity extends BaseEntity<BlogEntity> {
@@ -55,4 +49,59 @@ public class BlogEntity extends BaseEntity<BlogEntity> {
         return null;
     }
 
+    public String getPostTitle() {
+        return postTitle;
+    }
+
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
+    }
+
+    public String getPostAuthor() {
+        return postAuthor;
+    }
+
+    public void setPostAuthor(String postAuthor) {
+        this.postAuthor = postAuthor;
+    }
+
+    public String getPostType() {
+        return postType;
+    }
+
+    public void setPostType(String postType) {
+        this.postType = postType;
+    }
+
+    public String getPostContent() {
+        return postContent;
+    }
+
+    public void setPostContent(String postContent) {
+        this.postContent = postContent;
+    }
+
+    public LocalDateTime getPostDate() {
+        return postDate;
+    }
+
+    public void setPostDate(LocalDateTime postDate) {
+        this.postDate = postDate;
+    }
+
+    public String getPostFrom() {
+        return postFrom;
+    }
+
+    public void setPostFrom(String postFrom) {
+        this.postFrom = postFrom;
+    }
+
+    public String getPostLink() {
+        return postLink;
+    }
+
+    public void setPostLink(String postLink) {
+        this.postLink = postLink;
+    }
 }

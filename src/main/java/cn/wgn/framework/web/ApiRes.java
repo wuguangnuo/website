@@ -1,8 +1,8 @@
 package cn.wgn.framework.web;
 
 import cn.wgn.framework.constant.HttpStatus;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ApiRes 返回
@@ -11,12 +11,24 @@ import lombok.extern.slf4j.Slf4j;
  * @author WuGuangNuo
  * @date Created in 2020/2/15 20:12
  */
-@Slf4j
-@Data
 public class ApiRes<T> {
+    private static final Logger log = LoggerFactory.getLogger(ApiRes.class);
+
     private Integer status;
     private String message;
     private T data;
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
 
     public static <T> ApiRes<T> suc() {
         return suc("Success", null);

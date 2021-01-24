@@ -50,11 +50,11 @@ public class ControllerAspect {
         }
 
         VisitorEntity vEntity = new VisitorEntity();
-        vEntity.setLk(request.getServletPath())
-                .setIp(IpUtil.getIp(request))
-                .setAg(request.getHeader("User-Agent"))
-                .setTm(LocalDateTime.now())
-                .setUs(us);
+        vEntity.setLk(request.getServletPath());
+        vEntity.setIp(IpUtil.getIp(request));
+        vEntity.setAg(request.getHeader("User-Agent"));
+        vEntity.setTm(LocalDateTime.now());
+        vEntity.setUs(us);
         visitorService.save(vEntity);
 
         return pjp.proceed();

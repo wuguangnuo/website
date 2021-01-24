@@ -1,15 +1,12 @@
 package cn.wgn.website.sys.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import cn.wgn.framework.web.entity.BaseEntity;
-
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -19,9 +16,6 @@ import lombok.experimental.Accessors;
  * @author WuGuangNuo
  * @since 2020-06-21
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
 @TableName("wu_diary")
 @ApiModel(value="DiaryEntity对象", description="諾的日记")
 public class DiaryEntity extends BaseEntity<DiaryEntity> {
@@ -46,4 +40,35 @@ public class DiaryEntity extends BaseEntity<DiaryEntity> {
         return null;
     }
 
+    public String getDiaryTitle() {
+        return diaryTitle;
+    }
+
+    public void setDiaryTitle(String diaryTitle) {
+        this.diaryTitle = diaryTitle;
+    }
+
+    public String getDiaryKey() {
+        return diaryKey;
+    }
+
+    public void setDiaryKey(String diaryKey) {
+        this.diaryKey = diaryKey;
+    }
+
+    public String getDiaryContent() {
+        return diaryContent;
+    }
+
+    public void setDiaryContent(String diaryContent) {
+        this.diaryContent = diaryContent;
+    }
+
+    public LocalDateTime getDiaryDate() {
+        return diaryDate;
+    }
+
+    public void setDiaryDate(LocalDateTime diaryDate) {
+        this.diaryDate = diaryDate;
+    }
 }

@@ -3,9 +3,6 @@ package cn.wgn.framework.web.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -17,9 +14,6 @@ import java.io.Serializable;
  * @author WuGuangNuo
  * @since 2020-06-07
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
 @TableName("wu_job")
 @ApiModel(value="JobEntity对象", description="定时任务调度表")
 public class JobEntity extends BaseEntity<JobEntity> {
@@ -53,4 +47,59 @@ public class JobEntity extends BaseEntity<JobEntity> {
         return null;
     }
 
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
+
+    public String getJobGroup() {
+        return jobGroup;
+    }
+
+    public void setJobGroup(String jobGroup) {
+        this.jobGroup = jobGroup;
+    }
+
+    public String getInvokeTarget() {
+        return invokeTarget;
+    }
+
+    public void setInvokeTarget(String invokeTarget) {
+        this.invokeTarget = invokeTarget;
+    }
+
+    public String getCronExpression() {
+        return cronExpression;
+    }
+
+    public void setCronExpression(String cronExpression) {
+        this.cronExpression = cronExpression;
+    }
+
+    public String getMisfirePolicy() {
+        return misfirePolicy;
+    }
+
+    public void setMisfirePolicy(String misfirePolicy) {
+        this.misfirePolicy = misfirePolicy;
+    }
+
+    public String getConcurrent() {
+        return concurrent;
+    }
+
+    public void setConcurrent(String concurrent) {
+        this.concurrent = concurrent;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

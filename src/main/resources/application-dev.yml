@@ -61,7 +61,7 @@ mybatis-plus:
     map-underscore-to-camel-case: true
 
 logging:
-  config: D:/wuguangnuo/wgn.cn/website/init/logback-spring.xml
+  config: init/logback-spring.xml
   level:
     cn.wgn.website: debug
     cn.wgn.framework: debug

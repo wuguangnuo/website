@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
@@ -18,8 +16,6 @@ import java.time.LocalDateTime;
  * @author WuGuangNuo
  * @since 2020-09-19
  */
-@Data
-@Accessors(chain = true)
 @TableName("bot_clav")
 @ApiModel(value = "ClavEntity对象", description = "草榴社區")
 public class ClavEntity {

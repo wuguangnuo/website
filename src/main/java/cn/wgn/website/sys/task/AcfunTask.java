@@ -8,7 +8,8 @@ import cn.wgn.website.sys.service.IAcfunrkService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,9 +24,10 @@ import java.util.List;
  * @author WuGuangNuo
  * @date Created in 2020/7/19 11:48
  */
-@Slf4j
 @Component("acfunTask")
 public class AcfunTask {
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     /**
      * AcFun 排行榜最大支持 1000 条查询
      * 默认30条

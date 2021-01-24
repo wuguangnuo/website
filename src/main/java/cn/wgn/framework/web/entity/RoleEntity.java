@@ -3,9 +3,6 @@ package cn.wgn.framework.web.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -17,9 +14,7 @@ import java.io.Serializable;
  * @author WuGuangNuo
  * @since 2020-06-07
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
+
 @TableName("wu_role")
 @ApiModel(value="RoleEntity对象", description="角色表")
 public class RoleEntity extends BaseEntity<RoleEntity> {
@@ -41,4 +36,27 @@ public class RoleEntity extends BaseEntity<RoleEntity> {
         return null;
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getRoleDescription() {
+        return roleDescription;
+    }
+
+    public void setRoleDescription(String roleDescription) {
+        this.roleDescription = roleDescription;
+    }
+
+    public Integer getRoleStatus() {
+        return roleStatus;
+    }
+
+    public void setRoleStatus(Integer roleStatus) {
+        this.roleStatus = roleStatus;
+    }
 }

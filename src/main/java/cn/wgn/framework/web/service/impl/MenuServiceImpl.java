@@ -50,10 +50,10 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, MenuEntity> imp
                     result.add(menuTree);
                 }
                 menuTree = new MenuTree();
-                menuTree.setIcon(m.getIcon())
-                        .setIndex(m.getUrl())
-                        .setTitle(m.getName())
-                        .setSubs(new ArrayList<>());
+                menuTree.setIcon(m.getIcon());
+                menuTree.setIndex(m.getUrl());
+                menuTree.setTitle(m.getName());
+                menuTree.setSubs(new ArrayList<>());
             } else {
                 item = new HashMap<>();
                 item.put("text", m.getName());

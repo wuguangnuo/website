@@ -2,7 +2,8 @@ package cn.wgn.framework.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -22,15 +23,16 @@ import java.util.UUID;
  *
  * @author WuGuangNuo
  */
-@Slf4j
 @Component
 public class TencentAIUtil {
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     @Value("${private-config.tencent-ai.app-id}")
     private String appId;
     @Value("${private-config.tencent-ai.app-key}")
     private String appKey;
 
-//    // 身份证OCR
+    //    // 身份证OCR
 //    private final String ocr_idcardocr = "https://api.ai.qq.com/fcgi-bin/ocr/ocr_idcardocr";
     // 智能闲聊
     private final String NLP_TEXTCHAT = "https://api.ai.qq.com/fcgi-bin/nlp/nlp_textchat";

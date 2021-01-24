@@ -5,9 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -17,9 +14,6 @@ import lombok.experimental.Accessors;
  * @author WuGuangNuo
  * @since 2020-06-21
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
 @TableName("wu_dictionary")
 @ApiModel(value="DictionaryEntity对象", description="字典表")
 public class DictionaryEntity extends BaseEntity<DictionaryEntity> {
@@ -38,10 +32,40 @@ public class DictionaryEntity extends BaseEntity<DictionaryEntity> {
     @ApiModelProperty(value = "字典注释")
     private String codeNote;
 
-
     @Override
     protected Serializable pkVal() {
         return null;
     }
 
+    public String getGroupKey() {
+        return groupKey;
+    }
+
+    public void setGroupKey(String groupKey) {
+        this.groupKey = groupKey;
+    }
+
+    public String getCodeIndex() {
+        return codeIndex;
+    }
+
+    public void setCodeIndex(String codeIndex) {
+        this.codeIndex = codeIndex;
+    }
+
+    public String getCodeValue() {
+        return codeValue;
+    }
+
+    public void setCodeValue(String codeValue) {
+        this.codeValue = codeValue;
+    }
+
+    public String getCodeNote() {
+        return codeNote;
+    }
+
+    public void setCodeNote(String codeNote) {
+        this.codeNote = codeNote;
+    }
 }

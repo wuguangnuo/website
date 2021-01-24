@@ -6,9 +6,6 @@ import cn.wgn.framework.web.entity.BaseEntity;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -18,9 +15,6 @@ import lombok.experimental.Accessors;
  * @author WuGuangNuo
  * @since 2020-06-21
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
 @TableName("wu_game")
 @ApiModel(value="GameEntity对象", description="諾的H5游戏")
 public class GameEntity extends BaseEntity<GameEntity> {
@@ -45,4 +39,35 @@ public class GameEntity extends BaseEntity<GameEntity> {
         return null;
     }
 
+    public String getGameTitle() {
+        return gameTitle;
+    }
+
+    public void setGameTitle(String gameTitle) {
+        this.gameTitle = gameTitle;
+    }
+
+    public String getGameAuthor() {
+        return gameAuthor;
+    }
+
+    public void setGameAuthor(String gameAuthor) {
+        this.gameAuthor = gameAuthor;
+    }
+
+    public String getGameLink() {
+        return gameLink;
+    }
+
+    public void setGameLink(String gameLink) {
+        this.gameLink = gameLink;
+    }
+
+    public String getGameImg() {
+        return gameImg;
+    }
+
+    public void setGameImg(String gameImg) {
+        this.gameImg = gameImg;
+    }
 }

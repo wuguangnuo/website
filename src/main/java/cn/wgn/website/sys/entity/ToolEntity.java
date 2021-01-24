@@ -6,9 +6,6 @@ import cn.wgn.framework.web.entity.BaseEntity;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -18,9 +15,6 @@ import lombok.experimental.Accessors;
  * @author WuGuangNuo
  * @since 2020-06-21
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
 @TableName("wu_tool")
 @ApiModel(value="ToolEntity对象", description="諾的工具箱")
 public class ToolEntity extends BaseEntity<ToolEntity> {
@@ -48,4 +42,43 @@ public class ToolEntity extends BaseEntity<ToolEntity> {
         return null;
     }
 
+    public String getToolTitle() {
+        return toolTitle;
+    }
+
+    public void setToolTitle(String toolTitle) {
+        this.toolTitle = toolTitle;
+    }
+
+    public String getToolAuthor() {
+        return toolAuthor;
+    }
+
+    public void setToolAuthor(String toolAuthor) {
+        this.toolAuthor = toolAuthor;
+    }
+
+    public String getToolFrom() {
+        return toolFrom;
+    }
+
+    public void setToolFrom(String toolFrom) {
+        this.toolFrom = toolFrom;
+    }
+
+    public String getToolLink() {
+        return toolLink;
+    }
+
+    public void setToolLink(String toolLink) {
+        this.toolLink = toolLink;
+    }
+
+    public String getToolImg() {
+        return toolImg;
+    }
+
+    public void setToolImg(String toolImg) {
+        this.toolImg = toolImg;
+    }
 }

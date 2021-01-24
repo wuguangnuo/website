@@ -52,19 +52,19 @@ public class NovelServiceImpl extends BaseServiceImpl<NovelMapper, NovelEntity> 
                     || !getUsername().equals(entity.getNovelAuthor())) {
                 return "您不是作者，不可修改文章！";
             }
-            entity.setNovelAuthor(getUsername())
-                    .setNovelTitle(novelDto.getNovelTitle())
-                    .setNovelContent(novelDto.getNovelContent())
-                    .setNovelType(novelTypeEnum.toString())
-                    .setStatus(novelDto.getNovelState());
+            entity.setNovelAuthor(getUsername());
+            entity.setNovelTitle(novelDto.getNovelTitle());
+            entity.setNovelContent(novelDto.getNovelContent());
+            entity.setNovelType(novelTypeEnum.toString());
+            entity.setStatus(novelDto.getNovelState());
             novelMapper.updateById(entity);
             return entity.getId();
         } else {
             NovelEntity entity = new NovelEntity();
             BeanUtils.copyProperties(novelDto, entity);
-            entity.setNovelAuthor(getUsername())
-                    .setNovelType(novelTypeEnum.toString())
-                    .setStatus(novelDto.getNovelState());
+            entity.setNovelAuthor(getUsername());
+            entity.setNovelType(novelTypeEnum.toString());
+            entity.setStatus(novelDto.getNovelState());
             novelMapper.insert(entity);
             return entity.getId();
         }

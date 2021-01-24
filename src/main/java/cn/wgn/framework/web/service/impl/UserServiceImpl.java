@@ -248,14 +248,15 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
                 new QueryWrapper<MenuEntity>().lambda().in(MenuEntity::getId, permissions)
         ).stream().map(MenuEntity::getCode).collect(Collectors.toList());
 
-        return new UserData()
-                .setId(entity.getId())
-                .setUsername(entity.getUsername())
-                .setRealname(entity.getRealname())
-                .setPosition(position)
-                .setPermissions(permissions)
-                .setMenuList(menuList)
-                .setHeadimg(entity.getHeadimg())
-                .setEmail(entity.getEmail());
+        UserData userData = new UserData();
+        userData.setId(entity.getId());
+        userData.setUsername(entity.getUsername());
+        userData.setRealname(entity.getRealname());
+        userData.setPosition(position);
+        userData.setPermissions(permissions);
+        userData.setMenuList(menuList);
+        userData.setHeadimg(entity.getHeadimg());
+        userData.setEmail(entity.getEmail());
+        return userData;
     }
 }

@@ -8,7 +8,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -28,13 +27,11 @@ public class TokenUtil {
     /**
      * 令牌秘钥
      */
-    @Getter
     public static String secret;
 
     /**
      * 令牌有效期（默认60分钟）
      */
-    @Getter
     public static int expireTime;
 
     @Value("${private-config.token.secret}")
@@ -53,6 +50,14 @@ public class TokenUtil {
     @Autowired
     public void setRedisUtil(RedisUtil redisUtil) {
         TokenUtil.redisUtil = redisUtil;
+    }
+
+    public static String getSecret() {
+        return secret;
+    }
+
+    public static int getExpireTime() {
+        return expireTime;
     }
 
     /**

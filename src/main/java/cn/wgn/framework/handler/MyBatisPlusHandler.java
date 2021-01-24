@@ -2,8 +2,9 @@ package cn.wgn.framework.handler;
 
 import cn.wgn.framework.utils.TokenUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -14,9 +15,10 @@ import java.time.LocalDateTime;
  * @author WuGuangNuo
  * @date Created in 2020/5/31 13:19
  */
-@Slf4j
 @Component
 public class MyBatisPlusHandler implements MetaObjectHandler {
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     /**
      * 插入数据填充
      *
