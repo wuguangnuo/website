@@ -18,12 +18,24 @@ public class ApiRes<T> {
     private String message;
     private T data;
 
+    public Integer getStatus() {
+        return status;
+    }
+
     public void setStatus(Integer status) {
         this.status = status;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public T getData() {
+        return data;
     }
 
     public void setData(T data) {
@@ -76,9 +88,3 @@ public class ApiRes<T> {
         return result;
     }
 }
-
-
-//httpstatus 利用起来，到apires中和其他需要定义返回的地方。
-//减少模块间的引用和依赖
-//删除无用注释
-//某些非static 的 util改名成service

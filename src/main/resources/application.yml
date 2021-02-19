@@ -32,3 +32,6 @@ private-config:
   bt:
     # 宝塔API接口密钥
     btSign: F******************************K
+  cl:
+    # torrent文件保存路径
+    bt_path: /root/clavbt

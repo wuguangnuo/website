@@ -55,4 +55,92 @@ public class ClavEntity {
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getPart() {
+        return part;
+    }
+
+    public void setPart(String part) {
+        this.part = part;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getUploadTime() {
+        return uploadTime;
+    }
+
+    public void setUploadTime(String uploadTime) {
+        this.uploadTime = uploadTime;
+    }
+
+    public String getReplyNum() {
+        return replyNum;
+    }
+
+    public void setReplyNum(String replyNum) {
+        this.replyNum = replyNum;
+    }
+
+    public String getDownloadNum() {
+        return downloadNum;
+    }
+
+    public void setDownloadNum(String downloadNum) {
+        this.downloadNum = downloadNum;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getBtPath() {
+        return btPath;
+    }
+
+    public void setBtPath(String btPath) {
+        this.btPath = btPath;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
 }
