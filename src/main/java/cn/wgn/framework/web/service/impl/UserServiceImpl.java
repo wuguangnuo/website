@@ -99,6 +99,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, UserEntity> imp
         }
         VisitorEntity visitorEntity = visitorService.getOne(
                 new QueryWrapper<VisitorEntity>().lambda()
+                        .gt(VisitorEntity::getTm, DateUtil.dateAddMonths(null, -1)) // 加快查询速度，限制一个月
                         .eq(VisitorEntity::getUs, us)
                         .orderByDesc(VisitorEntity::getId),
                 false
