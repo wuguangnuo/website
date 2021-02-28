@@ -31,6 +31,7 @@
         <swagger2.version>2.9.2</swagger2.version>
         <!-- Swagger主题 -->
         <swagger-ui-layer.version>1.1.3</swagger-ui-layer.version>
+        <swagger-bootstrap-ui.version>1.9.2</swagger-bootstrap-ui.version>
         <!-- 解析JSON -->
         <fastjson.version>1.2.73</fastjson.version>
         <!-- 谷歌工具 -->
@@ -156,6 +157,11 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${swagger2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>${swagger-bootstrap-ui.version}</version>
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>com.github.caspar-chen</groupId>-->

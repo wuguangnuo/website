@@ -1,5 +1,6 @@
 package cn.wgn.framework.config;
 
+import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ import java.util.List;
  * @author WuGuangNuo
  */
 @Configuration
+@EnableSwaggerBootstrapUI
 public class SwaggerConfig {
     @Bean
     public Docket createRestApi() {
