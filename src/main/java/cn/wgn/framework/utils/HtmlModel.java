@@ -61,7 +61,7 @@ public class HtmlModel {
                 "<footer><p>Copyright &copy; 2020 <a href='https://www.wuguangnuo.cn'target='_blank'>wuguangnuo.cn</a> All Rights Reserved | Author by WuGN</p>" +
                 "<p style='color:#888'>京ICP备20006588号</p></footer></body>" +
                 "<script src='https://cdn.bootcss.com/clipboard.js/2.0.6/clipboard.min.js'></script>" +
-                "<script>new ClipboardJS('#copybtn')</script>" +
+                "<script>var copy=new ClipboardJS('#copybtn');copy.on('success',function(e){alert('复制成功！');})</script>" +
                 COMMON_FOOT;
     }
 
