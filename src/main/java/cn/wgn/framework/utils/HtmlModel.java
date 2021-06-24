@@ -76,7 +76,7 @@ public class HtmlModel {
         return COMMON_HEAD +
                 "<title>API sys | 諾</title>" +
                 "</head><body>" +
-                "<h1><a href='/swagger-ui.html'>cn.wgn.website API</a></h1>" +
+                "<h1><a href='/doc.html'>cn.wgn.website API</a></h1>" +
                 "<p><a href='/druid'>cn.wgn.website DRUID</a></p>" +
                 "<p><a href='/urule/frame'>cn.wgn.website URULE</a></p>" +
                 "<footer><p>Copyright &copy; 2020 <a href='https://www.wuguangnuo.cn'target='_blank'>wuguangnuo.cn</a> All Rights Reserved | Author by WuGN</p>" +
