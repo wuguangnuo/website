@@ -1,7 +1,6 @@
 package cn.wgn.framework.utils;
 
 import com.google.common.base.Strings;
-import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
