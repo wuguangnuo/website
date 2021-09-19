@@ -1,8 +1,9 @@
 package cn.wgn.website.sys.task;
 
+import cn.wgn.framework.utils.DateUtil;
 import cn.wgn.framework.utils.FileUtil;
 import cn.wgn.framework.utils.HtmlModel;
-import cn.wgn.framework.utils.StringUtil;
+import cn.wgn.framework.utils.HttpUtil;
 import cn.wgn.framework.utils.mail.EmailInfo;
 import cn.wgn.framework.utils.mail.EmailUtil;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -28,9 +30,36 @@ public class StockTask {
     private static final String MAIL_PATH = BASE_PATH + "stockmail.txt";
 
     /**
-     * 调用Python分析，每日早8点，晚8点发邮件
+     * 调用Python分析，每交易日早8点，晚8点发邮件
      */
     public void callPython() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateUtil.getDate());
+        int week = calendar.get(Calendar.DAY_OF_WEEK);
+        if (week == Calendar.SUNDAY) {
+            log.info("今天周日，赌场不开门");
+            return;
+        } else if (week == Calendar.SATURDAY) {
+            log.info("今天周六，赌场不开门");
+            return;
+        }
+
+        String d = DateUtil.dateFormat(DateUtil.getDate(), "yyyyMM");
+        String ds = HttpUtil.httpGetJson("http://tool.bitefu.net/jiari/?d=" + d);
+        //0工作日 1 假日 2节日
+        if ("1".equals(ds)) {
+            log.info("今天是法定假日，赌场不开门");
+            return;
+        } else if ("2".equals(ds)) {
+            log.info("今天是节假日，赌场不开门");
+            return;
+        } else if ("0".equals(ds)) {
+            log.info("今天是工作日，赌场终于开门了，许愿红色");
+        } else {
+            log.error("节假日接口返回异常，d=" + d + ", ds=" + ds);
+            return;
+        }
+
         // 调用 stock.py ,获取返回数据
         String[] arguments = new String[]{"python", PY_PATH};
         List<String> strList = new ArrayList<>();

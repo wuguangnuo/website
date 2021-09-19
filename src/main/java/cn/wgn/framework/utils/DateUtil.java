@@ -4,7 +4,11 @@ import com.google.common.base.Strings;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -23,6 +27,10 @@ public class DateUtil {
     public static final String YEAR_PATTERN = "yyyy";
     public static final String MINUTE_ONLY_PATTERN = "mm";
     public static final String HOUR_ONLY_PATTERN = "HH";
+
+    public static Date getDate() {
+        return new Date();
+    }
 
     /**
      * 当天日期下月一号
@@ -70,7 +78,7 @@ public class DateUtil {
      */
     public static Date dateAdd(Date date, int days, boolean includeTime) throws ParseException {
         if (date == null) {
-            date = new Date();
+            date = getDate();
         }
         if (!includeTime) {
             SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.DATE_PATTERN);
@@ -94,7 +102,7 @@ public class DateUtil {
             pattern = DateUtil.DATE_PATTERN;
         }
         if (date == null) {
-            date = new Date();
+            date = getDate();
         }
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         return sdf.format(date);
@@ -171,7 +179,7 @@ public class DateUtil {
      */
     public static Date dateAddHours(Date startDate, int hours) {
         if (startDate == null) {
-            startDate = new Date();
+            startDate = getDate();
         }
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
@@ -188,7 +196,7 @@ public class DateUtil {
      */
     public static Date dateAddMinutes(Date startDate, int minutes) {
         if (startDate == null) {
-            startDate = new Date();
+            startDate = getDate();
         }
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
@@ -205,7 +213,7 @@ public class DateUtil {
      */
     public static Date dateAddSeconds(Date startDate, int seconds) {
         if (startDate == null) {
-            startDate = new Date();
+            startDate = getDate();
         }
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
@@ -222,7 +230,7 @@ public class DateUtil {
      */
     public static Date dateAddDays(Date startDate, int days) {
         if (startDate == null) {
-            startDate = new Date();
+            startDate = getDate();
         }
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
@@ -239,7 +247,7 @@ public class DateUtil {
      */
     public static Date dateAddMonths(Date startDate, int months) {
         if (startDate == null) {
-            startDate = new Date();
+            startDate = getDate();
         }
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
@@ -256,7 +264,7 @@ public class DateUtil {
      */
     public static Date dateAddYears(Date startDate, int years) {
         if (startDate == null) {
-            startDate = new Date();
+            startDate = getDate();
         }
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
@@ -463,7 +471,7 @@ public class DateUtil {
      */
     public static Date toDate(LocalDateTime localDateTime) {
         if (localDateTime == null) {
-            return new Date();
+            return getDate();
         }
         return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
@@ -476,7 +484,7 @@ public class DateUtil {
      */
     public static Date toDate(LocalDate localDate) {
         if (localDate == null) {
-            return new Date();
+            return getDate();
         }
         return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
     }
