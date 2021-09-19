@@ -96,7 +96,7 @@ public class StockTask {
             return false;
         }
 
-        String d = DateUtil.dateFormat(DateUtil.getDate(), "yyyyMM");
+        String d = DateUtil.dateFormat(DateUtil.getDate(), "yyyyMMdd");
         String ds = HttpUtil.httpGetJson("http://tool.bitefu.net/jiari/?d=" + d);
         //0工作日 1 假日 2节日
         if ("1".equals(ds)) {
