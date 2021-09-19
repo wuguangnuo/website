@@ -111,7 +111,7 @@ public class StockTask {
                 "指数/基金量化分析",
                 HtmlModel.mailBody("指数/基金量化分析", sb.toString())
         );
-        log.info("发送邮件：" + emailInfo.toString());
-        EmailUtil.sendHtmlMail(emailInfo);
+        boolean emailRes = EmailUtil.sendHtmlMailSeparately(emailInfo);
+        log.info("发送邮件：" + (emailRes ? "成功" : "失败") + emailInfo.toString());
     }
 }

@@ -1,5 +1,6 @@
 package cn.wgn.framework.utils.mail;
 
+import cn.wgn.framework.utils.StringUtil;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -93,7 +94,7 @@ public class EmailUtil {
     }
 
     /**
-     * 发送邮件
+     * 发送邮件,多个群发
      *
      * @param emailInfo 邮件信息
      * @return Success: true; Error: false
@@ -166,5 +167,30 @@ public class EmailUtil {
         }
 
         return true;
+    }
+
+    /**
+     * 发送邮件,多个单独发
+     *
+     * @param emailInfo 邮件信息
+     * @return Success: true; Error: false
+     */
+    public static boolean sendHtmlMailSeparately(EmailInfo emailInfo) {
+        if (emailInfo == null || StringUtil.isEmpty(emailInfo.getToUser())) {
+            return false;
+        }
+        String toUser = emailInfo.getToUser();
+        if (!toUser.contains(",")) {
+            return sendHtmlMail(emailInfo);
+        }
+        boolean flag = true;
+        String[] users = toUser.split(",");
+        for (String user : users) {
+            emailInfo.setToUser(user);
+            if (!sendHtmlMail(emailInfo)) {
+                flag = false;
+            }
+        }
+        return flag;
     }
 }
