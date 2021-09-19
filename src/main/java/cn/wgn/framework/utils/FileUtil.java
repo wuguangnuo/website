@@ -19,7 +19,7 @@ public class FileUtil {
      * @param pathname
      * @return
      */
-    public static String getFileString(String pathname) {
+    public static String getFileString(String pathname, String split) {
         String result = null;
         try {
             File file = new File(pathname);
@@ -30,13 +30,14 @@ public class FileUtil {
             String line;
             while ((line = br.readLine()) != null) {
                 message.append(line);
+                message.append(split);
             }
+            result = message.toString();
             br.close();
-            result = message.toString().replaceAll("\t", "").replaceAll(" ", "");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result;
+        return result.substring(0, result.length() - split.length());
     }
 
     /**
