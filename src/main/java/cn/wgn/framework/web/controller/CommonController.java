@@ -42,12 +42,12 @@ public class CommonController {
         outputStream.write(data.getBytes(CharsetKit.CHARSET_UTF_8));
     }
 
-    @GetMapping("urule/*")
-    @ApiOperation("URULE已关闭")
-    public void urule(HttpServletResponse response) throws IOException {
-        OutputStream outputStream = response.getOutputStream();
-        response.setHeader("content-type", "text/html;charset=UTF-8");
-        String data = HtmlModel.closeUrule();
-        outputStream.write(data.getBytes(CharsetKit.CHARSET_UTF_8));
-    }
+//    @GetMapping("urule/*")
+//    @ApiOperation("URULE已关闭")
+//    public void urule(HttpServletResponse response) throws IOException {
+//        OutputStream outputStream = response.getOutputStream();
+//        response.setHeader("content-type", "text/html;charset=UTF-8");
+//        String data = HtmlModel.closeUrule();
+//        outputStream.write(data.getBytes(CharsetKit.CHARSET_UTF_8));
+//    }
 }
