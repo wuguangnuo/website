@@ -1,15 +1,25 @@
 package cn.wgn.framework.utils.mail;
 
 import cn.wgn.framework.utils.StringUtil;
-import com.google.common.base.Strings;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.mail.*;
-import javax.mail.internet.*;
+import javax.mail.Address;
+import javax.mail.BodyPart;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -100,6 +110,17 @@ public class EmailUtil {
      * @return Success: true; Error: false
      */
     public static boolean sendHtmlMail(EmailInfo emailInfo) {
+        return sendHtmlMail(emailInfo, true);
+    }
+
+    /**
+     * 发送邮件,多个群发
+     *
+     * @param emailInfo 邮件信息
+     * @param isCopyTo  允许抄送人
+     * @return Success: true; Error: false
+     */
+    public static boolean sendHtmlMail(EmailInfo emailInfo, boolean isCopyTo) {
         Properties properties = new Properties();
         properties.put("mail.smtp.host", smtpServer);
         properties.put("mail.transport.protocol", "smtp");
@@ -130,7 +151,7 @@ public class EmailUtil {
                 message.setRecipient(MimeMessage.RecipientType.TO, toAddress); // 设置收件人,并设置其接收类型为TO
             }
 
-            if (!Strings.isNullOrEmpty(copyTo)) {
+            if (StringUtils.isNotEmpty(copyTo) && isCopyTo) {
                 // 抄送人
                 Address ccAddress = new InternetAddress(copyTo);
                 message.setRecipient(MimeMessage.RecipientType.CC, ccAddress); // 设置抄送人,并设置其接收类型为CC
@@ -181,13 +202,17 @@ public class EmailUtil {
         }
         String toUser = emailInfo.getToUser();
         if (!toUser.contains(",")) {
-            return sendHtmlMail(emailInfo);
+            return sendHtmlMail(emailInfo, false);
         }
         boolean flag = true;
-        String[] users = toUser.split(",");
+        List<String> users = Arrays.asList(toUser.split(","));
+        if (StringUtils.isNotBlank(copyTo) && !users.contains(copyTo)) {
+            users.add(copyTo);
+        }
+
         for (String user : users) {
             emailInfo.setToUser(user);
-            if (!sendHtmlMail(emailInfo)) {
+            if (!sendHtmlMail(emailInfo, false)) {
                 flag = false;
             }
         }
