@@ -33,7 +33,7 @@
         <swagger-ui-layer.version>1.1.3</swagger-ui-layer.version>
         <swagger-bootstrap-ui.version>1.9.2</swagger-bootstrap-ui.version>
         <!-- 解析JSON -->
-        <fastjson.version>1.2.73</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <!-- 谷歌工具 -->
         <guava.version>28.2-jre</guava.version>
         <!-- 腾讯COS -->
