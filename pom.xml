@@ -20,7 +20,7 @@
         <!-- SpringBoot -->
         <spring-boot.version>2.2.4.RELEASE</spring-boot.version>
         <!-- 连接MySQL数据库 -->
-        <mysql-connector.version>8.0.19</mysql-connector.version>
+        <mysql-connector.version>8.0.28</mysql-connector.version>
         <!-- 日志框架 -->
         <logback.version>1.2.3</logback.version>
         <!-- ORM框架 -->
